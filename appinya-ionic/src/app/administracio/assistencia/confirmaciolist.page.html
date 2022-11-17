@@ -1,0 +1,96 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+-->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-searchbar
+      slot="start"
+      #textCerca
+      [hidden]="!bmostraCerca"
+      [(ngModel)]="queryText"
+      (ionChange)="cercarEsdeveniments($event)"
+      placeholder="Cerca"
+    >
+    </ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button class="hvr-grow" icon-only (click)="mostrarCerca()">
+        <ion-icon name="search" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="tipusCerca" (ionChange)="canviarCerca()">
+      <ion-segment-button value="actual"> Actuals </ion-segment-button>
+      <ion-segment-button value="historic"> Històric </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="ferActualitzar($event)">
+    <ion-refresher-content
+      pullingText="Puja per actualitzar"
+    ></ion-refresher-content>
+  </ion-refresher>
+  <esdeveniment-buit *ngIf="estatCarrega==1"></esdeveniment-buit>
+  <ion-list #carregat *ngIf="estatCarrega==3">
+    <ion-item
+      *ngFor="let esdeveniment of llistaItems"
+      (click)="navegarAPasarLlista(esdeveniment.Id)"
+    >
+      <ion-icon
+        slot="start"
+        class="gran"
+        color="primary"
+        src="assets/icons/icon_esdeveniment_{{esdeveniment.TipusEsdeveniment}}.svg"
+      ></ion-icon>
+      <ion-label>
+        <h2>{{esdeveniment.Titol}}</h2>
+        <h3>{{esdeveniment.DataIni | date:'EEE dd MMM'}}</h3>
+        <p [innerHtml]="esdeveniment.Descripcio"></p>
+      </ion-label>
+      <div slot="end">
+        <ion-badge color="groc">{{esdeveniment.Assistencia}}</ion-badge> <br />
+        <ion-badge color="danger">{{esdeveniment.NoAssistencia}}</ion-badge>
+      </div>
+    </ion-item>
+    <ion-infinite-scroll
+      (ionInfinite)="ferScrollInfinit($event)"
+      threshold="100px"
+    >
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Carregant"
+      >
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-list>
+
+  <notrobat
+    descripcio="No hi ha esdeveniments"
+    iconName="calendar-outline"
+    *ngIf="estatCarrega==5"
+  ></notrobat>
+  <senseconexio
+    descripcio="No hi ha esdeveniments"
+    iconName="calendar-outline"
+    *ngIf="estatCarrega==4"
+  ></senseconexio>
+</ion-content>

@@ -1,0 +1,345 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+
+<ion-content *ngIf="casteller">
+  <ion-header>
+    <div class="foto">
+      <img
+        [src]="casteller?.Foto ? casteller.Foto : 'assets/img/user/user-anonymous.jpg'"
+      />
+      <div class="sobrenom" *ngIf="casteller">{{casteller.Alias}}</div>
+      <div class="nom" *ngIf="casteller">
+        {{casteller.Id}} | {{casteller.Nom}} {{casteller.Cognom}}
+      </div>
+    </div>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="titol"> Notificacions </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="camp">
+        Les notificacions que l'app realitza seran enviades per correu
+        electrònic.
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item lines="none">
+          <ion-label>Rebre notícies</ion-label>
+          <ion-toggle
+            [(ngModel)]="casteller.RebreCorreuNoticies"
+            (click)="rebreCorreusNoticies(casteller.RebreCorreuNoticies)"
+          ></ion-toggle> </ion-item
+      ></ion-col>
+      <ion-col size="12">
+        <ion-item lines="none">
+          <ion-label>Rebre fotos</ion-label>
+          <ion-toggle
+            [(ngModel)]="casteller.RebreCorreuFotos"
+            (click)="rebreCorreusFotos(casteller.RebreCorreuFotos)"
+          ></ion-toggle>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="titol">
+        <div class="titol-text">Sol&middot;licituds delegació</div>
+        <div class="titol-plus">
+          <ion-icon
+            color="primary"
+            class="mitja"
+            name="add-outline"
+            (click)="enviaInvitacio()"
+          ></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="sub-titol"> Rebudes </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div
+          class="missatge-buit"
+          *ngIf="invitacions.length==0"
+          text-swap
+          style="white-space: normal"
+        >
+          No té invitacions
+        </div>
+        <ion-item *ngFor="let cas of invitacions">
+          <ion-avatar slot="start">
+            <img
+              [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'"
+            />
+          </ion-avatar>
+          {{cas.Alias}}
+          <div slot="end">
+            <ion-icon
+              name="checkmark-done-outline"
+              color="verd"
+              class="mitja"
+              (click)="acceptarInvitacio(cas)"
+            ></ion-icon>
+            <ion-icon
+              name="close-outline"
+              color="primary"
+              class="mitja"
+              (click)="esborrarACarrecDe(cas)"
+            ></ion-icon>
+          </div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="sub-titol"> Enviades </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div
+          class="missatge-buit"
+          *ngIf="solicituds.length==0"
+          text-swap
+          style="white-space: normal"
+        >
+          No té sol&middot;licituts enviades
+        </div>
+        <ion-item *ngFor="let cas of solicituds">
+          <ion-avatar slot="start">
+            <img
+              [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'"
+            />
+          </ion-avatar>
+          {{cas.Alias}}
+          <div slot="end">
+            <ion-icon
+              name="trash-bin-outline"
+              color="primary"
+              class="mitja"
+              (click)="esborrarInvitacio(cas)"
+            ></ion-icon>
+          </div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="(   isAdmin() || isTecnica() || isTecnicaNivell2()  )   ">
+      <ion-col size="12" class="titol">
+        <div class="titol-text">Minions</div>
+        <div class="titol-plus">
+          <ion-icon
+            color="primary"
+            class="mitja"
+            name="add-outline"
+            (click)="crearReferenciat()"
+          ></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="(   isAdmin() || isTecnica() || isTecnicaNivell2()  )   ">
+      <ion-col>
+        <div
+          class="missatge-buit"
+          *ngIf="adjunts.length==0"
+          text-swap
+          style="white-space: normal"
+        >
+          No té minions
+        </div>
+        <ion-item *ngFor="let cas of adjunts">
+          <ion-avatar slot="start" (click)="obrirOpcions(cas)">
+            <img
+              [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'"
+            />
+          </ion-avatar>
+          {{cas.Alias}}
+          <div slot="end">
+            <ion-icon
+              name="trash-bin-outline"
+              color="primary"
+              class="mitja alignIcon"
+              (click)="esborrarReferenciat(cas)"
+            ></ion-icon>
+          </div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="aCarrecDe.length!=0">
+      <ion-col size="12" class="titol">
+        <div class="titol-text">Delegues Confirmació</div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="aCarrecDe.length!=0">
+      <ion-col>
+        <ion-item *ngFor="let cas of aCarrecDe">
+          <ion-avatar slot="start" (click)="obrirOpcions(cas)">
+            <img
+              [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'"
+            />
+          </ion-avatar>
+          {{cas.Alias}}
+          <div slot="end">
+            <ion-icon
+              name="trash-bin-outline"
+              color="primary"
+              class="mitja alignIcon"
+              [hidden]="!cas.Email"
+              (click)="esborrarACarrecDe(cas)"
+            ></ion-icon>
+            <ion-icon
+              name="information-circle"
+              item-end
+              class="mitja alignIcon"
+              [hidden]="cas.Email"
+              color="primary"
+              (click)="infoMenor()"
+            ></ion-icon>
+          </div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="titol"> Persones a càrrec </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div
+          class="missatge-buit"
+          *ngIf="personesACarrec.length==0"
+          text-swap
+          style="white-space: normal"
+        >
+          No té persones a càrrec
+        </div>
+        <ion-item *ngFor="let cas of personesACarrec">
+          <ion-avatar slot="start" (click)="obrirOpcions(cas)">
+            <img
+              [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'"
+            />
+          </ion-avatar>
+          {{cas.Alias}}
+          <div slot="end">
+            <ion-icon
+              name="trash-bin-outline"
+              color="primary"
+              class="mitja alignIcon"
+              (click)="esborrarPersonesACarrec(cas)"
+            ></ion-icon>
+          </div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="titol"> Dades personals </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="camp" size="12" size-lg="6" size-xl="6">
+        {{casteller.Email}}
+      </ion-col>
+      <ion-col class="camp" size="12" size-lg="6" size-xl="6">
+        {{casteller.Nom}} {{casteller.Cognom}}
+      </ion-col>
+      <ion-col class="camp" size="12" size-lg="6" size-xl="6">
+        {{casteller.Document}}
+      </ion-col>
+      <ion-col
+        *ngIf="casteller.Direccio"
+        class="camp"
+        size="12"
+        size-lg="6"
+        size-xl="6"
+      >
+        {{casteller.Direccio}} , {{casteller.CodiPostal}} ,
+        {{casteller.Municipi}}
+      </ion-col>
+      <ion-col class="camp" size="12" size-lg="6" size-xl="6">
+        NAIXEMENT: {{casteller.DataNaixement | date:'dd/MM/yyyy' }}
+      </ion-col>
+      <ion-col
+        class="camp"
+        size="12"
+        size-lg="6"
+        size-xl="6"
+        *ngIf="casteller.Telefon1"
+      >
+        Telf: {{casteller.Telefon1}}
+        <ion-icon
+          (click)="obrirWhatApp(casteller.Telefon1)"
+          name="logo-whatsapp"
+          class="mitja alignIcon"
+          color="verd"
+        ></ion-icon>
+        <ion-icon
+          (click)="obrirTelefon(casteller.Telefon1)"
+          name="call-outline"
+          class="mitja alignIcon"
+          color="primary"
+        ></ion-icon>
+      </ion-col>
+      <ion-col
+        class="camp"
+        size="12"
+        size-lg="6"
+        size-xl="6"
+        *ngIf="casteller.Telefon2"
+      >
+        Aux: {{casteller.Telefon2}}
+        <ion-icon
+          (click)="obrirWhatApp(casteller.Telefon2)"
+          name="logo-whatsapp"
+          class="mitja alignIcon"
+          color="verd"
+        ></ion-icon>
+        <ion-icon
+          (click)="obrirTelefon(casteller.Telefon2)"
+          name="call-outline"
+          class="mitja alignIcon"
+          color="primary"
+        ></ion-icon>
+      </ion-col>
+      <ion-col class="camp" size="12">
+        <ion-button expand="block" (click)="mostrarAlertaCanvi()">
+          <ion-icon slot="start" name="create-outline"></ion-icon>
+          Hi ha errors?
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="titol">
+        <div class="titol-text">Dades usuari</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="camp" size="12"> Usuari: {{user.Usuari}} </ion-col>
+      <ion-col size="12" *ngIf="user?.Rols.length >0">
+        <ion-list>
+          <ion-item *ngFor="let rol of user?.Rols"> {{rol}} </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

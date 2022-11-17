@@ -1,0 +1,78 @@
+﻿/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ **/
+
+ion-content {
+  --background: none;
+  background: var(--ion-color-primary);
+}
+ion-button {
+  text-transform: unset;
+  color: var(--ion-color-primary-contrast);
+}
+ion-grid {
+  background: var(--ion-color-primary);
+}
+.col-separacio {
+  border-right: 1px inset;
+}
+.capa-fons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  opacity: 0.5;
+  background: var(--ion-color-primary);
+}
+.capa-logo {
+  position: absolute;
+  left: 0px;
+  top: 50px;
+}
+.logo {
+  padding: 50px 50px 50px 35px;
+  width: 300px;
+}
+
+.titol {
+  position: absolute;
+  width: 290px;
+  height: 99px;
+  left: 35px;
+  top: 257px;
+  font-family: Uniform-Black;
+  font-size: 65px;
+  line-height: 86.5%;
+
+  color: #ffffff;
+}
+.subtitol {
+  position: absolute;
+  width: 270px;
+  height: 99px;
+  left: 35px;
+  top: 381px;
+
+  font-family: "Uniform-Bold";
+  font-size: 18px;
+  line-height: 109%;
+  /* or 20px */
+
+  color: #ffffff;
+}

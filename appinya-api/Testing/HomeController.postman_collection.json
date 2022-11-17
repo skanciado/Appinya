@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "f28787c2-8713-4d29-9c14-189e2307dd4f",
+		"name": "HomeController",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "77418dd2-840d-4203-9cb2-33ec0e357501",
+						"exec": [
+							"pm.test(\"Validació d'usuari Administrador correcte\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"    var jsonData = pm.response.json();   ",
+							"    pm.environment.set(\"token\", jsonData.Token);  ",
+							"    pm.environment.set(\"idUsuari\", jsonData.Id);  ",
+							"    pm.environment.set(\"rols\", jsonData.Rols);  ",
+							"    pm.expect(jsonData.Rols).to.include(\"ADMIN\");",
+							"",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c7493453-62eb-420e-957e-edc4652a92f3",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Usuari\":\"{{admin_usuari}}\",\"Contrasenya\":\"{{admin_password}}\"}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/validar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"validar"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Hoy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e0bfb689-1fc0-481f-b803-ec2ca64a7608",
+						"exec": [
+							"pm.test(\"Descarregar totes les home \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json(); ",
+							"    pm.environment.set(\"idNoticies\", jsonData[0].id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e2643db7-5996-4245-9611-4053027654d4",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/home/Resum",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"home",
+						"Resum"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

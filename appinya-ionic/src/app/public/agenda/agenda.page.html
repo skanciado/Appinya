@@ -1,0 +1,60 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/ 
+-->
+<ion-header>
+  <ion-toolbar color="primary">
+    <h1 [hidden]="bmostraCerca">
+      <ion-select
+        interface="popover"
+        [(ngModel)]="tipusVista"
+        (ionChange)="canviVista()"
+      >
+        <ion-select-option value="perDia">Per Dia</ion-select-option>
+        <ion-select-option value="perMes">Per Mes</ion-select-option>
+      </ion-select>
+    </h1>
+    <ion-searchbar
+      slot="start"
+      #textCerca
+      [hidden]="!bmostraCerca"
+      [(ngModel)]="queryText"
+      (ionBlur)="amagarCerca()"
+      (ionChange)="cercarEsdeveniments($event)"
+      placeholder="Cerca"
+    >
+    </ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="mostrarCerca()">
+        <ion-icon name="search" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button icon-only (click)="presentFilter()">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content
+  id="content"
+  (onMove)="onSwipe($event)"
+  [@swiped]="swiped"
+  *ngIf="options"
+>
+  <full-calendar #calendar [options]="options"></full-calendar>
+</ion-content>

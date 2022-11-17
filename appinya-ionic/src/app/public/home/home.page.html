@@ -1,0 +1,76 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+ 
+-->
+
+<ion-content>
+  <div class="titol animate__animated animate__zoomInLeft">
+    Ep, posa’t al dia!
+
+  </div>
+  <div class="capcelera-logo"></div>
+
+  <h1 class="animate__animated animate__backInLeft">Propers esdeveniments</h1>
+  <div class="animate__animated animate__bounceIn nofound" *ngIf="estatLlistat==4">
+    <ion-icon name="newspaper-outline" class="gran" color="primary"></ion-icon>
+    <h1>Sense Connexió</h1>
+  </div>
+  <div class="animate__animated animate__bounceIn nofound" *ngIf="estatLlistat==3 && esdevenimentsActuals?.length==0">
+    <ion-icon name="calendar-outline" class="gran" color="primary"></ion-icon>
+    <h1>No hi ha esdeveniments</h1>
+  </div>
+  <div class="animate__animated animate__fadeIn loading" [style.display]="estatLlistat==1?'flex':'none'">
+    <img class="empty" src="assets/img/t-esdeveniment-buida.png" />
+    <img class="empty" src="assets/img/t-esdeveniment-buida.png" />
+    <img class="empty" src="assets/img/t-esdeveniment-buida.png" />
+    <img class="empty" src="assets/img/t-esdeveniment-buida.png" />
+    <img class="empty" src="assets/img/t-esdeveniment-buida.png" />
+  </div>
+  <ion-slides style="height: 200px" class="animate__animated animate__fadeIn" pager="false" [options]="slideOpts2"
+    *ngIf="estatLlistat==3  && esdevenimentsActuals?.length>0">
+    <ion-slide *ngFor="let esdeveniment of esdevenimentsActuals" style="width: 400px">
+      <esdeveniment-detall [esdeveniment]="esdeveniment"></esdeveniment-detall>
+    </ion-slide>
+  </ion-slides>
+
+  <h1 class="animate__animated animate__backInRight">Properes notícies</h1>
+  <div class="animate__animated animate__bounceIn nofound" *ngIf="estatLlistat==4">
+    <ion-icon name="newspaper-outline" class="gran" color="primary"></ion-icon>
+    <h1>Sense Connexió</h1>
+  </div>
+  <div class="animate__animated animate__bounceIn nofound" *ngIf="estatLlistat==3  && noticiesActuals?.length==0">
+    <ion-icon name="newspaper-outline" class="gran" color="primary"></ion-icon>
+    <h1>No hi ha notícies</h1>
+  </div>
+  <ion-slides class="noticies animate__animated animate__fadeIn" pager="false" [options]="slideOpts"
+    style="height: 250px" *ngIf="estatLlistat==3  &&noticiesActuals?.length>0">
+    <ion-slide ion-item *ngFor="let noticia of noticiesActuals" (click)=clickNoticia(noticia)>
+      <div class=" 
+          animate__animated animate__bounceInUp
+          targeta-esdeveniment
+          noticia
+        ">
+        <div class="noticia-titol" text-wrap>{{noticia.Titol}}</div>
+        <div class="noticia-contingut" [innerHtml]="noticia.Descripcio"></div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
+</ion-content>

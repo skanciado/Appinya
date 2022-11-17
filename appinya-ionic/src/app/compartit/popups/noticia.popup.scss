@@ -1,0 +1,88 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+.noticia-edit {
+  position: absolute;
+  right: 0px;
+  top: 10px;
+}
+.noticia-titol {
+  font-family: "Uniform-Bold";
+  font-size: 25px;
+  line-height: 28px;
+  width: 300px;
+  color: var(--ion-color-secondary);
+  padding: 15px 15px 5px 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+}
+.noticia-container {
+  position: relative;
+  padding: 10px;
+}
+.noticia {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--ion-color-blanc);
+  box-shadow: 2px 3px 8px #c0c0c0;
+  border-radius: 10px;
+  text-align: left;
+  margin-bottom: 15px;
+}
+.noticia-contingut {
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: 10px 15px 15px 15px;
+  overflow: hidden;
+  font-family: "Uniform-Medium";
+  font-size: 15px;
+  line-height: 18px;
+  color: var(--ion-color-secondary);
+}
+
+.noticia-foto {
+  width: 100%;
+  max-height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+  text-align: center;
+}
+.noticia-peu {
+  border-radius: 10px;
+}
+.noticia-ampliar {
+  font-family: "Uniform-Medium";
+  font-size: 15px;
+  line-height: 17px;
+  color: #949494;
+  border-radius: 10px;
+  padding: 0px 15px 15px 15px;
+}
+ion-item {
+  --ion-background-color: var(--ion-color-blanc);
+}
+ion-button {
+  text-transform: uppercase;
+}
+img {
+  width: 100%;
+  max-height: none;
+}

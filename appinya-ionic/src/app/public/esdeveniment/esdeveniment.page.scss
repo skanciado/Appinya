@@ -1,0 +1,302 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ **/
+@media only screen and (max-width: 600px) {
+  ion-segment-button > ion-label {
+    display: none;
+  }
+}
+.esdeveniment-capcalera-assistire {
+  position: relative;
+  width: 100%;
+  height: 129px;
+  background-size: cover;
+  border-radius: 0px;
+  opacity: 0.9;
+  background-color: var(--ion-color-groc);
+}
+.esdeveniment-capcalera-noassistire {
+  background: var(--ion-color-primary);
+  transition: all 1s ease-in-out;
+}
+.esdeveniment-capcalera {
+  position: relative;
+  width: 100%;
+  height: 129px;
+  background-size: cover;
+  border-radius: 0px;
+  opacity: 0.9;
+  background-color: var(--appinya-capcalera-color);
+}
+.esdeveniment-capcalera-1 {
+  background-image: url("../../../assets/img/bg_esdeveniment_diada.png");
+  background-position: calc(100% - 20px);
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+  background-size: contain;
+}
+.esdeveniment-capcalera-2 {
+  background-image: url("../../../assets/img/bg_esdeveniment_entreno.png");
+  background-position: calc(100% - 20px);
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+  background-size: contain;
+}
+.esdeveniment-capcalera-3 {
+  background-image: url("../../../assets/img/bg_esdeveniment_comercial.png");
+  background-position: calc(100% - 20px);
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+  background-size: contain;
+}
+.esdeveniment-capcalera-4 {
+  background-image: url("../../../assets/img/bg_esdeveniment_taller.png");
+  background-position: calc(100% - 20px);
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+  background-size: contain;
+}
+.esdeveniment-capcalera-5 {
+  background-image: url("../../../assets/img/bg_esdeveniment_social.png");
+  background-position: calc(100% - 20px);
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+  background-size: contain;
+}
+.esdeveniment-capcalera-6 {
+  background-image: url("../../../assets/img/bg_esdeveniment_musics.png");
+  background-position: calc(100% - 20px);
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+  background-size: contain;
+}
+.esdeveniment-capcalera-7 {
+  background-image: url("../../../assets/img/bg_esdeveniment_entrenoop.png");
+  background-position: calc(100% - 20px);
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+  background-size: contain;
+}
+assistenciaform-comp {
+  margin: auto;
+}
+
+.titol {
+  position: absolute;
+  left: 34px;
+  top: 40px;
+  font-family: "Uniform-Black";
+  font-size: 26px;
+  line-height: 46px;
+  z-index: 999;
+  border-right: 1px;
+  border-right-style: initial;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: 104px;
+  vertical-align: middle;
+  padding-top: 10px;
+  padding-left: 10px;
+  color: var(--ion-color-blanc) !important;
+  max-width: 90%;
+}
+.estatTitol {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-family: "Uniform-Black";
+  font-size: 20px;
+  line-height: 20px;
+  z-index: 999;
+  border-right: 1px;
+  border-right-style: initial;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: 104px;
+  vertical-align: middle;
+  padding-top: 10px;
+  padding-left: 10px;
+  color: var(--ion-color-primary) !important;
+  max-width: 90%;
+}
+
+.barraopcions {
+  background-color: var(--ion-color-secondary) !important;
+  ion-segment-button {
+    font-family: "Uniform";
+    font-size: 15px;
+    line-height: 17px;
+    .ios {
+      color: var(--ion-color-blanc-shade);
+    }
+  }
+}
+.peu-data {
+  color: var(--ion-color-blanc) !important;
+  font-family: "Uniform-Medium";
+  font-size: 10px;
+  float: left;
+  width: 100%;
+  text-align: right;
+}
+@-moz-document url-prefix() {
+  .peu-assistencia {
+    bottom: 70px !important;
+  }
+}
+
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    .peu-assistencia {
+      bottom: 70px !important;
+    }
+  }
+}
+
+.peu-assistencia {
+  background-color: var(--ion-color-tertiary);
+  position: fixed;
+  bottom: 0px;
+  text-align: center;
+  padding: 0px;
+  .assistencia-div {
+    width: 50%;
+    position: relative;
+    float: left;
+  }
+}
+
+.noseleccionat {
+  color: var(--ion-color-quaternary);
+}
+.assistent-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  ion-card-content {
+    flex: 1 1 auto;
+  }
+}
+
+.item-trns {
+  border-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--ion-color-primary);
+}
+.hide {
+  display: none;
+}
+
+.info-general {
+  text-align: center;
+}
+
+.content {
+  background-color: white;
+}
+
+.logo {
+  text-align: center;
+}
+
+.visible {
+  visibility: hidden;
+}
+
+.novisible {
+  visibility: hidden;
+}
+.data {
+  color: var(--ion-color-blanc) !important;
+  text-align: center;
+  font-family: "Uniform";
+  font-size: 23px;
+  float: left;
+  position: relative;
+  padding-left: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  left: 34px;
+  top: 90px;
+  @media only screen and (max-width: 600px) {
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+.text {
+  text-align: justify;
+  padding: 10px 10px 10px 10px;
+  font-size: 16px;
+  color: var(--ion-color-primary);
+  background-color: unset !important;
+}
+
+.titolApartat {
+  text-align: justify;
+  font-weight: bold;
+  padding: 10px 10px 0px 10px;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+}
+.titolUbicacio {
+  @extend .titolTransport;
+  text-transform: uppercase;
+  padding-top: 20px;
+}
+.titolTransport {
+  text-align: justify;
+  font-weight: bold;
+  padding: 10px 10px 0px 10px;
+  font-size: 16px;
+  color: var(--ion-color-primary);
+}
+.titolTransportOpcio {
+  padding: 10px 10px 0px 10px;
+  font-size: 12px;
+  color: var(--ion-color-primary);
+  text-align: center;
+}
+.transportOpcio {
+  padding: 10px 10px 0px 10px;
+  font-size: 14px;
+  color: var(--ion-color-primary);
+}
+ion-range {
+  padding-top: 0px;
+}
+.line-superior {
+  border-top: 1px solid;
+}
+.line-inferior {
+  border-bottom: 1px solid;
+}
+.centreContenidor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div [role="checkbox"] {
+  border-radius: 30px;
+  height: 30px;
+}

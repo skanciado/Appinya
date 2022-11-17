@@ -1,0 +1,24 @@
+﻿<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button color="blanc" (click)="cancelar()">X</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-list>
+    <ion-item *ngFor="let filter of tipusEsdeveniment">
+      <ion-icon class="mitja" color="blanc" src="assets/icons/icon_esdeveniment_{{filter.Id}}.svg"></ion-icon>
+      <ion-label color="blanc">{{filter.name}} </ion-label>
+      <ion-toggle color="groc" [(ngModel)]="filter.isChecked"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-item>
+    <ion-button slot="end" (click)="aplicarFilters()" color="groc" shape="round">
+      Aplicar
+    </ion-button>
+  </ion-item>
+</ion-footer>

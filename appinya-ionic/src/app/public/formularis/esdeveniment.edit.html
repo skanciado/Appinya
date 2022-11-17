@@ -1,0 +1,335 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/  
+-->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-button slot="primary" shape="round" (click)="onSubmit()">
+      Guardar
+    </ion-button>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-title
+      ><ion-input
+        [ngModel]="titol2"
+        placeholder="Escriu el títol ..."
+        (change)="canviarTitol($event)"
+      ></ion-input>
+    </ion-title> </ion-toolbar
+></ion-header>
+<ion-content *ngIf="formulari"
+  ><form [formGroup]="formulari" (ngSubmit)="onSubmit()">
+    <ion-item style="display: none">
+      <ion-input placeholder="Títol" formControlName="Titol"></ion-input>
+    </ion-item>
+
+    <div
+      *ngIf="Titol.invalid && (Titol.dirty || Titol.touched)"
+      class="alert alert-danger"
+    >
+      <p class="alert-danger" *ngIf="Titol.errors.required">
+        <sup>*</sup> El títol és obligatori
+      </p>
+    </div>
+
+    <div>
+      <p-editor
+        formControlName="Descripcio"
+        [style]="{'width':'100%','height':'320px'}"
+      ></p-editor>
+      <div
+        *ngIf="Descripcio.invalid && (Descripcio.dirty || Descripcio.touched)"
+      >
+        <p class="alert-danger" *ngIf="Descripcio.errors.required">
+          <sup>*</sup> La descripció és obligatòria
+        </p>
+      </div>
+    </div>
+    <ion-item>
+      <ion-icon
+        slot="start"
+        color="primary"
+        name="newspaper-outline"
+      ></ion-icon>
+      <ion-select
+        formControlName="TipusEsdeveniment"
+        placeholder="Selecciona el tipus d'esdeveniment"
+      >
+        <ion-select-option
+          *ngFor="let tipus of tipusEsdeveniment"
+          value="{{tipus.Id}}"
+          >{{tipus.Descripcio}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <div
+      *ngIf="TipusEsdeveniment.invalid && (TipusEsdeveniment.dirty || TipusEsdeveniment.touched)"
+    >
+      <p class="alert-danger" *ngIf="TipusEsdeveniment.errors.nullValidator">
+        <sup>*</sup> El tipus d'esdeveniment és obligatori
+      </p>
+    </div>
+    <ion-item class="opcio-data">
+      <ion-label> Tot el Dia </ion-label>
+      <ion-toggle
+        formControlName="TotElDia"
+        (ionChange)="canviaTotElDia($event)"
+        color="primary"
+      ></ion-toggle>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6" class="ion-text-center">
+          <h4>Data d'inici</h4>
+          <p-calendar
+            formControlName="DataIniCalendar"
+            [inline]="true"
+            utc="false"
+            (onSelect)="changeDataInici()"
+            [showTime]="!TotElDia.value"
+          ></p-calendar>
+        </ion-col>
+
+        <ion-col size="12" size-md="6" class="ion-text-center">
+          <h4>Data fi</h4>
+          <p-calendar
+            [locale]="es"
+            [inline]="true"
+            utc="false"
+            formControlName="DataFiCalendar"
+            (onSelect)="changeDataFi()"
+            [showTime]="!TotElDia.value"
+          ></p-calendar>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div
+      *ngIf="formulari.errors?.dataValidator && (DataIni.dirty || DataIni.touched)"
+    >
+      <p class="alert-danger"><sup>*</sup> Data d'inici i fi incoherents</p>
+    </div>
+    <div
+      *ngIf="formulari.errors?.horaValidator && (DataIni.dirty || DataIni.touched)"
+    >
+      <p class="alert-danger"><sup>*</sup> Data d'inici i fi incoherents</p>
+    </div>
+    <ion-item class="opcio-data border-top border-botton" lines="none">
+      <ion-icon slot="start" color="primary" name="bus-outline"></ion-icon>
+      <ion-label> Ofereix transport </ion-label>
+      <ion-toggle
+        formControlName="OfereixTransport"
+        color="primary"
+      ></ion-toggle>
+    </ion-item>
+    <ion-grid *ngIf="OfereixTransport.value">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-md="5">
+          <ion-item class="opcio-data" lines="none">
+            <ion-icon
+              slot="start"
+              color="primary"
+              name="arrow-forward-outline"
+            ></ion-icon>
+            <ion-label> Anada? </ion-label>
+            <ion-toggle
+              formControlName="TransportAnada"
+              color="primary"
+            ></ion-toggle>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-md="5">
+          <ion-item
+            class="opcio-data"
+            lines="none"
+            *ngIf="OfereixTransport.value"
+          >
+            <ion-icon
+              slot="start"
+              color="primary"
+              name="arrow-back-outline"
+            ></ion-icon>
+            <ion-label> i tornada? </ion-label>
+            <ion-toggle
+              formControlName="TransportTornada"
+              color="primary"
+            ></ion-toggle>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-button
+      Expand="full"
+      ion-item
+      class="opcio-data border-top"
+      lines="none"
+      fill="clear"
+      (click)="afegirPregunta()"
+    >
+      <ion-icon slot="start" color="primary" name="add-outline"></ion-icon>
+      <ion-label> Afegir pregunta </ion-label>
+    </ion-button>
+    <ion-list lines="none">
+      <ion-item
+        *ngFor="let p1 of Preguntes.value"
+        (click)="modificar(p1)"
+        lines="none"
+      >
+        <img
+          class="tipuspregunta"
+          *ngIf="p1.TipusPregunta=='10'"
+          src="assets/img/pregunta1.png"
+        />
+        <img
+          *ngIf="p1.TipusPregunta=='20'"
+          class="tipuspregunta"
+          src="assets/img/pregunta2.png"
+        />
+        <img
+          *ngIf="p1.TipusPregunta=='30'"
+          class="tipuspregunta"
+          src="assets/img/pregunta3.png"
+        />
+        {{p1.Pregunta}}
+        <ion-badge *ngIf="p1.TipusPregunta=='2'" color="secondary" slot="end"
+          >Opcions {{p1.Valores.length}}</ion-badge
+        >
+      </ion-item>
+    </ion-list>
+    <ion-item class="opcio-data border-top" lines="none">
+      <ion-icon
+        slot="start"
+        color="primary"
+        name="navigate-circle-outline"
+      ></ion-icon>
+      <ion-label position="fixed"> Adreça </ion-label>
+      <ion-input formControlName="Direccio"></ion-input>
+    </ion-item>
+    <ion-item class="opcio-data" lines="none">
+      <ion-icon slot="start" color="primary" name="locate-outline"></ion-icon>
+      <ion-label> Ubicació </ion-label>
+    </ion-item>
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-md="5">
+          <ion-item class="opcio-data" lines="none">
+            <ion-label position="floating"> Latitud </ion-label>
+            <ion-input
+              formControlName="Latitud"
+              placeholder="Latitud"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" size-md="5">
+          <ion-item class="opcio-data" lines="none">
+            <ion-label position="floating"> Longitud </ion-label>
+            <ion-input
+              formControlName="Longitud"
+              placeholder="Longitud"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item
+          ><ion-icon
+            color="primary"
+            class="mitja"
+            name="location-outline"
+          ></ion-icon>
+          <h3>Cercar a Google Maps!</h3></ion-item
+        ></ion-col
+      >
+      <ion-col size="12">
+        <input
+          type="text"
+          placeholder="Introdueix l'adreça'"
+          id="autocomplete"
+          style="width: 90%"
+        />
+        <google-map
+          *ngIf="apiLoaded"
+          (mapClick)="click($event)"
+          width="100%"
+          height="450px"
+          [center]="posicio"
+          [zoom]="zoom"
+        >
+          <map-marker
+            [position]="posicio"
+            [options]="markerOptions"
+          ></map-marker>
+        </google-map>
+
+        <div *ngIf="!apiLoaded" class="background-color:red">
+          Google Maps no carrega
+        </div>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" #fab>
+  <ion-fab-button>
+    <ion-icon name="share"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button *ngIf="id != '0'" (click)="esborrar()" data-desc="Esborrar"
+      ><ion-icon name="trash-outline" color="secondary"></ion-icon
+    ></ion-fab-button>
+    <ion-fab-button
+      *ngIf="id != '0' && !menuBloquejat"
+      (click)="bloquejar()"
+      data-desc="Bloquejar"
+      ><ion-icon name="lock-closed-outline" color="secondary"></ion-icon
+    ></ion-fab-button>
+    <ion-fab-button
+      *ngIf="id != '0' && menuBloquejat"
+      (click)="desbloquejar()"
+      data-desc="Desbloquejar"
+      ><ion-icon name="lock-open-outline" color="secondary"></ion-icon
+    ></ion-fab-button>
+    <ion-fab-button
+      *ngIf="id != '0' && !menuActiu"
+      (click)="activar()"
+      data-desc="Activar esdeveniment"
+      ><ion-icon
+        name="notifications-circle-outline"
+        color="secondary"
+      ></ion-icon
+    ></ion-fab-button>
+    <ion-fab-button
+      *ngIf="id != '0' && menuActiu"
+      (click)="anular()"
+      data-desc="Anular esdeveniment"
+      ><ion-icon
+        name="notifications-off-circle-outline"
+        color="secondary"
+      ></ion-icon
+    ></ion-fab-button>
+  </ion-fab-list>
+</ion-fab>

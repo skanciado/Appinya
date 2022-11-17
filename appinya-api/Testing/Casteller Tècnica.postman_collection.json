@@ -1,0 +1,820 @@
+{
+	"info": {
+		"_postman_id": "e0f669b9-1672-4c1d-a76d-5605c4add3d2",
+		"name": "Casteller Tècnica",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							"pm.test(\"Validació d'usuari Administrador correcte\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"    var jsonData = pm.response.json();   ",
+							"    pm.environment.set(\"token\", jsonData.token);  ",
+							"    pm.environment.set(\"idUsuari\", jsonData.id);  ",
+							"    pm.environment.set(\"rols\", jsonData.rols);  ",
+							"    pm.expect(jsonData.rols).to.include(\"ADMIN\");",
+							"",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Usuari\":\"{{admin_usuari}}\",\"Contrasenya\":\"{{admin_password}}\"}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/validar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"validar"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Crear Casteller",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							"  var jsonData = pm.response.json();   ",
+							" ",
+							"if (jsonData.correcte ) pm.environment.set(\"idCasteller\", jsonData.retorn.id);",
+							"pm.test(\"Crear usuari Test\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"   ",
+							"    pm.expect(jsonData.correcte).to.equal(true);   ",
+							"    ",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"",
+							"pm.environment.set(\"random_usuari\", \"test_\"+_.random(0, 10000)+\"@test.com\");",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"IdUsuari\":\"{{idUsuari}}\",\r\n \"Nom\":\"Test\",\r\n \"Cognom\":\"Test\",\r\n \"Alias\":\"{{random_usuari}}\",\r\n \"Email\":\"{{random_usuari}}\",         \r\n \"IdTipusDocument\":1, \r\n \"Document\":\"999999S\",\r\n \"Telefon1\":\"9655544\",\r\n \"VisTelefon1\":false,\r\n \"Telefon2\":\"6666666\",\r\n \"VisTelefon2\":false,\r\n \"Carrec\":\"Tester\",\r\n \"Direccio\":\"Antoni Willifox 1111\",        \r\n \"CodiPostal\":\"08018\",\r\n\"IdMunicipi\":147463,\r\n\"IdProvincia\":86,  \r\n \"VisDireccio\":false,\r\n \"Assegurat\":false,\r\n \"DataNaixement\":\"1980-12-30T00:00:00\",\r\n \"VisDataNaixement\":false,\r\n \"TeCamisa\":false,  \r\n \"Sanitari\":false,\r\n \"Habitual\":false,\r\n \"Actiu\":true,\r\n \"RebreCorreuNoticies\":false,\r\n \"RebreCorreuFotos\":false, \r\n \"TeCasc\":false,\r\n \"EsCascLloguer\":false\r\n }"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Dades Tecniques",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							"  var jsonData = pm.response.json();   ",
+							"  ",
+							"pm.test(\"Cercar dades Tecniques\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed  ",
+							"    ",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"",
+							"pm.environment.set(\"random_usuari\", \"test_\"+_.random(0, 10000)+\"@test.com\");",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/tecnics/{{idCasteller}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"tecnics",
+						"{{idCasteller}}"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Editar Tecniques",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							"  var jsonData = pm.response.json();   ",
+							"  ",
+							"pm.test(\"Desar Dades  Tecniques\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed  ",
+							"    ",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"",
+							"pm.environment.set(\"random_usuari\", \"test_\"+_.random(0, 10000)+\"@test.com\");",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"id\": 4231,\r\n        \"idUsuari\": null,\r\n        \"nom\": \"Test\",\r\n        \"cognom\": \"Test\",\r\n        \"alias\": \"test_4861@test.com\",\r\n        \"email\": \"test_4861@test.com\",\r\n        \"idTipusDocument\": 1,\r\n        \"tipusDocument\": \"DNI\",\r\n        \"document\": \"999999S\",\r\n        \"telefon1\": \"9655544\",\r\n        \"visTelefon1\": false,\r\n        \"telefon2\": \"6666666\",\r\n        \"visTelefon2\": false,\r\n        \"carrec\": \"Tester\",\r\n        \"direccio\": \"Antoni Willifox 1111\",\r\n        \"codiPostal\": \"08018\",\r\n        \"idMunicipi\": 147463,\r\n        \"idProvincia\": 86,\r\n        \"municipi\": \"LEGUTIANO\",\r\n        \"provincia\": \"Àlaba\",\r\n        \"visDireccio\": false,\r\n        \"assegurat\": false,\r\n        \"dataNaixement\": \"1980-12-30T00:00:00\",\r\n        \"visDataNaixement\": false,\r\n        \"teCamisa\": false,\r\n        \"dataEntregaCamisa\": null,\r\n        \"esBaixa\": false,\r\n        \"dataBaixa\": null,\r\n        \"dataAlta\": \"2019-12-30T00:00:00\",\r\n        \"foto\": null,\r\n        \"sanitari\": false,\r\n        \"habitual\": true,\r\n        \"actiu\": true,\r\n        \"rebreCorreuNoticies\": false,\r\n        \"rebreCorreuFotos\": false,\r\n        \"dadesTecniques\": {\r\n        \t\"Espatlla\":200,\r\n        \t\"Bracos\":200,\r\n        \t\"Alcada\":200,\r\n        \t\"Pes\":200\r\n        },\r\n        \"observacions\": null,\r\n        \"teCasc\": false,\r\n        \"esCascLloguer\": false,\r\n        \"responsablesLegals\": [],\r\n        \"posicions\": [ \r\n        \t{\r\n        \t\t\"IdPosicio\":30,\r\n        \t\t\"Descripcio\":\"Contrafort\",\r\n        \t\t\"Experiencia\":80\r\n        \t\r\n        \t},{\r\n        \t\t\"IdPosicio\":40,\r\n        \t\t\"Descripcio\":\"Agulla\",\r\n        \t\t\"Experiencia\":80\r\n        \t\r\n        \t}]\r\n    }"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/tecnics/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"tecnics",
+						""
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0497b501-f90b-440f-8828-c10c3a177aa6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "88b3eda3-564d-4dc4-aba0-5e8534be204b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -1,0 +1,147 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ **/
+
+.item,
+.list,
+.item-content,
+.item-complex {
+  --ion-background-color: transparent !important;
+}
+.form > div {
+  width: 100%;
+}
+.form {
+  max-width: 350px;
+  display: flex;
+  flex-wrap: wrap;
+  background: #e7e7e7;
+  border-radius: 10px;
+  margin: auto;
+}
+.fotoMarco {
+  float: left;
+  font-size: 16px;
+  line-height: 19px;
+}
+.nombre {
+  float: left;
+  max-width: 150px;
+  padding-top: 10px;
+  margin-left: 10px;
+  color: var(--ion-color-primary);
+}
+.foto {
+  width: 60px;
+  border-radius: 60px;
+}
+.transport {
+  display: flex;
+  flex-wrap: wrap;
+}
+.questinari {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 20px;
+}
+.titolTransport-icon {
+  flex: 20%;
+  padding-left: 20px;
+  font-family: Uniform-Bold;
+  line-height: 21px;
+  padding-top: 30px;
+  color: var(--ion-color-primary);
+}
+.titolTransport {
+  flex: 80%;
+  font-family: Uniform-Bold;
+  font-size: 16px;
+  line-height: 21px;
+  padding-top: 40px;
+  color: var(--ion-color-primary);
+}
+.titol {
+  flex: 100%;
+  font-family: Uniform-Bold;
+  font-size: 18px;
+  line-height: 21px;
+  padding-top: 30px;
+  text-align: center;
+  color: var(--ion-color-primary);
+}
+.pregunta-body {
+  width: 100%;
+}
+.pregunta-linea {
+  flex: 50%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: Uniform-Bold;
+  padding-left: 30px;
+  padding-top: 10px;
+  font-size: 16px;
+  color: var(--ion-color-primary);
+}
+.respuesta-linea {
+  flex: 50%;
+  font-family: Uniform-Bold;
+  font-size: 14px;
+  text-align: center;
+  color: var(--ion-color-primary);
+}
+.linea {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 100%;
+  font-family: Uniform-Bold;
+  font-size: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: var(--ion-color-primary);
+}
+.linea-row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  flex: 100%;
+  font-family: Uniform-Bold;
+  font-size: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: var(--ion-color-primary);
+}
+.usuari {
+  flex: 100%;
+  font-family: Uniform-Bold;
+  font-size: 16px;
+  text-align: center;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+.noseleccionat {
+  color: var(--ion-color-quaternary);
+}
+.peu-assistencia {
+  background-color: var(--ion-color-tertiary);
+
+  .assistencia-div {
+    width: 50%;
+    position: relative;
+    float: left;
+  }
+}

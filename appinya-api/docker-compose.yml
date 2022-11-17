@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  appinya-web: 
+    depends_on:
+        - appinya-db
+    links:
+        - appinya-db     
+    build: .
+  appinya-db: 
+    image: skanciado/appinya-db
+    ports: 
+        - 1433:1433
+    expose:
+        - "1433"
+    environment:
+        ACCEPT_EULA: "Y"
+        SA_PASSWORD: "!Appinya2021"

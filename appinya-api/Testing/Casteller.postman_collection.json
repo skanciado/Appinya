@@ -1,0 +1,1423 @@
+{
+	"info": {
+		"_postman_id": "47b5ea43-2848-4707-8bea-364e120fa0c6",
+		"name": "Casteller",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							"pm.test(\"Validació d'usuari Administrador correcte\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"    var jsonData = pm.response.json();   ",
+							"    pm.environment.set(\"token\", jsonData.Token);  ",
+							"    pm.environment.set(\"idUsuari\", jsonData.Id);  ",
+							"    pm.environment.set(\"rols\", jsonData.Rols);  ",
+							"    pm.expect(jsonData.Rols).to.include(\"ADMIN\");",
+							"",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Usuari\":\"{{admin_usuari}}\",\"Contrasenya\":\"{{admin_password}}\"}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/validar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"validar"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Casteller per ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Obtenir informació d'Usuari  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/usuari/{{idCasteller}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"usuari",
+						"{{idCasteller}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Casteller per ID (2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2b4a2ae3-e3f7-450c-9604-a4c845f759b3",
+						"exec": [
+							"pm.test(\"Obtenir informació d'Usuari  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "dd098340-e133-401e-ad9f-2f47566859db",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/usuari/{{idCasteller}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"usuari",
+						"{{idCasteller}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Casteller sessió",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Obtenir informació d'Usuari  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();   ",
+							"     ",
+							"pm.globals.set(\"idCastellerSession\", jsonData.casteller.id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/usuari/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"usuari",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Casteller",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							"  var jsonData = pm.response.json();   ",
+							" ",
+							"if (jsonData.correcte ) pm.environment.set(\"idCasteller\", jsonData.retorn.id);",
+							"pm.test(\"Crear usuari Test\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"   ",
+							"    pm.expect(jsonData.correcte).to.equal(true);   ",
+							"    ",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"",
+							"pm.environment.set(\"random_usuari\", \"test_\"+_.random(0, 10000)+\"@test.com\");",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"IdUsuari\":\"{{idUsuari}}\",\r\n \"Nom\":\"Test\",\r\n \"Cognom\":\"Test\",\r\n \"Alias\":\"{{random_usuari}}\",\r\n \"Email\":\"{{random_usuari}}\",         \r\n \"IdTipusDocument\":1, \r\n \"Document\":\"999999S\",\r\n \"Telefon1\":\"9655544\",\r\n \"VisTelefon1\":false,\r\n \"Telefon2\":\"6666666\",\r\n \"VisTelefon2\":false,\r\n \"Carrec\":\"Tester\",\r\n \"Direccio\":\"Antoni Willifox 1111\",        \r\n \"CodiPostal\":\"08018\",\r\n\"IdMunicipi\":147463,\r\n\"IdProvincia\":86,  \r\n \"VisDireccio\":false,\r\n \"Assegurat\":false,\r\n \"DataNaixement\":\"1980-12-30T00:00:00\",\r\n \"VisDataNaixement\":false,\r\n \"TeCamisa\":false,  \r\n \"Sanitari\":false,\r\n \"Habitual\":false,\r\n \"Actiu\":true,\r\n \"RebreCorreuNoticies\":false,\r\n \"RebreCorreuFotos\":false, \r\n \"TeCasc\":false,\r\n \"EsCascLloguer\":false\r\n }"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Crear ResposableLegal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Crear Responsable Legal  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"    pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"IdCasteller\":{{idCasteller}},\r\n    \"TipusResponsableId\":1,\r\n    \"Nom\":\"TEST nom\", \r\n    \"Cognoms\":\"TEST Cognom\",\r\n    \"Telefon1\":\"99999999\",\r\n    \"Telefon2\":\"88888888\",\r\n    \"Email\":\"skanciado@gmail.com\",\r\n    \"EsCasteller\":false\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/responsableLegal",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"responsableLegal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Esborrar ResposableLegal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Esborrar Responsable Legal  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();  ",
+							"    pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " "
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/responsableLegal?IdCasteller={{idCasteller}}&TipusResponsableId=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"responsableLegal"
+					],
+					"query": [
+						{
+							"key": "IdCasteller",
+							"value": "{{idCasteller}}"
+						},
+						{
+							"key": "TipusResponsableId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Casteller",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Obtenir informació d'Usuari  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"     ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/cercar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"cercar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enviar Invitació",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Enviar Invitació Confirmació  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"       pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/invitacio/{{idCasteller}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"invitacio",
+						"{{idCasteller}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Esborrar Invitació",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Enviar Invitació Confirmació  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"       pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/invitacio/{{idCasteller}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"invitacio",
+						"{{idCasteller}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Delegació II",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Esborrar una solicitud  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"       pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"",
+							"let idCasteller = pm.environment.get(\"idCasteller\");",
+							"pm.environment.set(\"idCasteller2\",idCasteller-1 );",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Emisor\":{{idCasteller}},\n\t\"Receptor\":{{idCastellerSession}}\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/delegacio/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"delegacio",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Esborrar Solicitud",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Esborrar una solicitud  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"       pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/solicitud/{{idCasteller}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"solicitud",
+						"{{idCasteller}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Delegació",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Esborrar una solicitud  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"       pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"",
+							"let idCasteller = pm.environment.get(\"idCasteller\");",
+							"pm.environment.set(\"idCasteller2\",idCasteller-1 );",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Emisor\":{{idCasteller}},\n\t\"Receptor\":{{idCasteller2}}\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/delegacio/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"delegacio",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Esborrar Delegacio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Esborrar una Delegacio  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();  ",
+							"    pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"let idCasteller = pm.environment.get(\"idCasteller\");",
+							"pm.environment.set(\"idCasteller2\",idCasteller-1 );",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Emisor\":{{idCasteller}},\n\t\"Receptor\":{{idCasteller2}}\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/delegacio/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"delegacio",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Te Camisa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Setejar Camisa \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"    pm.expect(jsonData.correcte).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"type": "text",
+						"value": "no-cache, private"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 4224,\r\n        \"idUsuari\": null,\r\n        \"nom\": \"Test\",\r\n        \"cognom\": \"Test\",\r\n        \"alias\": \"test_3368@test.com\",\r\n        \"email\": \"test_3368@test.com\",\r\n        \"idTipusDocument\": 1,\r\n        \"tipusDocument\": \"DNI\",\r\n        \"document\": \"999999S\",\r\n        \"telefon1\": \"9655544\",\r\n        \"visTelefon1\": false,\r\n        \"telefon2\": \"6666666\",\r\n        \"visTelefon2\": false,\r\n        \"carrec\": \"Tester\",\r\n        \"direccio\": \"Antoni Willifox 1111\",\r\n        \"codiPostal\": \"08018\",\r\n        \"idMunicipi\": 147463,\r\n        \"idProvincia\": 86,\r\n        \"municipi\": \"LEGUTIANO\",\r\n        \"provincia\": \"Àlaba\",\r\n        \"visDireccio\": false,\r\n        \"assegurat\": false,\r\n        \"dataNaixement\": \"1980-12-30T00:00:00\",\r\n        \"visDataNaixement\": false,\r\n        \"teCamisa\": true,\r\n        \"dataEntregaCamisa\": \"2019-12-30T00:00:00\",\r\n        \"esBaixa\": false,\r\n        \"dataBaixa\": null,\r\n        \"dataAlta\": \"2019-12-30T00:00:00\",\r\n        \"foto\": null,\r\n        \"sanitari\": false,\r\n        \"habitual\": true,\r\n        \"actiu\": true,\r\n        \"rebreCorreuNoticies\": false,\r\n        \"rebreCorreuFotos\": false,\r\n        \"dadesTecniques\": null,\r\n        \"observacions\": null,\r\n        \"teCasc\": false,\r\n        \"esCascLloguer\": false,\r\n        \"responsablesLegals\": [],\r\n        \"posicions\": []\r\n    }"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers/teCamisa/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers",
+						"teCamisa",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

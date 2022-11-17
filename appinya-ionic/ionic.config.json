@@ -1,0 +1,7 @@
+{
+  "name": "appinya",
+  "integrations": {
+    "cordova": {}
+  },  
+  "type": "angular"
+}

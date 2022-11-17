@@ -1,0 +1,121 @@
+<!--/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button color="blanc" (click)="cancelar()">X</ion-button>
+    </ion-buttons>
+    <ion-searchbar
+      slot="start"
+      #textCerca
+      [hidden]="!bmostraCerca"
+      [(ngModel)]="queryText"
+      (ionChange)="cercarText($event)"
+      placeholder="Cerca"
+    >
+    </ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button color="blanc" item-start (click)="mostrarCerca()">
+        <ion-icon name="search" class="icon-gran25"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        icon-only
+        (click)="presentFilter()"
+        *ngIf="isAdmin() || isTecnica() || isTecnicaNivell2() || this.isCapMusic()"
+      >
+        <ion-icon name="options-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-segment
+    [(ngModel)]="tipusCerca"
+    (ionChange)="canviarTipusParticipants()"
+    color="primary"
+    [class.hide]="bmostraCerca"
+  >
+    <ion-segment-button value="assistents">
+      <ion-icon name="happy"></ion-icon>
+      <ion-label>Assistiran</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="noassistents">
+      <ion-icon name="sad"> </ion-icon>
+      <ion-label>No Assistiran</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="noconfirmats">
+      <ion-icon name="help-circle"></ion-icon>
+      <ion-label>No Confirmats</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+<ion-content>
+  <carregant-logo
+    #carregant
+    *ngIf="estatCarrega==1"
+    style="width: 100%; height: 100%"
+  ></carregant-logo>
+  <ion-refresher slot="fixed" (ionRefresh)="ferActualitzar($event)">
+    <ion-refresher-content
+      pullingText="Puja per actualitzar"
+    ></ion-refresher-content>
+  </ion-refresher>
+  <ion-list #carregat *ngFor="let grup of llistaItems">
+    <ion-list-header ion-item>
+      <ion-icon
+        size="large"
+        src="assets/icons/icon_tipus_posicio_{{grup.IdPosicio}}.svg"
+        color="blanc"
+      >
+      </ion-icon>
+      {{grup.nom}}
+      <div>Total: {{grup.castellers.length}} p.</div>
+    </ion-list-header>
+    <ion-item *ngFor="let casteller of grup.castellers">
+      <ion-avatar slot="start">
+        <img
+          [src]="casteller.Foto ? casteller.Foto : 'assets/img/user/user-anonymous.jpg'"
+        />
+      </ion-avatar>
+      {{casteller.Alias}}
+    </ion-item>
+  </ion-list>
+  <ion-infinite-scroll
+    (ionInfinite)="ferScrollInfinit($event)"
+    threshold="100px"
+  >
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Carregant"
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <notrobat
+    descripcio="No hi ha assistència"
+    iconName="calendar-outline"
+    *ngIf="estatCarrega==5"
+  ></notrobat>
+  <senseconexio
+    descripcio="No hi ha assistència"
+    iconName="calendar-outline"
+    *ngIf="estatCarrega==4"
+  ></senseconexio>
+</ion-content>

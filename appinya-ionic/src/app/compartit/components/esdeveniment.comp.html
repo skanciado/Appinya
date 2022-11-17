@@ -1,0 +1,120 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+-->
+<div class="animate__animated animate__fadeIn targeta-esdeveniment">
+  <div
+    class="targeta-esdeveniment-capcalera"
+    (click)="veuredetall()"
+    [ngClass]="{'targeta-esdeveniment-capcalera-assistire':esdeveniment.Assistire===true ,'targeta-esdeveniment-capcalera-noassistire':esdeveniment.Assistire===false , 'targeta-esdeveniment-capcalera-noconfirmat':esdeveniment.Assistire==null }"
+  >
+    <div class="targeta-esdeveniment-capcalera-1">
+      <ion-icon
+        class="mitja"
+        src="assets/icons/icon_esdeveniment_{{esdeveniment.TipusEsdeveniment}}.svg"
+      ></ion-icon>
+      <div class="targeta-esdeveniment-dia">
+        {{esdeveniment.DataIni | date:'EEE'}}
+      </div>
+      <div class="targeta-esdeveniment-dia-num">
+        {{esdeveniment.DataIni | date:'dd'}}
+      </div>
+      <div class="targeta-esdeveniment-mes">
+        {{esdeveniment.DataIni | date:'MMM'}}
+      </div>
+    </div>
+    <div
+      class="targeta-esdeveniment-capcalera-2"
+      [class.targeta-esdeveniment-capcalera-21]="esdeveniment.TipusEsdeveniment=='1'"
+      [class.targeta-esdeveniment-capcalera-22]="esdeveniment.TipusEsdeveniment=='2'"
+      [class.targeta-esdeveniment-capcalera-23]="esdeveniment.TipusEsdeveniment=='3'"
+      [class.targeta-esdeveniment-capcalera-24]="esdeveniment.TipusEsdeveniment=='4'"
+      [class.targeta-esdeveniment-capcalera-25]="esdeveniment.TipusEsdeveniment=='5'"
+      [class.targeta-esdeveniment-capcalera-26]="esdeveniment.TipusEsdeveniment=='6'"
+      [class.targeta-esdeveniment-capcalera-27]="esdeveniment.TipusEsdeveniment=='7'"
+    >
+      {{esdeveniment.Titol}}
+      <p
+        *ngIf="esdeveniment.DataIni.substring(0,10)==esdeveniment.DataFi.substring(0,10) && esdeveniment.DataIni.indexOf('00:00:00') > 0"
+      >
+        Tot el dia
+      </p>
+      <p
+        *ngIf="esdeveniment.DataIni.substring(0,10)==esdeveniment.DataFi.substring(0,10) && esdeveniment.DataIni.indexOf('00:00:00') < 0"
+      >
+        {{esdeveniment.DataIni | horaSenseUTC}} a {{esdeveniment.DataFi |
+        horaSenseUTC}}
+      </p>
+      <p
+        *ngIf="esdeveniment.DataIni.substring(0,10)!=esdeveniment.DataFi.substring(0,10) && esdeveniment.DataIni.indexOf('00:00:00') > 0"
+      >
+        Del {{esdeveniment.DataIni | date:'dd/MM/yyyy'}} al
+        {{esdeveniment.DataFi | date:'dd/MM/yyyy'}}
+      </p>
+      <div
+        text-swap
+        *ngIf="esdeveniment.DataIni.substring(0,10)!=esdeveniment.DataFi.substring(0,10) && esdeveniment.DataIni.indexOf('00:00:00') < 0"
+      >
+        {{esdeveniment.DataIni | date:'dd/MM/yyyy HH:mm'}} <br />
+        {{esdeveniment.DataFi | date:'dd/MM/yyyy HH:mm'}}
+      </div>
+    </div>
+  </div>
+  <div class="targeta-esdeveniment-assistencia">
+    <div class="targeta-esdeveniment-assistencia-resumen">
+      <img src="assets/icons/icon_checkl.svg" />{{esdeveniment.Assistencia}}
+      <img src="assets/icons/icon_cruz.svg" /> {{esdeveniment.NoAssistencia}}
+    </div>
+    <div
+      class="targeta-esdeveniment-assistencia-anulat"
+      *ngIf="esdeveniment.Anulat || !esdeveniment.Actiu ;else assistencia_part "
+    >
+      ANULAT
+    </div>
+    <ng-template #assistencia_part>
+      <div
+        class="targeta-esdeveniment-assistencia-anulat"
+        *ngIf="esdeveniment.Bloquejat == true"
+      >
+        Assistència Tancada
+      </div>
+      <div
+        class="targeta-esdeveniment-assistencia-yo"
+        (click)="assistire(false)"
+        *ngIf="esdeveniment.Bloquejat == false && esdeveniment.Assistire===true"
+      >
+        ASSISTIRÉ
+      </div>
+      <div
+        class="targeta-esdeveniment-assistencia-yo"
+        (click)="assistire(true)"
+        *ngIf="esdeveniment.Bloquejat == false && esdeveniment.Assistire===false"
+      >
+        NO ASSISTIRÉ
+      </div>
+      <div
+        class="targeta-esdeveniment-assistencia-yo"
+        (click)="assistire(true)"
+        *ngIf="esdeveniment.Bloquejat == false && esdeveniment.Assistire!==false && esdeveniment.Assistire!==true"
+      >
+        NO CONFIRMAT
+      </div>
+    </ng-template>
+  </div>
+</div>

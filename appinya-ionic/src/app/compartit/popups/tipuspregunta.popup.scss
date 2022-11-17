@@ -1,0 +1,46 @@
+ion-content {
+  --ion-background-color: var(--appinya-background-popup);
+  font-family: "Uniform-Medium";
+}
+.text-blanc {
+  color: var(--ion-color-blanc);
+  p {
+    font-size: 14px;
+  }
+}
+.border-top {
+  border-bottom: 1px solid var(--ion-color-blanc);
+}
+.border-botton {
+  border-bottom: 1px solid var(--ion-color-blanc);
+}
+.info {
+  @extend .border-botton;
+  @extend .border-top;
+  padding-left: 10px;
+}
+.selected {
+  border: var(--ion-color-primary);
+  border-style: groove;
+  border-radius: 15px;
+}
+ion-toolbar {
+  --ion-background-color: var(--appinya-background-popup);
+}
+ion-list {
+  --ion-background-color: none;
+  font-family: "Uniform-Bold";
+  font-size: 18px;
+}
+ion-col > div {
+  text-align: center;
+}
+ion-footer {
+  --ion-background-color: var(--appinya-background-popup);
+}
+ion-button {
+  font-family: "Uniform-Medium";
+  font-size: 14px;
+  --padding-end: 20px;
+  --padding-start: 20px;
+}

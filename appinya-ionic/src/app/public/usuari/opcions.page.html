@@ -1,0 +1,214 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+<ion-header class="header"> </ion-header>
+<div class="foto hvr-grow" (click)="navegarAFitxaCasteller()">
+  <img
+    [src]="casteller?.Foto ? casteller.Foto : 'assets/img/user/user-anonymous.jpg'"
+  />
+  <div>Veure el meu perfil</div>
+</div>
+<ion-content>
+  <ion-grid style="padding-top: 90px">
+    <ion-row>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="anuncis()">
+            <ion-icon
+              src="assets/icons/icon_anunci.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Anuncis</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="calendari()">
+            <ion-icon
+              src="assets/icons/icon_calendari.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Calendari</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="fotos()">
+            <ion-icon
+              src="assets/icons/icon_fotos.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Fotografies</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div
+            class="cercle"
+            style="background-color: rgba(216, 214, 214, 0.863)"
+          >
+            <ion-icon
+              src="assets/icons/icon_tecnica.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Tècnica</div>
+        </div>
+      </ion-col>
+      <ion-col
+        size="4"
+        *ngIf="isJunta() || isConfirmadorAssistencia() || isAdmin()"
+      >
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="navegarAConfirmacio()">
+            <ion-icon
+              src="assets/icons/icon_lista.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Passar Llista</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="navegarACastells()">
+            <ion-icon
+              class="gran"
+              color="primary"
+              src="assets/icons/icon_person.svg"
+            ></ion-icon>
+          </div>
+          <div>Castellers</div>
+        </div>
+      </ion-col>
+      <ion-col size="4" *ngIf="isJunta() || isMusic() || isAdmin()">
+        <div class="opcio">
+          <div
+            class="cercle"
+            style="background-color: rgba(216, 214, 214, 0.863)"
+          >
+            <ion-icon
+              src="assets/icons/icon_musics.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Músics</div>
+        </div>
+      </ion-col>
+      <ion-col size="4" *ngIf="isJunta() || isSecretari() || isAdmin()">
+        <div class="opcio">
+          <div
+            class="cercle"
+            style="background-color: rgba(216, 214, 214, 0.863)"
+          >
+            <ion-icon
+              src="assets/icons/icon_tresoreria.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Tresoreria</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="accedirABustia()">
+            <ion-icon
+              src="assets/icons/icon_bustia.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Bústia</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="navegarAFitxaUsuari()">
+            <ion-icon
+              src="assets/icons/icon_preferencies.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Preferències</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="incidencia()">
+            <ion-icon
+              src="assets/icons/icon_incidencia.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Incidències</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="organitzacio()">
+            <ion-icon
+              src="assets/icons/icon_organitzacio.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Organització</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="cercle hvr-grow" (click)="assitenciaPersonal()">
+            <ion-icon
+              name="pie-chart-outline"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Assistència</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="opcio">
+          <div class="sortir" (click)="sortir()">
+            <ion-icon
+              src="assets/icons/icon_salir.svg"
+              class="gran"
+              color="primary"
+            ></ion-icon>
+          </div>
+          <div>Sortir</div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

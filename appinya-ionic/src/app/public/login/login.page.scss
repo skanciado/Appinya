@@ -1,0 +1,99 @@
+﻿/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2020  Daniel Horta Vidal
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ **/
+p {
+  font-size: 12px;
+}
+ion-content {
+  background-color: var(--ion-color-primary);
+}
+.item-interactive.ion-invalid {
+  --highlight-background: none !important;
+}
+.item-interactive.ion-valid {
+  --highlight-background: none !important;
+}
+ion-list {
+  --ion-background-color: none;
+  padding-bottom: 20px;
+}
+ion-label {
+  padding-bottom: 20px;
+}
+ion-button {
+  margin-top: 40px;
+  margin-right: auto;
+}
+.centre-button {
+  align-items: center;
+  justify-content: center;
+}
+.part-superior {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background: var(--ion-color-primary);
+}
+.part-central {
+  position: absolute;
+  width: 315px;
+  left: 50%;
+  margin-left: -150px;
+  top: 149px;
+  background: #ffffff;
+  border-radius: 10px;
+}
+.hola {
+  position: relative;
+  width: 246px;
+  padding-top: 30px;
+  padding-left: 30px;
+  font-family: "Uniform-Black";
+  font-size: 55px;
+  line-height: 64px;
+  color: var(--ion-color-groc);
+}
+.formulari {
+  position: relative;
+  margin: 0 auto;
+}
+.logo {
+  padding: 50px 50px 50px 50px;
+  width: 280px;
+}
+
+ion-label {
+  font-size: 18px !important;
+  line-height: 25px;
+  margin-bottom: 5px;
+}
+
+.list {
+  margin-bottom: 0;
+}
+.oblidarContrasenya {
+  width: 100%;
+  text-align: center;
+}
+.fingerPrint {
+  width: 100%;
+  text-align: center;
+  padding-top: 10px;
+}

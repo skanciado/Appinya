@@ -1,0 +1,91 @@
+<!--
+
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+    -->
+<ion-list lines="none">
+  <ion-item>
+    <ion-label slot="start"> Canalla</ion-label>
+    <ion-label slot="end">
+      <ion-badge color="primary"
+        >{{assistencia.AssisteixenCanalla}}</ion-badge
+      ></ion-label
+    >
+  </ion-item>
+  <ion-item>
+    <ion-label slot="start">Tronc</ion-label>
+    <ion-label slot="end">
+      <ion-badge color="primary">{{assistencia.AssisteixenTronc}}</ion-badge
+      >&nbsp;
+      <ion-badge color="tertiary"
+        >{{assistencia.AssisteixenPinyaMix}}</ion-badge
+      >
+    </ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label slot="start">Pinya</ion-label>
+    <ion-label slot="end">
+      <ion-badge color="primary"
+        >{{assistencia.AssisteixenPinya}}</ion-badge
+      ></ion-label
+    >
+  </ion-item>
+  <ion-item
+    ><ion-label slot="start">Músics</ion-label>
+    <ion-label slot="end"
+      ><ion-badge color="primary">
+        {{(assistencia).AssisteixenMusics}}</ion-badge
+      >&nbsp;
+      <ion-badge color="tertiary">
+        {{(assistencia).AssisteixenMusicsMix}}</ion-badge
+      >
+    </ion-label>
+  </ion-item>
+  <ion-item
+    ><ion-label slot="start">Sanitaris</ion-label>
+    <ion-label slot="end"
+      ><ion-badge color="primary"
+        >{{(assistencia ).AssisteixenSanitaris}}</ion-badge
+      >
+    </ion-label>
+  </ion-item>
+  <ion-item
+    ><ion-label slot="start">Altres</ion-label>
+    <ion-label slot="end"
+      ><ion-badge color="primary"
+        >{{(assistencia ).AssisteixenSense}}</ion-badge
+      ></ion-label
+    >
+  </ion-item>
+
+  <ion-button
+    shape="round"
+    expand="block"
+    color="groc"
+    (click)="obrirAssistencia()"
+    >Assistència
+  </ion-button>
+  <ion-button
+    shape="round"
+    expand="block"
+    color="groc"
+    (click)="obrirAssistenciaGrup()"
+    >Assistència per posició</ion-button
+  >
+</ion-list>

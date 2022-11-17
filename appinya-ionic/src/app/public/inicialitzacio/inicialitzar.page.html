@@ -1,0 +1,276 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+-->
+<ion-content class="outer-content">
+  <div class="capcalera" #pageTop>
+    <div class="titol animate__animated animate__zoomInLeft">
+      Configura el teu dispositiu
+    </div>
+    <div class="capcelera-logo"></div>
+  </div>
+  <ion-grid class="contenido" [hidden]="storeVisibleState != 'visible'" [@visiblitat]="storeVisibleState">
+    <ion-row>
+      <ion-col size="9">
+        <h2 class="storeText animate__animated animate__backInRight">
+          Descarregar les dades al teu dispositiu
+        </h2>
+      </ion-col>
+      <ion-col size="3" class="ion-text-end center">
+        <ion-toggle class="animate__animated animate__backInLeft" [(ngModel)]="offline" disabled="true"></ion-toggle>
+      </ion-col>
+      <ion-col size="12" size-md="6" [hidden]="!offline">
+        <img class="imageStore fade-in" src="assets/img/Terceros/freepik/online.jpg" />
+        <a href="http://www.freepik.com">Designed by stories / Freepik</a>
+      </ion-col>
+      <ion-col size-md="6" class="center animate__animated animate__fadeInUp" [hidden]="!offline">
+        L'aplicació en aquest mode no requereix connexió a internet per veure
+        tots els esdeveniments, àlbums o informació associda als castellers.
+        <br />
+        <br />
+        Aquesta versió no requereix connexió a internet a cada click, però si
+        que caldrà per confirmar l'assistència o modificar la informació.
+      </ion-col>
+      <ion-col size="12" class="center resumText" [hidden]="!offline">
+        <b class="resumText">
+          Aquest mode és el més òptim per a dispositus mòbils</b>
+      </ion-col>
+      <ion-col size="12" size-md="6" [hidden]="offline">
+        <img class="imageStore fade-in" src="assets/img/Terceros/freepik/online.jpg" />
+        <a href="http://www.freepik.com">Designed by stories / Freepik</a>
+      </ion-col>
+      <ion-col size-md="6" class="center animate__animated animate__fadeInUp" [hidden]="offline">
+        L'aplicació en aquest mode requereix una connexió a internet per poder
+        veure la informació dels castellers, àlbums i calendari.
+        <br />
+        <br />
+        També es requerirà connexió a internet per poder veure la informació
+        personal o tècnica.
+        <br />
+        <br />
+      </ion-col>
+      <ion-col size="12" class="center resumText animate__animated animate__fadeInUp" [hidden]="offline">
+        <b> Aquest mode és el més òptim per a ordinadors</b>
+      </ion-col>
+
+      <ion-col size="12" center text-center>
+        <ion-button expand="block" (click)="anarInformacioUs()" color="verd">
+          Següent >
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid [hidden]="usVisibleState != 'visible'" [@visiblitat]="usVisibleState"
+    class="animate__animated animate__fadeInUp">
+    <ion-row>
+      <ion-col size="12" text-center>
+        <h2 class="">CONDICIONS D’ÚS</h2>
+      </ion-col>
+      <ion-col size="12" text-left>
+        <h2>Objectiu</h2>
+        <p>
+          L’objecte de les presents condicions es regular l’accés i la
+          utilització de l’aplicació mòbil i web Appinya.
+        </p>
+        <p>
+          L’Associació Colla Castellera Jove de Barcelona és reserva la facultat
+          de modificar, en qualsevol moment i, sense previ avís, la presentació
+          i configuració de l’aplicació, així com els seus continguts o serveis.
+          L’usuari reconeix i accepta que en qualsevol moment l’Associació Colla
+          Castellera Jove de Barcelona pugui interrompre, desactivar, o
+          cancel·lar qualsevol dels elements integrats a l’aplicació.
+        </p>
+        <p>
+          L’accés i la utilització de l’aplicació té caràcter gratuït sense que
+          l’usuari hagi que proporcionar cap tipus de contraprestació per a
+          poder gaudir d’ells, exceptuant allò, relatiu al possible cost de la
+          connexió mitjançant de la xarxa de telecomunicacions subministrada per
+          el proveïdor d'accés contractat per l’usuari.
+        </p>
+        <p>
+          La utilització d’algun dels Continguts o serveis de l’aplicació podrà
+          fer-se mitjançant la subscripció o registre previ de l’Usuari.
+        </p>
+        <h2>L’usuari</h2>
+        <p>
+          La descàrrega i l’ús de l’aplicació atorga la condició d’usuari de la
+          mateixa, i implica la lectura, enteniment i acceptació de tots els
+          termes i condicions d’ús recollides en aquest document.
+        </p>
+
+        <h2>Ús de l’aplicació</h2>
+        <p>
+          L’usuari reconeix i accepta que l’ús dels continguts i/o serveis
+          oferits per l’aplicació mòbil es farà sota el seu exclusiu risc i
+          responsabilitat. L’usuari es compromet a fer servir l’aplicació i tot
+          el seu contingut i serveis en conformitat amb la Llei, la moral,
+          l’ordre públic i les presents condicions d’ús. Així mateix, es
+          compromet a fer un ús adequat dels serveis i continguts de l’aplicació
+          i, no a emprar-los en activitats il·lícites o constitutives de delicte,
+          que atemptin contra els drets de tercers i/o que infringeixin la
+          regulació sobre propietat intel·lectual i industrial, o qualsevol
+          altra norma legal aplicable.
+        </p>
+        <p>
+          A títol enunciatiu, i en cap cas limitatiu o excloent, l'usuari es
+          compromet a:
+        </p>
+        <ul style="
+            list-style-type: square;
+            list-style-type: disc;
+            margin-top: 1em;
+            margin-bottom: 1 em;
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 40px;
+          ">
+          <li>
+            No introduir o difondre continguts o propaganda de caràcter racista,
+            xenòfob, homòfob, pornogràfic, d’apologia del terrorisme o que
+            atempti contra els drets humans.
+          </li>
+          <li>
+            No difondre, transmetre o ficar a disposició de tercers qualsevol
+            tipus d’informació personal d’altres usuaris.
+          </li>
+        </ul>
+
+        <h2>Exclusió de garanties i responsabilitats</h2>
+        <p>
+          L’Associació Colla Castellera Jove de Barcelona no garanteix en tot
+          moment la disponibilitat d’accés de l’aplicació i els seus serveis,
+          per tant, no serà responsable, amb els límits que l’ordenament jurídic
+          marqui, de danys i perjudicis causats per la indisponiblitat, falles
+          d’accés o falta de continuïtat de l’aplicació i els seus serveis
+        </p>
+        <p>
+          L’ús de l’aplicació per part de menors d'edat és exclusiva
+          responsabilitat dels seus pares i tutors, l'utilització de
+          l’aplicació implica la seva autorització per a fer-ho, eximint-se
+          l’Associació Colla Castellera Jove de Barcelona de qualsevol
+          responsabilitat al respecte.
+        </p>
+
+        <h2>Conducta dels Usuaris</h2>
+        <p>
+          L’Associació Colla Castellera Jove de Barcelona no garanteix que els
+          usuaris de l’aplicació facin us dels continguts o serveis de la
+          mateixa de conformitat amb la Llei, la moral, l’ordre públic ni les
+          presents condicions. Tampoc garanteix la veracitat de les dades
+          proporcionades pels usuaris.
+        </p>
+        <p>
+          L’Associació Colla Castellera Jove de Barcelona no serà responsable,
+          indirecta ni subsidiàriament, de danys i perjudicis de qualsevol
+          naturalesa derivats de la utilització dels continguts o serveis de
+          l’aplicació per part dels usuaris.
+        </p>
+        <p>
+          L’Associació Colla Castellera Jove de Barcelona no té cap obligació de
+          comprovar la veracitat o exactitud de la informació subministrada a
+          través de l’aplicació.
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" center text-center>
+        <ion-button expand="block" (click)=" anarCarregarInformacio()" color="verd">
+          Accepto
+        </ion-button>
+      </ion-col>
+      <ion-col size="6" center text-center>
+        <ion-button expand="block" (click)="cancelar()">
+          No accepto
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div [hidden]="actualitzacioVisibleState != 'visible'" [@visiblitat]="actualitzacioVisibleState"
+    style="height: 100%; vertical-align: central">
+    <ion-grid style="position: absolute; top: 50%">
+      <ion-row>
+        <ion-col col-12 text-center>
+          <carregant-barra [percentatge]="percentatge" [percentatgeW]="percentatgeW" [informacio]="log">
+          </carregant-barra>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="casteller" [hidden]="validacioInfoVisibleState != 'visible'" [@visiblitat]="validacioInfoVisibleState">
+    <div class="part-central animate__animated animate__backInLeft">
+      <div style="margin: auto; width: 130px" [hidden]="fotoVisibleState != 'visible'" [@visiblitat]="fotoVisibleState">
+        <div class="cabeceraFoto" [style.background-image]="'url('+foto+')'"></div>
+      </div>
+      <div class="formulari">
+        <p>
+          Aquí tens la informació que tenim registrada. Notifica els canvis
+          clicant al botó de "hi ha errors". Gràcies per la teva col·laboració
+        </p>
+        <form #loginForm="ngForm" novalidate>
+          <ion-list lines="none" text-center>
+            <ion-item class="animate__animated animate__backInLeft">
+              <ion-icon class="gran" src="assets/icons/icon_person.svg" color="primary" slot="start">
+              </ion-icon>
+              <ion-label>{{casteller.Nom}} {{casteller.Cognom}}</ion-label>
+            </ion-item>
+
+            <ion-item *ngIf="casteller.Carrec">
+              <ion-icon class="gran" src="assets/icons/icon_information.svg" color="primary" slot="start">
+              </ion-icon>
+              <ion-label> Càrrec: {{casteller.Carrec}} </ion-label>
+            </ion-item>
+
+            <ion-item *ngIf="casteller.Email">
+              <ion-icon class="gran" name="mail-outline" color="primary" slot="start"></ion-icon>
+              <ion-label>{{casteller.Email}} </ion-label>
+            </ion-item>
+
+            <ion-item *ngIf="casteller.Telefon1">
+              <ion-icon class="gran" name="logo-whatsapp" color="primary" slot="start"></ion-icon>
+
+              <ion-label>{{casteller.Telefon1}} </ion-label>
+            </ion-item>
+            <ion-item *ngIf="casteller.Telefon2">
+              <ion-icon class="gran" name="logo-whatsapp" color="primary" slot="start"></ion-icon>
+
+              <ion-label>{{casteller.Telefon2}} </ion-label>
+            </ion-item>
+            <ion-item *ngIf="casteller.Direccio" text-wrap>
+              <ion-icon class="gran" src="assets/icons/icon_adreca.svg" color="primary" slot="start"></ion-icon>
+              {{casteller.Direccio}} <br />
+              {{casteller.CodiPostal}} {{casteller.Municipi}}
+              {{casteller.Provincia}}
+            </ion-item>
+
+            <ion-button expand="block" (click)="anarFinalitzar()" color="verd">
+              Sí, és correcte
+            </ion-button>
+            <ion-button expand="block" (click)="mostrarAlertaCanvi()">
+              <ion-icon slot="start" name="create-outline"></ion-icon>
+              Hi ha errors
+            </ion-button>
+          </ion-list>
+        </form>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,24 @@
+﻿<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button color="blanc" (click)="cancelar()">X</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-list>
+    <ion-item *ngFor="let rol of rols">
+      <ion-icon slot="start" class="mitja" color="blanc" [name]="rol.Icon"></ion-icon>
+      <ion-label color="blanc">{{rol.Descripcio}} </ion-label>
+      <ion-toggle slot="end" color="groc" [(ngModel)]="rol.Checked"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-item>
+    <ion-button slot="end" (click)="aplicarFilters()" color="groc" shape="round">
+      Aplicar
+    </ion-button>
+  </ion-item>
+</ion-footer>

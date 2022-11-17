@@ -1,0 +1,44 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/ 
+-->
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button color="blanc" (click)="cancelar()">X</ion-button>
+      <ion-title> Posicions </ion-title>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="blanc" (click)="aplicarFilters()" strong>Fet!</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let posicio of posicions">
+      <ion-icon class="mitja" color="blanc" *ngIf="posicio.icon"
+        src="assets/icons/icon_tipus_posicio_{{posicio.IdPosicio}}.svg" color="primary">
+      </ion-icon>
+      <ion-label color="blanc">{{posicio.name}} </ion-label>
+      <ion-toggle color="groc" [(ngModel)]="posicio.isChecked" (ionChange)="canviPosicio(posicio)"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>

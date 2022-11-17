@@ -1,0 +1,94 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+.album-item {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  text-align: center;
+}
+.titol {
+  color: var(--ion-color-blanc);
+  font-family: "Uniform-Medium";
+  font-size: 23px;
+  padding-top: 10px;
+  position: absolute;
+  top: 150px;
+  left: 30px;
+}
+.fotograf {
+  color: var(--ion-color-blanc);
+  font-family: "Uniform-Medium";
+  font-size: 13px;
+  padding-top: 10px;
+  position: absolute;
+  top: 120px;
+  left: 30px;
+}
+.edicio {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  opacity: 0.8;
+}
+.data {
+  font-weight: bold;
+  color: var(--ion-color-primary);
+  line-height: 30px;
+  text-align: right;
+  padding-right: 20px;
+  font-size: 15px;
+}
+
+.opcions-inferiors {
+  padding-left: 20px;
+}
+.foto-bg {
+  width: 90%;
+}
+.foto-foto {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--ion-color-primary);
+  margin: 0px 0px 0px 0px;
+}
+
+.foto-foto img {
+  width: 100%;
+  height: auto;
+  opacity: 0.7;
+}
+
+.corazon-contenidor {
+  position: relative;
+  float: left;
+}
+
+.numero-contenidor {
+  position: relative;
+  float: left;
+  height: 30px;
+  vertical-align: middle;
+  padding-left: 10px;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 18px;
+  color: var(--ion-color-primary);
+}

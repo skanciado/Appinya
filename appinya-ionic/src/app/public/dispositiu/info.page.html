@@ -1,0 +1,121 @@
+<!--/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Finestra de Desenvolupament</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form>
+    <ion-list>
+      <ion-list-header lines="full">
+        <ion-label> Informació Dispositiu </ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Versió</ion-label>
+        <ion-input clearInput [value]="versio" readonly slot="end"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Plataforma</ion-label>
+        <ion-input
+          clearInput
+          [value]="plataforma"
+          readonly
+          slot="end"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label> Data Actualització</ion-label>
+        <ion-input
+          clearInput
+          [value]="dataActualitzacio"
+          readonly
+          slot="end"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label> Servidor</ion-label>
+        <ion-input
+          clearInput
+          [value]="servidor"
+          readonly
+          slot="end"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label> Token</ion-label>
+        <ion-textarea
+          rows="3"
+          cols="20"
+          clearInput
+          [value]="token"
+          readonly
+        ></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label> Usuari Sessió</ion-label>
+        <ion-textarea
+          rows="5"
+          cols="20"
+          clearInput
+          [value]="user"
+          readonly
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-list-header lines="full">
+        <ion-label> Informació Local </ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label> Castellers</ion-label>
+        <ion-badge slot="end">{{castellers}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label> Esdeveniments</ion-label>
+        <ion-badge slot="end">{{esdeveniments}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label> Posicions</ion-label>
+        <ion-badge slot="end">{{tipusposicions}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label> Tipus Esdeveniments</ion-label>
+        <ion-badge slot="end">{{tipusesdeveniments}}</ion-badge>
+      </ion-item>
+      <ion-item-group>
+        <ion-item>
+          <ion-button (click)="forcarRefresc()" type="submit">
+            Forçar Refresc
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="subplantar()" type="submit">
+            Subplantar
+          </ion-button>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+  </form>
+</ion-content>

@@ -1,0 +1,115 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+:root {
+  background-color: darkgrey;
+}
+.titol {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+.tipuspregunta {
+  border: var(--ion-color-primary);
+  border-style: groove;
+  border-radius: 15px;
+  margin: 10px 10px 10px 10px;
+  width: 70px;
+}
+#foto-noticia {
+  min-height: 150px;
+  max-height: 450px;
+
+  background-color: darkgrey;
+  text-align: center;
+  position: relative;
+  margin: 10px 10px 20px 10px;
+  transition: all 4s ease-out;
+  overflow: hidden;
+}
+
+.alert-danger {
+  color: var(--ion-color-danger);
+  font-size: 13px;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+/*
+ #foto-noticia:active {
+   height: 600px;
+ }
+*/
+#foto-noticia img {
+  width: 100%;
+  height: auto;
+  transition: all 4s ease-out;
+}
+
+#foto-esborrar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#foto-agregar {
+  width: 150px;
+  border: 1px solid var(--ion-color-blanc);
+  border-radius: 50px;
+  padding: 10px;
+  opacity: 0.5;
+  position: absolute;
+  top: 40%;
+  left: 40%;
+}
+
+#foto-agregar ion-item {
+  background-color: transparent;
+  color: var(--ion-color-blanc);
+  font-size: 12px;
+}
+
+#foto-agregar:hover {
+  opacity: 0.7;
+  border: 1px solid var(--ion-color-primary);
+}
+
+ion-title {
+  font-family: "Uniform-Bold";
+  font-size: 28px;
+  line-height: 33px;
+  color: var(--ion-color-primary);
+}
+ion-header {
+  height: 124px;
+  border-bottom: 3px var(--ion-color-secondary);
+  border-bottom-style: groove;
+  background: var(--appinya-background-formulari);
+}
+ion-content {
+  background: var(--appinya-background-formulari);
+  color: var(--ion-color-primary);
+}
+ion-item {
+  border-bottom: 1px solid var(--ion-color-primary);
+}
+.opcio-data {
+  border-bottom: 0px;
+}
+.opcio-data-permanent {
+  padding-left: 50px;
+}

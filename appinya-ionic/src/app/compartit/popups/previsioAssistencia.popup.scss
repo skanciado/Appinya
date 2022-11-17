@@ -1,0 +1,65 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+ion-item-sliding {
+  height: 100%;
+  transition: width 0.2s ease-out, opacity 0.2s ease-out;
+}
+.deleted {
+  width: 0px;
+  opacity: 0;
+}
+.confirmat {
+  --background: var(--ion-color-groc);
+}
+ion-segment {
+  background-color: white;
+}
+.list-header {
+  margin-bottom: 0px;
+}
+
+.ico-peque:before {
+  font-size: 20px;
+}
+
+.cardNotFound {
+  position: relative;
+  text-align: center;
+  top: 12%;
+}
+
+.toolbar-ios .segment-ios {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  max-width: 260px;
+  padding-left: 60px;
+}
+
+.segment-ios-blanc .segment-button.segment-activated {
+  color: #000;
+  background-color: var(--ion-color-blanc);
+}
+@media only screen and (max-width: 600px) {
+  ion-segment-button > ion-label {
+    display: none;
+  }
+}

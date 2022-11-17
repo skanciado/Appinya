@@ -1,0 +1,62 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+
+
+-->
+
+<ion-content>
+  <div class="titol">Parlem-ne!</div>
+  <div class="sottitol">
+    Tens alguna suggerència o vols fer cap comentari a la junta, tècnica o a
+    alguna comissió en concret? Posa’t en contacte!
+  </div>
+  <div class="capcelera-logo"></div>
+  <div>
+    <form #submitForm="ngForm" novalidate (ngSubmit)="submit(submitForm)">
+      <ion-list no-lines>
+        <ion-select [(ngModel)]="qui" name="qui" placeholder="Missatge a...">
+          <ion-select-option value="1">Cap de colla</ion-select-option>
+          <ion-select-option value="5">Tècnica Canalla</ion-select-option>
+          <ion-select-option value="3">Tècnica Tronc</ion-select-option>
+          <ion-select-option value="4">Tècnica Pinya</ion-select-option>
+          <ion-select-option value="2">Junta</ion-select-option>
+          <ion-select-option value="8">Imatge</ion-select-option>
+          <ion-select-option value="7">Bar</ion-select-option>
+          <ion-select-option value="9">Tresoreria</ion-select-option>
+          <ion-select-option value="10">Secretaria</ion-select-option>
+        </ion-select>
+
+        <ion-item>
+          <ion-textarea [(ngModel)]="supportMessage" name="supportQuestion" #supportQuestion="ngModel" rows="10"
+            required placeholder="Escriu el missatge... "></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <p ion-text [hidden]="supportQuestion.valid || submitted === false || !conexio" color="danger" padding-left>
+        Explica'ns!
+      </p>
+
+      <div padding text-center>
+        <ion-button shape="round" expand="block" type="submit" [hidden]="!conexio" color="groc">Envia</ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,41 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+<ion-content
+  style="
+    background: url('./assets/colla/presentacio.jpg') no-repeat center/cover
+      fixed;
+  "
+>
+  <div id="optimitzar">
+    <div class="missatge">
+      <h1>Optimitzant l'app!</h1>
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+    </div>
+    <div class="peu">
+      S'ha detectat un canvi de versió. <br />
+      {{text}}<br />
+      <button ion-button round *ngIf="visibleReintentar" (click)="reintentar()">
+        Reintenta
+      </button>
+    </div>
+  </div>
+</ion-content>

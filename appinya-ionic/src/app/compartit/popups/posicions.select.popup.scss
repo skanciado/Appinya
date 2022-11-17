@@ -1,0 +1,45 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+.grup {
+  color: var(--ion-color-blanc);
+  font-size: 16px;
+  background-color: var(--ion-color-secondary);
+}
+ion-content {
+  --ion-background-color: var(--appinya-background-popup);
+}
+ion-toolbar {
+  --ion-background-color: var(--appinya-background-popup);
+}
+ion-list {
+  --ion-background-color: none;
+  font-family: "Uniform-Bold";
+  font-size: 18px;
+}
+
+ion-footer {
+  --ion-background-color: var(--appinya-background-popup);
+}
+ion-button {
+  font-family: "Uniform-Medium";
+  font-size: 14px;
+  --padding-end: 20px;
+  --padding-start: 20px;
+}

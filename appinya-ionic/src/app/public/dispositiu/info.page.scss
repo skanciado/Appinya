@@ -1,0 +1,84 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+
+dispositiu-det {
+  /*.scroll-content {
+        background: #EDEDED;
+    }*/
+  .titol {
+     font-weight: bold;
+  }
+
+  .data {
+    font-weight: bold;
+  }
+
+  .esdeveniment-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    ion-card-content {
+      flex: 1 1 auto;
+      margin-right: 0px !important;
+    }
+  }
+
+  button div {
+    margin-left: 0px !important;
+  }
+
+  .esdeveniment-button {
+    padding-right: 0px;
+    padding-left: 4px;
+  }
+
+  .esdeveniment_icon:before {
+    font-size: 60px;
+  }
+
+  .esdeveniment-card ion-card-header .item {
+    padding: 4px 16px;
+  }
+
+  .ico-peque {
+    margin: 0px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  .ico-peque:before {
+    font-size: 20px;
+  }
+
+  .text-assitencia {
+    font-size: 10px;
+  }
+
+  .number-assistencia {
+    font-size: 10px;
+    font-weight: bold;
+  }
+
+  .assistencia-box {
+    width: 50px;
+    text-align: left;
+  }
+}

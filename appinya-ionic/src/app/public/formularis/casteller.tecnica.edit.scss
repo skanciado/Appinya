@@ -1,0 +1,88 @@
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+:root {
+  background-color: darkgrey;
+}
+
+ion-header {
+  ion-title {
+    font-family: "Uniform-Bold";
+    font-size: 28px;
+    line-height: 33px;
+    color: var(--ion-color-primary);
+  }
+
+  background-color: var(--ion-color-primary);
+  height: 85px;
+  margin-bottom: 90px;
+  .foto {
+    img {
+      width: 110px;
+      height: 110px;
+      border-radius: 90px;
+    }
+    position: absolute;
+    font-family: "Uniform-Medium";
+    font-size: 15px;
+    line-height: 18px;
+    text-align: center;
+    color: #949494;
+    top: 26px;
+    z-index: 999;
+    overflow: hidden;
+    left: 50%;
+    margin-left: -100px;
+  }
+}
+ion-toolbar {
+  background-color: var(--ion-color-primary);
+}
+.sobrenom {
+  font-family: "Uniform-Bold";
+  font-size: 22px;
+  text-align: center;
+  padding-top: 0px;
+  color: var(--ion-color-primary) !important;
+}
+.nom {
+  font-family: "Uniform";
+  font-size: 14px !important;
+  text-align: center;
+  padding-top: 0px !important;
+  color: var(--ion-color-primary) !important;
+}
+
+ion-content {
+  background: var(--appinya-background-formulari);
+  color: var(--ion-color-primary);
+}
+ion-item {
+  border-bottom: 1px solid var(--ion-color-primary);
+}
+.opcio-data {
+  border-bottom: 0px;
+}
+.opcio-data-permanent {
+  padding-left: 50px;
+}
+@media only screen and (max-width: 445px) {
+  .poslabel {
+    display: none;
+  }
+}

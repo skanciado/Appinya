@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  appinya-web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    ports:
+      - 8080:80

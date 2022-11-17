@@ -1,0 +1,906 @@
+{
+	"info": {
+		"_postman_id": "57cf032f-0ac8-447c-904c-98b84db8373d",
+		"name": "Administració Usuaris",
+		"description": "Validar Rol Admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							"pm.test(\"Validació d'usuari Administrador correcte\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"    var jsonData = pm.response.json();   ",
+							"    pm.environment.set(\"token\", jsonData.token);  ",
+							"    pm.environment.set(\"idUsuari\", jsonData.id);  ",
+							"    pm.environment.set(\"rols\", jsonData.rols);  ",
+							"    pm.expect(jsonData.rols).to.include(\"ADMIN\");",
+							"",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Usuari\":\"{{admin_usuari}}\",\"Contrasenya\":\"{{admin_password}}\"}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/validar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"validar"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtenir Informació d'Usuari",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "44d68b61-a804-49f9-be4f-d7b39254adba",
+						"exec": [
+							"pm.test(\"Obtenir informació d'usuari\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+							"     // assert that the response has a valid JSON body",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"    var jsonData = pm.response.json();  ",
+							"});  "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/usuaris/{{idUsuari}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"usuaris",
+						"{{idUsuari}}"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Usuaris Bàsica",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "44d68b61-a804-49f9-be4f-d7b39254adba",
+						"exec": [
+							"pm.test(\"Obtenir llistat  d'usuaris\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+							"     // assert that the response has a valid JSON body",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"     ",
+							"});  "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/usuaris",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"usuaris"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": []
+		},
+		{
+			"name": "Cerca Usuaris",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "44d68b61-a804-49f9-be4f-d7b39254adba",
+						"exec": [
+							"pm.test(\"Obtenir llistat  d'usuaris\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+							"     // assert that the response has a valid JSON body",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"     ",
+							"});  "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"RegIni\":0,\t\"Text\":\"\",\t\"Opcions\":\"\" }\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/usuari/cercar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"usuari",
+						"cercar"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Usuari",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"",
+							"    var jsonData = pm.response.json();   ",
+							"    pm.environment.set(\"random_usuari\", jsonData.retorn.usuari);   ",
+							"    pm.test(\"Creació d'un usuari amb permisos bàsics\", function () { ",
+							"        pm.expect(jsonData.correcte).eq(true);",
+							"        pm.response.to.have.status(200); ",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Usuari\":\"test_{{$randomInt}}@test.com\",\"Contrasenya\":\"{{admin_password}}\"}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/usuari",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"usuari"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Casteller Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54f116ac-bb9b-44d2-bb3e-6338ca73bc73",
+						"exec": [
+							" ",
+							" ",
+							"pm.test(\"Crear usuari Test\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"    var jsonData = pm.response.json();   ",
+							"    pm.expect(jsonData.correcte).to.equal(true);   ",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a902dcb-17de-4907-b000-8560d11354df",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"IdUsuari\":\"{{idUsuari}}\",\r\n \"Nom\":\"Test\",\r\n \"Cognom\":\"Test\",\r\n \"Alias\":\"{{random_usuari}}\",\r\n \"Email\":\"{{random_usuari}}\",         \r\n \"IdTipusDocument\":1, \r\n \"Document\":\"46555555S\",\r\n \"Telefon1\":\"933030243\",\r\n \"VisTelefon1\":false,\r\n \"Telefon2\":\"6666666\",\r\n \"VisTelefon2\":false,\r\n \"Carrec\":\"Tester\",\r\n \"Direccio\":\"Antoni Willifox 1111\",        \r\n \"CodiPostal\":\"08018\",\r\n\"IdMunicipi\":147463,\r\n\"IdProvincia\":86,  \r\n \"VisDireccio\":false,\r\n \"Assegurat\":false,\r\n \"DataNaixement\":\"1980-12-30T00:00:00\",\r\n \"VisDataNaixement\":false,\r\n \"TeCamisa\":false,  \r\n \"Sanitari\":false,\r\n \"Habitual\":false,\r\n \"Actiu\":true,\r\n \"RebreCorreuNoticies\":false,\r\n \"RebreCorreuFotos\":false, \r\n \"TeCasc\":false,\r\n \"EsCascLloguer\":false\r\n }"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/castellers",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"castellers"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Assignar Rol Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Assingar rol administrador \", function () { ",
+							"    pm.response.to.have.status(200);  ",
+							"   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Email\":\"{{random_usuari}}\",\"Rols\":[\t\"ADMIN\" ]}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/usuari/rols/assignar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"usuari",
+						"rols",
+						"assignar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Informació d'Usuari per Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Obtenir Usuari per Id \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/usuari/?id={{idUsuari}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"usuari",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{idUsuari}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirmar Manualment Correu",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Confirmar manualment el correu \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/usuari/email/confirmar?usuari={{admin_usuari}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"usuari",
+						"email",
+						"confirmar"
+					],
+					"query": [
+						{
+							"key": "usuari",
+							"value": "{{admin_usuari}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "06ea2b40-f791-40b1-ad18-e7f5b2b8519d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4249246c-931c-4b0d-b7e2-8f6150f0021f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

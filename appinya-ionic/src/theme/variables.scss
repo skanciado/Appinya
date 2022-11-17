@@ -1,0 +1,136 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+@font-face {
+  font-family: "Uniform";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../assets/fonts/Uniform.ttf");
+}
+
+@font-face {
+  font-family: "Uniform-Bold";
+  font-style: normal;
+  font-weight: bold;
+  src: url("../assets/fonts/UniformBold.ttf");
+}
+@font-face {
+  font-family: "Uniform-Medium";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../assets/fonts/UniformMedium.ttf");
+}
+
+@font-face {
+  font-family: "Uniform-Black";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../assets/fonts/UniformBlack.ttf");
+}
+
+.ion-color-blanc {
+  --ion-color-base: var(--ion-color-blanc) !important;
+  --ion-color-base-rgb: var(--ion-color-blanc-rgb) !important;
+  --ion-color-contrast: var(--ion-color-blanc-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-blanc-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-blanc-shade) !important;
+  --ion-color-tint: var(--ion-color-blanc-tint) !important;
+}
+.ion-color-verd {
+  --ion-color-base: var(--ion-color-verd) !important;
+  --ion-color-base-rgb: var(--ion-color-verd-rgb) !important;
+  --ion-color-contrast: var(--ion-color-verd-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-verd-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-verd-shade) !important;
+  --ion-color-tint: var(--ion-color-verd-tint) !important;
+}
+.ion-color-groc {
+  --ion-color-base: var(--ion-color-groc) !important;
+  --ion-color-base-rgb: var(--ion-color-groc-rgb) !important;
+  --ion-color-contrast: var(--ion-color-groc-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-groc-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-groc-shade) !important;
+  --ion-color-tint: var(--ion-color-groc-tint) !important;
+}
+.tabActiu {
+  color: var(--ion-color-blanc);
+  width: 70px !important;
+  height: 70px !important;
+}
+
+.senseconexio {
+  background-color: var(--ion-color-danger);
+  text-align: center;
+  color: var(--ion-color-danger-contrast);
+}
+.version-appinya {
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-blanc);
+  font-size: 10px;
+  text-align: right;
+  padding-right: 10px;
+}
+ion-button {
+  text-transform: unset;
+}
+
+ion-icon {
+  &.gran {
+    width: 50px;
+    height: 50px;
+  }
+
+  &.mitja {
+    width: 30px;
+    height: 30px;
+  }
+
+  &.moltgran {
+    width: 100px;
+    height: 100px;
+  }
+}
+.tabVisible {
+  opacity: 1;
+  transition: all 4s linear;
+  visibility: visible;
+}
+
+.tabHidden {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+}
+ion-segment-button {
+  text-transform: unset;
+  font-family: "Uniform-Bold";
+  font-size: 16px;
+}
+
+ion-menu-toggle {
+  background-color: var(--ion-color-primary) !important;
+  font-weight: bold;
+}
+ion-fab-button[data-desc] {
+  position: relative;
+}
+
+ion-fab-button[data-desc]::after {
+  position: absolute;
+  content: attr(data-desc);
+  z-index: 1;
+  right: 55px;
+  bottom: 4px;
+  background-color: var(--ion-color-blanc);
+  padding: 9px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  color: var(--ion-color-primary);
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
+.border-top {
+  border-top: 1px solid var(--ion-color-primary);
+}
+.border-botton {
+  border-bottom: 1px solid var(--ion-color-primary);
+}

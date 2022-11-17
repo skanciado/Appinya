@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+     <title>Canvi Contrasenya</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+    </style>
+    <script src="../js/jquery-1.11.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+</head>
+<body onload="init()">
+    <div id="main-logo" style="width:100%;background-color:black;align-content:center;height:150px;padding-top:40px">
+        <center>    <img aling="middle" src="../images/logo.png" width="300px" /></center>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h1>Canviar Contrasenya</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <p class="text-center">Introdueix la nova contrasenya i el teu correu electrònic</p>
+                <form method="post" id="passwordForm">
+                    <input type="text" class="input-lg form-control" name="email" id="email" placeholder="Email" autocomplete="off">
+                    <br />
+                    <input type="password" class="input-lg form-control" name="password1" id="password1" placeholder="Nova contrasenya" autocomplete="off">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span id="8char" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Ha te tenir com a mínim 8 caràcters<br>
+                            <span id="ucase" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Una majúscula
+                        </div>
+                        <div class="col-sm-6">
+                            <span id="lcase" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Una minúscula<br>
+                            <span id="num" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Un número
+                        </div>
+                    </div>
+                    <input type="password" class="input-lg form-control" name="password2" id="password2" placeholder="Repeteix la contrasenya" autocomplete="off">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <span id="pwmatch" class="glyphicon glyphicon-remove" style="color:#FF0004;"></span> Les contrasenyes no coïncideixen
+                        </div>
+                    </div>
+                    <input type="button" class="col-xs-12 btn btn-primary btn-load btn-lg" onclick="enviarPeticio()" value="Canviar Contrasenya">
+                </form>
+            </div><!--/col-sm-6-->
+        </div><!--/row-->
+    </div>
+    <script type="text/javascript">
+        var token = "";
+        function init() {
+            var url = window.location.href;
+            var regex = new RegExp("[?&]id(=([^&#]*)|&|#|$)");
+            var regex2 = new RegExp("[?&]userName(=([^&#]*)|&|#|$)");
+            result = regex.exec(url);
+            result2 = regex2.exec(url);
+            if (result) {
+                token = result[2];
+                $("#email").val(result2[2]);
+            } else {
+                alert("Error a l\'autentificació");
+            }
+
+        }
+        function enviarPeticio() {
+            var email = $("#email").val();
+            var pass1 = $("#password1").val();
+            var pass2 = $("#password2").val();
+            var ucase = new RegExp("[A-Z]+");
+            var lcase = new RegExp("[a-z]+");
+            var num = new RegExp("[0-9]+");
+            if (email == "") {
+                alert("Error en l'usuari, l'usuari és obligatori");
+                $("#email").focus();
+
+            } else
+                if (pass1.length >= 8 && ucase.test(pass1) && lcase.test(pass1) && num.test(pass1) && pass1 == pass2) {
+                    $.ajaxSetup({
+                      contentType: "application/json; charset=utf-8"
+                    });
+                    $.post("../api/v1.0/autenticacio/contrasenya/confirmar", JSON.stringify({ Email: email, NewPassword: pass1, ConfirmPassword: pass2, Tiket: decodeURIComponent(token) }), function (data) {
+                        window.location = "./ResultatContrasenya/ConfirmacioContrasenyaOK.html";
+                    }).fail(function () {
+                        window.location = "./ResultatContrasenya/ErrorContrasenya.html";
+                    })
+                } else {
+                    alert("Contrasenya Incorrecte, comprova que el formulari està ven complimentat");
+                }
+
+        }
+
+        $("input[type=password]").keyup(function () {
+            var ucase = new RegExp("[A-Z]+");
+            var lcase = new RegExp("[a-z]+");
+            var num = new RegExp("[0-9]+");
+
+            if ($("#password1").val().length >= 8) {
+                $("#8char").removeClass("glyphicon-remove");
+                $("#8char").addClass("glyphicon-ok");
+                $("#8char").css("color", "#00A41E");
+            } else {
+                $("#8char").removeClass("glyphicon-ok");
+                $("#8char").addClass("glyphicon-remove");
+                $("#8char").css("color", "#FF0004");
+            }
+
+            if (ucase.test($("#password1").val())) {
+                $("#ucase").removeClass("glyphicon-remove");
+                $("#ucase").addClass("glyphicon-ok");
+                $("#ucase").css("color", "#00A41E");
+            } else {
+                $("#ucase").removeClass("glyphicon-ok");
+                $("#ucase").addClass("glyphicon-remove");
+                $("#ucase").css("color", "#FF0004");
+            }
+
+            if (lcase.test($("#password1").val())) {
+                $("#lcase").removeClass("glyphicon-remove");
+                $("#lcase").addClass("glyphicon-ok");
+                $("#lcase").css("color", "#00A41E");
+            } else {
+                $("#lcase").removeClass("glyphicon-ok");
+                $("#lcase").addClass("glyphicon-remove");
+                $("#lcase").css("color", "#FF0004");
+            }
+
+            if (num.test($("#password1").val())) {
+                $("#num").removeClass("glyphicon-remove");
+                $("#num").addClass("glyphicon-ok");
+                $("#num").css("color", "#00A41E");
+            } else {
+                $("#num").removeClass("glyphicon-ok");
+                $("#num").addClass("glyphicon-remove");
+                $("#num").css("color", "#FF0004");
+            }
+
+            if ($("#password1").val() && $("#password1").val() == $("#password2").val()) {
+                $("#pwmatch").removeClass("glyphicon-remove");
+                $("#pwmatch").addClass("glyphicon-ok");
+                $("#pwmatch").css("color", "#00A41E");
+            } else {
+                $("#pwmatch").removeClass("glyphicon-ok");
+                $("#pwmatch").addClass("glyphicon-remove");
+                $("#pwmatch").css("color", "#FF0004");
+            }
+        });
+    </script>
+</body>
+</html>

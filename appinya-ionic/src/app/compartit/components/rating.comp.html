@@ -1,0 +1,52 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/  
+-->
+<div class="star-container">
+  <ion-icon
+    class="start-icon"
+    name="star"
+    [class.select]="starts>=1"
+    (click)="starSelect(1)"
+  ></ion-icon>
+  <ion-icon
+    class="start-icon"
+    name="star"
+    [class.select]="starts>=2"
+    (click)="starSelect(2)"
+  ></ion-icon>
+  <ion-icon
+    class="start-icon"
+    name="star"
+    [class.select]="starts>=3"
+    (click)="starSelect(3)"
+  ></ion-icon>
+  <ion-icon
+    class="start-icon"
+    name="star"
+    [class.select]="starts>=4"
+    (click)="starSelect(4)"
+  ></ion-icon>
+  <ion-icon
+    class="start-icon"
+    name="star"
+    [class.select]="starts>=5"
+    (click)="starSelect(5)"
+  ></ion-icon>
+</div>

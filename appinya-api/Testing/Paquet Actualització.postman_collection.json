@@ -1,0 +1,949 @@
+{
+	"info": {
+		"_postman_id": "e1e69e1f-2fb5-4267-b792-1d0855c1c169",
+		"name": "Paquet Actualització",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "169ea118-0b00-453d-9560-e1df0074d025",
+						"exec": [
+							"pm.test(\"Validació d'usuari Administrador correcte\", function () {",
+							"     // assert that the status code is 200",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants ",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+							"    var jsonData = pm.response.json();   ",
+							"    pm.environment.set(\"token\", jsonData.Token);  ",
+							"    pm.environment.set(\"idUsuari\", jsonData.Id);  ",
+							"    pm.environment.set(\"rols\", jsonData.Rols);  ",
+							"    pm.expect(jsonData.Rols).to.include(\"ADMIN\");",
+							"",
+							"}); ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "38785ac5-4639-46a0-b665-6edcb09f9ce2",
+						"exec": [
+							"pm.expect(pm.environment.has('admin_usuari')).to.equal(true,'No hi ha usuari per validar. Assignat l\\'entorn correcte.');",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida'); ",
+							"let user = pm.environment.get(\"admin_usuari\");",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url);",
+							"console.log(\"Usuari  \", user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Usuari\":\"{{admin_usuari}}\",\"Contrasenya\":\"{{admin_password}}\"}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/autenticacio/validar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"autenticacio",
+						"validar"
+					]
+				},
+				"description": "Autenticate"
+			},
+			"response": [
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 12:01:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTkzMDAsImV4cCI6MTU2MTQ2NDEwMCwiaWF0IjoxNTYwODU5MzAwfQ.fIlka_EYmNtR51_et7r5cMsJkf8GqoVxfEncKMnGWuk\"\n}"
+				},
+				{
+					"name": "http://localhost:61775/Users/authenticate",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{'Username':'admin','Password':'admin'}"
+						},
+						"url": {
+							"raw": "http://localhost:61775/Users/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61775",
+							"path": [
+								"Users",
+								"authenticate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcQTQ1MTI1Nlxzb3VyY2VccmVwb3NcYXBwaW55YXYyXEFwcGlueWFTZXJ2ZXJDb3JlXFVzZXJzXGF1dGhlbnRpY2F0ZQ==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 18 Jun 2019 11:54:50 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"username\": \"admin\",\n    \"password\": null,\n    \"role\": \"Admin\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE1NjA4NTg4OTAsImV4cCI6MTU2MTQ2MzY5MCwiaWF0IjoxNTYwODU4ODkwfQ.UOkznzJOTH2Ik4OyeyehbaFeOoN0AgEZdMuNTyG9Pk0\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Informació d'Usuari validad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Obtenir informació d'Usuari  \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"     var jsonData = pm.response.json();  ",
+							"    pm.expect(jsonData.confirmatEmail).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache, private",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/usuari/usuariactual",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"usuari",
+						"usuariactual"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PaquetActualització",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar totes les actualitzacions \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Data\":\"2020-05-18T00:00:00.000\",\n\t\"DadesCastellers\":true,\n\t\"DadesJunta\":true,\n\t\"DadesTecnica\":true\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/paquetActualitzacio",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"paquetActualitzacio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Echo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar totes les actualitzacions \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Data\":null,\n\t\"DadesCastellers\":true,\n\t\"DadesJunta\":true,\n\t\"DadesTecnica\":true\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/paquetActualitzacio",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"paquetActualitzacio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Provincies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar totes les provincies \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/TipusBasics/provincies",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"TipusBasics",
+						"provincies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Municipis",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar els municipis de la provincia 86 \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/TipusBasics/municipis/86",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"TipusBasics",
+						"municipis",
+						"86"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Tipus Noticies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar totes tipus de  noticies \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/TipusBasics/noticies",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"TipusBasics",
+						"noticies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Tipus Esdeveniments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar totes tipus esdeveniments \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/TipusBasics/esdeveniments",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"TipusBasics",
+						"esdeveniments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Noticies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar totes les noticies \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/noticies/cercar",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"noticies",
+						"cercar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tipus Bàsics",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar tots els tipus bàsics \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/TipusBasics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"TipusBasics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cercar Tipus Posicions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbad6c48-004a-433a-b7c7-e4ee16c68092",
+						"exec": [
+							"pm.test(\"Descarregar totes posicions \", function () { ",
+							"    pm.response.to.have.status(200);   ",
+							"    var jsonData = pm.response.json();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76dae85d-8193-48e4-b5f3-f55878b09eee",
+						"exec": [
+							" ",
+							"pm.expect(pm.environment.has('url')).to.equal(true,'La URL desti no està definida');  ",
+							"let url = pm.environment.get(\"url\");  ",
+							"console.log(\"Servidor  \", url); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v1.0/TipusBasics/posicions",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"TipusBasics",
+						"posicions"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "ccd8472a-d2ca-4472-bb12-d0cef73e6c59",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "d444a8eb-046f-4d50-8bff-977b84fa408e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

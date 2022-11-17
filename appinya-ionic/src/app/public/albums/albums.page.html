@@ -1,0 +1,138 @@
+<!--/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="temporada && tipusCerca!='actual'" text-center>
+      {{temporada.Descripcio}}
+    </ion-title>
+    <ion-title *ngIf="tipusCerca=='actual'" text-center>
+      Àlbums Temporada Actual
+    </ion-title>
+    <ion-buttons slot="end" *ngIf=" tipusCerca=='historic'">
+      <ion-button color="blanc" (click)="canviarTemporadaClick()">
+        <ion-icon name="calendar" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="tipusCerca" (ionChange)="canviarCerca()">
+      <ion-segment-button value="actual"> Actuals </ion-segment-button>
+      <ion-segment-button value="historic"> Històric </ion-segment-button>
+    </ion-segment></ion-toolbar
+  >
+</ion-header>
+<ion-content>
+  <ion-refresher (ionRefresh)="ferActualitzar($event)" slot="fixed">
+    <ion-refresher-content
+      pullingText="Puja per actualitzar"
+    ></ion-refresher-content>
+  </ion-refresher>
+  <notrobat
+    descripcio="No hi ha albums"
+    iconName="image-outline"
+    *ngIf="estatCarrega==5"
+  ></notrobat>
+  <senseconexio *ngIf="estatCarrega==4"></senseconexio>
+  <ion-grid #carregat *ngIf="estatCarrega==3">
+    <ion-row align-items-stretch>
+      <ion-col
+        class="album-item"
+        size="12"
+        size-md="6"
+        size-xl="4"
+        align-self-stretch
+        align-self-center
+        *ngFor="let foto of llistaItems"
+      >
+        <ion-card class="foto-bg">
+          <div class="foto-foto">
+            <img [src]="foto.Portada" (click)="anarAUrl(foto)" />
+            <div class="titol" text-wrap>{{foto.Album}}</div>
+            <div class="fotograf" *ngIf="foto.Fotograf">
+              Fotògraf/a {{foto.Fotograf.Nom}} {{foto.Fotograf.Cognom}}
+            </div>
+            <div class="edicio">
+              <ion-fab-button
+                size="small"
+                color="blanc"
+                [hidden]="!potEditarFoto(foto)"
+                (click)="editarFoto(foto)"
+              >
+                <ion-icon name="pencil-outline" color="primary"></ion-icon>
+              </ion-fab-button>
+            </div>
+          </div>
+          <ion-row no-padding class="opcions-inferiors">
+            <ion-col size="4">
+              <div class="corazon-contenidor" [@like]="foto.estat">
+                <ion-icon
+                  [name]="(!foto.JoLike) ? 'heart-outline':'heart'"
+                  class="mitja"
+                  item-start
+                  color="primary"
+                  (click)="ferLike(foto,!foto.JoLike)"
+                ></ion-icon>
+              </div>
+              <div class="numero-contenidor" *ngIf="foto.Likes>0">
+                {{foto.Likes}}
+              </div>
+            </ion-col>
+
+            <ion-col size="8" class="data">
+              {{foto.Data | date:'dd LLLL YYYY' | uppercase }}
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-col col-12>
+      <ion-infinite-scroll
+        (ionInfinite)="ferScrollInfinit($event)"
+        threshold="100px"
+      >
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="Carregant"
+        >
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ion-col>
+  </ion-grid>
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    *ngIf="isNoticier() || isBar() || isOrganitzador() || isJunta() || isSecretari()"
+    #fab
+  >
+    <ion-fab-button>
+      <ion-icon name="share"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="editarFoto(null)" data-desc="Crear Album"
+        ><ion-icon name="add" color="secondary"></ion-icon
+      ></ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

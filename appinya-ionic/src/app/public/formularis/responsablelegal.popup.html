@@ -1,0 +1,85 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+-->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button color="blanc" (click)="cancelar()">X</ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" *ngIf="formulariActiu">
+      <ion-button color="blanc" (click)="guardar()" strong>Guardar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid *ngIf="!formulariActiu">
+    <ion-row>
+      <ion-col size="6">
+        <div class="opcio" (click)="obrirPopUpCastellers()">
+          <div class="cercle">És casteller?</div>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="opcio" (click)="obrirFormulari()">
+          <div class="cercle">No és casteller</div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list *ngIf="formulariActiu">
+    <ion-item>
+      <ion-select placeholder="Tipus de relació" [(ngModel)]="responsable.TipusResponsableId">
+        <ion-select-option *ngFor="let t of relacions" value="{{t.Id}}">{{t.Descripcio}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nom</ion-label>
+      <ion-input name="Nom" [(ngModel)]="responsable.Nom"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Cognoms</ion-label>
+      <ion-input name="Cognoms" [(ngModel)]="responsable.Cognoms"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" name="Email" [(ngModel)]="responsable.Email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Telèfon (principal)</ion-label>
+      <ion-input type="number" name="Telefon1" [(ngModel)]="responsable.Telefon1"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Telèfon (secundari)</ion-label>
+      <ion-input type="number" name="Telefon2" [(ngModel)]="responsable.Telefon2"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer *ngIf="casteller">
+  <ion-item color="primary">
+    <ion-avatar slot="start">
+      <img [src]="casteller.Foto ? casteller.Foto : 'assets/img/user/user-anonymous.jpg'" />
+    </ion-avatar>
+
+    {{casteller.Alias}}
+    <ion-icon slot="end" color="blanc" name="trash-bin-outline" (click)="esborrarCasteller()"></ion-icon>
+  </ion-item>
+</ion-footer>
