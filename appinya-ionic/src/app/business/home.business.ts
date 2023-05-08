@@ -20,15 +20,15 @@ import { Injectable } from '@angular/core';
 import { StoreData } from '../services/storage.data';
 import { UsuariService } from '../services/usuari.service';
 import { Menu } from '../entities/Menu';
-import { ErrorRefrescarCredencials } from '../entities/Errors'; 
+import { ErrorRefrescarCredencials } from '../entities/Errors';
 import { ICastellerModel, IResumHomeModel } from '../entities/interfaces';
 import { CastellersService } from '../services/castellers.service';
 import { NoticiesService } from '../services/noticies.service';
 import { EsdevenimentService } from '../services/esdeveniments.service';
 import { DeviceService } from '../services/device.service';
 import { HomeService } from '../services/home.service';
-import { EsdevenimentBs } from './Esdeveniments.business';
-import { NoticiesBs } from './Noticies.business';
+import { EsdevenimentBs } from './esdeveniments.business';
+import { NoticiesBs } from './noticies.business';
 
 /**
  * Gestor de Negoci de Usuaris
@@ -39,24 +39,24 @@ import { NoticiesBs } from './Noticies.business';
 })
 export class HomeBs {
 
-      
+
     constructor(
-        protected homeService:HomeService,
-        protected esdevenimentBs:EsdevenimentBs,
+        protected homeService: HomeService,
+        protected esdevenimentBs: EsdevenimentBs,
         protected noticiesBs: NoticiesBs,
-        protected deviceService:DeviceService, 
-        protected storeData: StoreData) { 
+        protected deviceService: DeviceService,
+        protected storeData: StoreData) {
     }
-    public async ObtenirHome () : Promise<IResumHomeModel> {
+    public async ObtenirHome(): Promise<IResumHomeModel> {
         let online = await this.storeData.esOnline();
         let user = await this.storeData.obtenirUsuariSession();
-         
+
         return {
-            Esdeveniments:await this.esdevenimentBs.obtenirEsdevenimentsActuals(),
-            Noticies:await this.noticiesBs.obtenirNoticiesActuals(0)
+            Esdeveniments: await this.esdevenimentBs.obtenirEsdevenimentsActuals(),
+            Noticies: await this.noticiesBs.obtenirNoticiesActuals(0)
         }
-             
-         
+
+
     }
-    
+
 }

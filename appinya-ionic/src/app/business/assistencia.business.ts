@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
 import { Constants } from "../Constants";
 import {
@@ -42,7 +43,7 @@ export class AssistenciaBs {
     protected assistenciaService: AssistenciaService,
     protected usuariService: UsuariService,
     protected storeData: StoreData
-  ) {}
+  ) { }
 
   estadisticaCasteller: IEstadisticaIndividualModel[] = [];
   /**
@@ -50,7 +51,7 @@ export class AssistenciaBs {
    * Pot retornar un error ERROR_MSG_SENSE_CONEXIO
    * */
   public async obtenirEstadisticaIndividual(): Promise<
-    IEstadisticaIndividualModel[]
+    IEstadisticaIndividualModel[] | undefined
   > {
     let user = await this.storeData.obtenirUsuariSession();
     let temporada = await this.storeData.obtenirTemporada();
@@ -65,6 +66,7 @@ export class AssistenciaBs {
         return this.estadisticaCasteller;
       });
     }
+    return undefined;
   }
 
   /**
@@ -119,9 +121,8 @@ export class AssistenciaBs {
   ): Promise<IEstadisticaIndividualModel[]> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.assistenciaService
-      .obtenirEstadistica(idCasteller, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .obtenirEstadistica(idCasteller, user));
   }
 
   /**
@@ -133,9 +134,8 @@ export class AssistenciaBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.assistenciaService
-      .enviarCorreuExportacio(idEsdeveniment, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .enviarCorreuExportacio(idEsdeveniment, user));
   }
   /**
    * Envia un correu electronic amb la extracció de l'assitencia d una temporada
@@ -146,9 +146,8 @@ export class AssistenciaBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.assistenciaService
-      .enviarCorreuExportacioAssistenciaGlobalDetall(idTemporada, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .enviarCorreuExportacioAssistenciaGlobalDetall(idTemporada, user));
   }
   /**
    * Envia un correu electronic amb la extracció de l'assitencia  d una temporada
@@ -159,9 +158,8 @@ export class AssistenciaBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.assistenciaService
-      .enviarCorreuExportacioAssistenciaGlobalResum(idTemporada, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .enviarCorreuExportacioAssistenciaGlobalResum(idTemporada, user));
   }
   /**
    * Confirmar assistencia d'un delegat o referent
@@ -185,9 +183,8 @@ export class AssistenciaBs {
     ];
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.assistenciaService
-      .confirmarAssistencia(lstAssistencia, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .confirmarAssistencia(lstAssistencia, user));
   }
   /**
    * Confirmar assistencia de forma personal
@@ -195,7 +192,7 @@ export class AssistenciaBs {
    * @param assistencia
    */
   public async confirmarAssistenciaPersonal(
-    idEsdeveniment: String,
+    idEsdeveniment: string,
     assistencia: boolean
   ): Promise<IRespostaServidor> {
     let lstAssistencia: IAssistenciaModel[] = [];
@@ -205,16 +202,13 @@ export class AssistenciaBs {
       Casteller: userM.CastellerId,
       Esdeveniment: idEsdeveniment,
       NumAcompanyants: 0,
-      Transport: null,
-      Observacions: null,
-      TransportAnada: null,
-      TransportTornada: null,
+      ConfirmacioTecnica: false,
       Preguntes: [],
       Assistire: assistencia ? true : false,
+      DataModificacio: new Date()
     });
-    return this.assistenciaService
-      .confirmarAssistencia(lstAssistencia, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .confirmarAssistencia(lstAssistencia, user));
   }
   /**
    * Confirmar la assistencia d' un esdveniment
@@ -265,9 +259,8 @@ export class AssistenciaBs {
     });
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.assistenciaService
-      .confirmarAssistencia(lstAssistencia, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .confirmarAssistencia(lstAssistencia, user));
   }
   /**
    * Confirmacio assitencia d'un usuari sense ser tecnica
@@ -278,9 +271,8 @@ export class AssistenciaBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.assistenciaService
-      .confirmarAssistencia(assistencia, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .confirmarAssistencia(assistencia, user));
   }
   /**
    * Confirmacio de l'assistencia per tecnica
@@ -293,9 +285,8 @@ export class AssistenciaBs {
     assistencia: IAssistenciaModel[]
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.assistenciaService
-      .confirmacioTecnica(idEsdeveniment, assistencia, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .confirmacioTecnica(idEsdeveniment, assistencia, user));
   }
   /**
    * Previsio de l'assistencia per tecnica
@@ -308,9 +299,8 @@ export class AssistenciaBs {
     assistencia: IAssistenciaModel[]
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.assistenciaService
-      .previsioTecnica(idEsdeveniment, assistencia, user)
-      .toPromise();
+    return await lastValueFrom(this.assistenciaService
+      .previsioTecnica(idEsdeveniment, assistencia, user));
   }
   /**
    * Metode per validar validar la confirmacio d'assistencia

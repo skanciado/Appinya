@@ -48,10 +48,12 @@ namespace AppinyaServerCore.Controllers
         private readonly ICastellerService _castellerService;
         private readonly IAssistenciaService _assistenciaService;
         private readonly IUsuariService _usuariService;
+        private readonly EmailSettings _emailSettings;
         #endregion
         public CastellersController(
          ILogger<CastellersController> logger,
          IOptions<AppSettings> appSettings,
+            IOptions<EmailSettings> emailSettings,
          ICastellerService castellerService,
          IAssistenciaService assistenciaService,
          IUsuariService usuariService,
@@ -60,6 +62,7 @@ namespace AppinyaServerCore.Controllers
         {
             if (appSettings == null) throw new ArgumentNullException(nameof(appSettings));
             _appSettings = appSettings.Value;
+            _emailSettings = emailSettings.Value;
             _castellerService = castellerService;
             _assistenciaService = assistenciaService;
             _usuariService = usuariService;

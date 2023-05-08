@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
 import {
   ICastellerModel,
   IDeuteModel,
@@ -39,7 +39,7 @@ export class DeutesBs {
     protected deuteService: DeuteService,
     protected usuariService: UsuariService,
     protected storeData: StoreData
-  ) {}
+  ) { }
 
   /**
    * Desar Deuta
@@ -50,7 +50,7 @@ export class DeutesBs {
     deute: IDeuteModel
   ): Promise<IRespostaServidorAmbRetorn<IDeuteModel>> {
     let user: IUsuariSessio = await this.storeData.obtenirUsuariSession();
-    return this.deuteService.desar(deute, user).toPromise();
+    return await lastValueFrom(this.deuteService.desar(deute, user));
   }
   /**
    * Esborrar Deuta
@@ -59,7 +59,7 @@ export class DeutesBs {
    */
   public async esborrarDeute(deute: IDeuteModel): Promise<IRespostaServidor> {
     let user: IUsuariSessio = await this.storeData.obtenirUsuariSession();
-    return this.deuteService.esborrar(deute, user).toPromise();
+    return await lastValueFrom(this.deuteService.esborrar(deute, user));
   }
   /**
    * Obtenir les Deutes
@@ -70,7 +70,7 @@ export class DeutesBs {
     cas: ICastellerModel
   ): Promise<IDeuteModel[]> {
     let user: IUsuariSessio = await this.storeData.obtenirUsuariSession();
-    return this.deuteService.obtenirDeutes(cas.Id, user).toPromise();
+    return await lastValueFrom(this.deuteService.obtenirDeutes(cas.Id, user));
   }
 
   /**
@@ -85,15 +85,14 @@ export class DeutesBs {
     regIni: number
   ): Promise<IDeuteModel[]> {
     let user: IUsuariSessio = await this.storeData.obtenirUsuariSession();
-    return this.deuteService
-      .obtenirDeutesPaginades(concepte, cas ? cas.Id : "", pagats, regIni, user)
-      .toPromise();
+    return await lastValueFrom(this.deuteService
+      .obtenirDeutesPaginades(concepte, cas ? cas.Id : "", pagats, regIni, user));
   }
   /**
    * Obtenir les Deutes Casteller
    */
   public async obtenirDeutesUsuari(): Promise<IDeuteModel[]> {
     let user: IUsuariSessio = await this.storeData.obtenirUsuariSession();
-    return this.deuteService.obtenirDeutesUsuari(user).toPromise();
+    return await lastValueFrom(this.deuteService.obtenirDeutesUsuari(user));
   }
 }

@@ -28,6 +28,7 @@ import { PaginaGenerica } from "./PaginaGenerica";
 import { Router } from "@angular/router";
 import { UsuariBs } from "src/app/business/Usuari.business";
 import { StoreData } from "src/app/services/storage.data";
+import { Constants } from "src/app/Constants";
 
 /**
  * Pagina amb utilitzats per navegar
@@ -40,8 +41,8 @@ export abstract class PaginaNavegacio extends PaginaGenerica {
     protected navCtrl: NavController,
     protected toastCtlr: ToastController,
     protected alertCtlr: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected storeData: StoreData
+    loadingCtrl: LoadingController,
+    storeData: StoreData
   ) {
     super(usuariBS, toastCtlr, alertCtlr, loadingCtrl, storeData);
   }
@@ -63,14 +64,14 @@ export abstract class PaginaNavegacio extends PaginaGenerica {
    * Metode per navegar a l'inici de la app
    * */
   navegarAInici() {
-    this.navCtrl.navigateRoot("/public");
+    this.navCtrl.navigateRoot(Constants.URL_INICI);
   }
 
   /**
    * Metode per navegar a la pagina de login
    * */
   navegarAAcces() {
-    this.navCtrl.navigateRoot("/public/acces");
+    this.navCtrl.navigateRoot(Constants.URL_ACCES);
   }
   /**
    * Metode per navegar a la pagina fitxa casteller
@@ -78,129 +79,130 @@ export abstract class PaginaNavegacio extends PaginaGenerica {
    */
   navegarAFitxaCasteller(id?: string) {
     if (id) {
-      this.navCtrl.navigateForward(`/public/casteller/${id}`);
-    } else this.navCtrl.navigateForward(`/public/casteller/0`);
+      this.navCtrl.navigateForward(`${Constants.URL_SOCIS_DET}/${id}`);
+    } else this.navCtrl.navigateForward(`${Constants.URL_SOCIS_DET}/0`);
   }
   /**
    * Metode per navegar a la pagina Usuari
    */
   navegarAFitxaUsuari() {
-    this.navCtrl.navigateRoot(`/public/fitxa`);
+    this.navCtrl.navigateRoot(`${Constants.URL_FITXA_USUARI}`);
   }
 
   /**
    * Metode per navegar a la pagina bustia
    */
   navegarACastells() {
-    this.navCtrl.navigateRoot(`/public/castellers`);
+    this.navCtrl.navigateRoot(`${Constants.URL_SOCIS}`);
   }
   /**
    * Metode per navegar a la pagina bustia
    */
   navegarABustia() {
-    this.navCtrl.navigateRoot(`/public/bustia`);
+    this.navCtrl.navigateRoot(`${Constants.URL_BUSTIA}`);
   }
   /**
    * Metode per navegar a la pagina incidencies
    */
   navegarAIncidencia() {
-    this.navCtrl.navigateRoot(`/public/incidencia`);
+    this.navCtrl.navigateRoot(`${Constants.URL_INCIDENCIA}`);
   }
   /**
    * Metode per navegar a la pagina esdeveniment
    * @param id
    */
   navegarAEsdeveniment(id: string) {
-    this.navCtrl.navigateRoot(`/public/esdeveniment/${id}`);
+    this.navCtrl.navigateRoot(`${Constants.URL_ESDEVENIMENT_DET}/${id}`);
   }
 
   navegarAEsdevenimentForm(id: string, clone?: boolean) {
     if (clone) {
       this.navCtrl.navigateRoot(
-        `/public/formularis/esdeveniment/${id}?clone=true`
+        `${Constants.URL_ESDEVENIMENT_EDIT}/${id}?clone=true`
       );
-    } else this.navCtrl.navigateRoot(`/public/formularis/esdeveniment/${id}`);
+    } else this.navCtrl.navigateRoot(`${Constants.URL_ESDEVENIMENT_EDIT}/${id}`);
   }
   /**
    * Metode per navegar a la pagina de login
    * */
   navegarAIniciarSessio() {
-    this.navCtrl.navigateRoot("/public/login");
+    console.debug("Navegar Inicia Sessio")
+    this.navCtrl.navigateRoot(Constants.URL_LOGIN);
   }
   /**
    * Metode per navegar a la pagina de Organitzacio
    * */
   navegarAOrganitzacio() {
-    this.navCtrl.navigateRoot("/public/organitzacio");
+    this.navCtrl.navigateRoot(Constants.URL_ORGANITZACIO);
   }
   /**
    * Metode per navegar a la pagina de refresc de la base de dades local
    * */
   navegarARefresc() {
-    this.navCtrl.navigateRoot("/public/inicialitzar");
+    this.navCtrl.navigateRoot(Constants.URL_INICIALITZAR);
   }
   /**
    * Metode per navegar a la pagina de login
    * */
   navegarAAgenda() {
-    this.navCtrl.navigateForward("/public/agendalist");
+    this.navCtrl.navigateForward(Constants.URL_AGENDA);
   }
   /**
    * Metode per navegar a la pagina de login
    * */
-  navegarAEditarNoticia(id) {
-    this.navCtrl.navigateForward(`/public/formularis/noticia/${id}`);
+  navegarAEditarNoticia(id: any) {
+    this.navCtrl.navigateForward(`${Constants.URL_NOTICIA_FITXA}/${id}`);
   }
   /**
    * Navegar A editar Casteller
    */
-  navegarAEditarCasteller(id) {
-    this.navCtrl.navigateForward(`/public/formularis/casteller/${id}`);
+  navegarAEditarCasteller(id: any) {
+    this.navCtrl.navigateForward(`${Constants.URL_FITXA_SOCI}/${id}`);
   }
   /**
    * Navegar A editar Casteller
    */
-  navegarAEditarDadesTecniques(id) {
-    this.navCtrl.navigateForward(`/public/formularis/castellertecnic/${id}`);
+  navegarAEditarDadesTecniques(id: any) {
+    this.navCtrl.navigateForward(`${Constants.URL_DADES_TECNIQUES}/${id}`);
   }
   /**
    * Metode per navegar a la pagina de login
    * */
-  navegarAEditarAlbum(id) {
-    this.navCtrl.navigateForward(`/public/formularis/album/${id}`);
+  navegarAEditarAlbum(id: any) {
+    this.navCtrl.navigateForward(`${Constants.URL_EDITAR_ALBUM}/${id}`);
   }
   /**
    * Anar a Anuncis
    */
   navegarAAnuncis() {
-    this.navCtrl.navigateForward("/public/noticies");
+    this.navCtrl.navigateForward(Constants.URL_NOTICIES);
   }
   /**
    * Anar a Albums
    */
   navegarAAlbums() {
-    this.navCtrl.navigateForward("/public/albums");
+    this.navCtrl.navigateForward(Constants.URL_ALBUMS);
   }
   /**
    * Anar a Albums
    */
   navegarAConfirmacio() {
-    this.navCtrl.navigateForward("/administracio/assistencia");
+    this.navCtrl.navigateForward(Constants.URL_EDITAR_ASSISTENCIA);
   }
   /**
    * Anar a Albums
    */
   navegarAPasarLlista(id: string) {
-    this.navCtrl.navigateForward(`/administracio/pasarllista/${id}`);
+    this.navCtrl.navigateForward(`${Constants.URL_PASAR_LLISTA}/${id}`);
   }
   /**
    * Metode per navegar a la pagina de login
    * */
   navegarAAssistencia(id: string) {
-    this.navCtrl.navigateForward(`/public/assistencia/${id}`);
+    this.navCtrl.navigateForward(`${Constants.URL_ASSISTENCIA}/${id}`);
   }
   navegarAAssistenciaCasteller(id: string) {
-    this.navCtrl.navigateForward(`/public/casteller/assistencia/${id}`);
+    this.navCtrl.navigateForward(`${Constants.URL_ASSISTENCIA_SOCI}/${id}`);
   }
 
   /**

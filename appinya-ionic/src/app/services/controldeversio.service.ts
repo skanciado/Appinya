@@ -21,9 +21,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap, map, timeout } from 'rxjs/operators'; 
+import { catchError, tap, map, timeout } from 'rxjs/operators';
 import { IControlDeVersio, ITemporadaModel } from '../entities/interfaces';
-import { RestService } from './RestBase.service'; 
+import { RestService } from './RestBase.service';
 import { StoreData } from './storage.data';
 import { Platform } from '@ionic/angular';
 /**
@@ -35,18 +35,18 @@ import { Platform } from '@ionic/angular';
 export class ControlDeVersioService extends RestService {
 
   constructor(
-    protected http: HttpClient,
-    protected store: StoreData, 
+    http: HttpClient,
+    store: StoreData,
     protected platform: Platform) {
-    super(http, store );
+    super(http, store);
   }
   /**
    * Check de versió en el servidor
    */
-  checkVersio(versio:string): Observable<IControlDeVersio> {
+  checkVersio(versio: string): Observable<IControlDeVersio> {
 
     let checkVersio$ = this.http.get<IControlDeVersio>(`${this.obtenirURLServidor()}/api/v1.0/controldeversio/validar?versioDB=${this.store.obtenirVersioDB()}&versioApp=${versio}`, this.obtenirHeaderSenseAutentificacio())
-    
+
     return checkVersio$;
 
   }
@@ -54,7 +54,7 @@ export class ControlDeVersioService extends RestService {
   obtenir(): Observable<IControlDeVersio> {
 
     let checkVersio$ = this.http.get<IControlDeVersio>(`${this.obtenirURLServidor()}/api/v1.0/controldeversio`, this.obtenirHeaderSenseAutentificacio())
-   
+
     return checkVersio$;
 
   }

@@ -28,71 +28,51 @@ using AppinyaServerCore.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using Quartz;
+using Quartz.Logging;
+
 namespace AppinyaServerCore.Jobs
 {
-    public class HabitualJob : IHostedService, IDisposable
+    public class HabitualJob : IJob
     {
-        private int executionCount = 0;
-        private readonly ILogger<HabitualJob> _logger;
-        private readonly IAuditoriaService _auditoriaService;
-        private readonly IAssistenciaService _assistenciaService;
-        private readonly int Frequencia = 24 * 3600;
-        private Timer _timer;
 
+        private readonly ILogger<HabitualJob> _logger;
+        private readonly IAssistenciaService _assistenciaService;
+        private readonly IAuditoriaService _auditoriaService; 
         public HabitualJob(
-            ILogger<HabitualJob> logger
-            ,
+           ILogger<HabitualJob> logger,
             IAuditoriaService auditoriaService,
-            IAssistenciaService assistenciaService)
+            IAssistenciaService assistenciaService
+            )
         {
             _logger = logger;
             _auditoriaService = auditoriaService;
             _assistenciaService = assistenciaService;
+
         }
-
-        public Task StartAsync(CancellationToken stoppingToken)
+        public Task Execute(IJobExecutionContext context)
         {
-            _logger.LogInformation("HabitualJob Encens");
-
-            _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(Frequencia));
-
-            return Task.CompletedTask;
-        }
-
-        private async void DoWork(object state)
-        {
-
             LogJobs log = _auditoriaService.RegistraExecIniProces<HabitualJob>();
             try
             {
-                _logger.LogInformation(
-                    "HabitualJob ID : {Count}", log.Id);
-                _assistenciaService.CalcularHabitualitat();
-                _auditoriaService.RegistraExecFinProces(log);
+                _logger.LogInformation("HabitualJob Encens");
+                _assistenciaService.CalcularHabitualitat(); 
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                log.Error = ex.Message;
+               
+                return Task.FromResult(false);
+            }finally
+            {
+                _logger.LogInformation("HabitualJob Apagat");
                 _auditoriaService.RegistraExecFinProces(log);
             }
-
-
         }
 
-        public Task StopAsync(CancellationToken stoppingToken)
-        {
-            _logger.LogInformation("HabitualJob Parat");
 
-            _timer?.Change(Timeout.Infinite, 0);
 
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            _timer?.Dispose();
-        }
     }
+
 }

@@ -41,8 +41,8 @@ import {
 })
 export class OrganitzacioService extends RestService {
   constructor(
-    protected http: HttpClient,
-    protected store: StoreData,
+    http: HttpClient,
+    store: StoreData,
     protected platform: Platform
   ) {
     super(http, store);

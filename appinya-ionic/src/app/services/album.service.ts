@@ -38,7 +38,10 @@ import { StoreData } from "./storage.data";
   providedIn: "root",
 })
 export class AlbumService extends RestService {
-  constructor(protected http: HttpClient, protected store: StoreData) {
+  constructor(
+    http: HttpClient,
+    store: StoreData
+  ) {
     super(http, store);
   }
 

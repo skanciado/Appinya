@@ -16,6 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
 import {
   IPaquetActualitzacio,
@@ -33,9 +35,9 @@ import { NoticiesService } from "../services/noticies.service";
 import { PaquetActualitzacioService } from "../services/paquetActualitzacio.service";
 import { UsuariBs } from "./Usuari.business";
 import { CastellersBs } from "./casteller.business";
-import { EsdevenimentBs } from "./Esdeveniments.business";
-import { NoticiesBs } from "./Noticies.business";
-import { AlbumsBs } from "./Albums.business";
+import { EsdevenimentBs } from "./esdeveniments.business";
+import { NoticiesBs } from "./noticies.business";
+import { AlbumsBs } from "./albums.business";
 import { UsuariService } from "../services/usuari.service";
 import { TemporadaService } from "../services/temporada.service";
 import { ErrorTemporadaBuida } from "../entities/Errors";
@@ -59,7 +61,7 @@ export class SincronitzacioDBBs {
     protected temporadaService: TemporadaService,
     protected helperService: HelperService,
     protected storeData: StoreData
-  ) {}
+  ) { }
   public async obtenirDataUltimaActualitzacio(): Promise<string> {
     let user = await this.storeData.obtenirUsuariSession();
     return this.paquetActualitzacioService
@@ -70,26 +72,25 @@ export class SincronitzacioDBBs {
    * Carregar les dades de publicacions Events i Noticies
    * @param mostraMissatge Per mostrar el missatge al usuari o no
    */
-  public async actualitzarPaquets(): Promise<IResultatPaquetActualitzacio> {
+  public async actualitzarPaquets(): Promise<IResultatPaquetActualitzacio | undefined> {
     let online = await this.storeData.esOnline();
     if (online) return; // no se actualiza
 
     let data = await this.storeData.obtenirDataActualitzacio();
     let usuari = await this.storeData.obtenirUsuari();
     let user = await this.storeData.obtenirUsuariSession();
-
-    let p = await this.paquetActualitzacioService
+    this.usuariBs.esRolAdmin(usuari);
+    let p = await lastValueFrom(await this.paquetActualitzacioService
       .obtenirPaquetActualitzacio(
         data,
         this.usuariBs.esRolCasteller(usuari),
         this.usuariBs.esRolJunta(usuari) ||
-          this.usuariBs.esRolAdmin(usuari) ||
-          this.usuariBs.esRolSecretari(usuari),
+        this.usuariBs.esRolAdmin(usuari) ||
+        this.usuariBs.esRolSecretari(usuari),
         this.usuariBs.esRolTecnica(usuari) ||
-          this.usuariBs.esRolTecnicaNivell2(usuari),
+        this.usuariBs.esRolTecnicaNivell2(usuari),
         user
-      )
-      .toPromise();
+      ));
     if (p.Retorn.Temporada) {
       this.storeData.desarTemporada(p.Retorn.Temporada);
     } else {
@@ -100,17 +101,17 @@ export class SincronitzacioDBBs {
     let castNum = await this.castellersBs.actualitzarCastellers(
       p.Retorn.Castellers
     );
-    let esdNum = await this.esdevenimentBs.actualitzarEsdeveniments(
+    let esdNum = (p.Retorn.Esdeveniments) ? await this.esdevenimentBs.actualitzarEsdeveniments(
       p.Retorn.Esdeveniments
-    );
-    let notNum = await this.noticiesBs.actualitzarNoticies(
+    ) : 0;
+    let notNum = (p.Retorn.Noticies) ? await this.noticiesBs.actualitzarNoticies(
       p.Retorn.Noticies,
       p.Retorn.DataActualitzacio
-    );
-    let fotNum = await this.albumBs.actualitzarAlbums(
+    ) : 0;
+    let fotNum = (p.Retorn.Albums) ? await this.albumBs.actualitzarAlbums(
       p.Retorn.Albums,
       p.Retorn.DataActualitzacio
-    );
+    ) : 0;
     await this.storeData.desarDataActualitzacio(p.Retorn.DataActualitzacio);
     return <IResultatPaquetActualitzacio>{
       ActCastellers: castNum,
@@ -121,7 +122,7 @@ export class SincronitzacioDBBs {
   }
   public async obtenirTemporadaActual(): Promise<ITemporadaModel> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.temporadaService.obtenirTemporadaActual(user).toPromise();
+    return await lastValueFrom(this.temporadaService.obtenirTemporadaActual(user));
   }
   /**
    * Validar Credencials
@@ -161,7 +162,7 @@ export class SincronitzacioDBBs {
     IRespostaServidorAmbRetorn<IUsuariModel>
   > {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.relacionarCastellerAmbUsuari(user).toPromise();
+    return await lastValueFrom(this.usuariService.relacionarCastellerAmbUsuari(user));
   }
   public async actualitzarInformacioPublica() {
     await this.storeData.carregarLocalInformacioPublica();
@@ -204,8 +205,8 @@ export class SincronitzacioDBBs {
       .obtenirAlbums(album.Id, user)
       .toPromise();
 
-    await this.noticiesBs.actualitzarNoticies(lstNoticies);
-    await this.albumBs.actualitzarAlbums(lstAlbums);
+    if (lstNoticies) await this.noticiesBs.actualitzarNoticies(lstNoticies);
+    if (lstAlbums) await this.albumBs.actualitzarAlbums(lstAlbums);
     return true;
   }
   /**

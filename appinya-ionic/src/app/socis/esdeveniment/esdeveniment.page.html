@@ -1,0 +1,313 @@
+<!--
+
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+    -->
+<carregant-logo #carregant *ngIf="!esdevenimentDetall ; else detall" style="width: 100%; height: 100%"
+  (onLoad)="carregarEsdeveniement($event)"></carregant-logo>
+<ng-template #detall>
+  <ion-header style="background-color: white">
+    <div class="esdeveniment-capcalera" [class.esdeveniment-capcalera-1]="tipusEsdeveniment=='1'"
+      [class.esdeveniment-capcalera-2]="tipusEsdeveniment=='2'"
+      [class.esdeveniment-capcalera-3]="tipusEsdeveniment=='3'"
+      [class.esdeveniment-capcalera-4]="tipusEsdeveniment=='4'"
+      [class.esdeveniment-capcalera-5]="tipusEsdeveniment=='5'"
+      [class.esdeveniment-capcalera-6]="tipusEsdeveniment=='6'"
+      [class.esdeveniment-capcalera-7]="tipusEsdeveniment=='7'">
+      <div class="estatTitol" *ngIf="esdevenimentDetall?.BloquejarAssistencia! == true ">
+        Assistència Tancada
+      </div>
+      <div class="titol">{{esdevenimentDetall!.Titol!}}</div>
+      <div class="data"
+        *ngIf="esdevenimentDetall?.DataIni?.substring(0,10)==esdevenimentDetall?.DataFi?.substring(0,10) && esdevenimentDetall?.DataIni?.indexOf('00:00:00')! > 0">
+        {{esdevenimentDetall!.DataIni! | date:'EEEE, d MMMM'}} (Tot el dia)
+      </div>
+      <div class="data"
+        *ngIf="esdevenimentDetall?.DataIni?.substring(0,10)==esdevenimentDetall?.DataFi?.substring(0,10) && esdevenimentDetall?.DataIni?.indexOf('00:00:00')! < 0">
+        {{esdevenimentDetall!.DataIni! | date:'EEEE, d MMMM'}},
+        {{esdevenimentDetall!.DataIni! | horaSenseUTC}} a
+        {{esdevenimentDetall!.DataFi! | horaSenseUTC}}
+      </div>
+      <div class="data"
+        *ngIf="esdevenimentDetall?.DataIni?.substring(0,10) !=esdevenimentDetall?.DataFi?.substring(0,10) && esdevenimentDetall?.DataIni?.indexOf('00:00:00')! > 0">
+        {{esdevenimentDetall!.DataIni! | date:'EEEE, d MMMM'}} a
+        {{esdevenimentDetall!.DataFi! | date:'EEEE, d MMMM'}}
+      </div>
+      <div class="data"
+        *ngIf="esdevenimentDetall?.DataIni?.substring(0,10) !=esdevenimentDetall?.DataFi?.substring(0,10) && esdevenimentDetall?.DataIni?.indexOf('00:00:00')! < 0">
+        Del {{esdevenimentDetall!.DataIni! | date:'EEEE, d MMMM HH:mm'}} al
+        {{esdevenimentDetall!.DataFi! | date:'EEEE, d MMMM HH:mm'}}
+      </div>
+    </div>
+    <ion-segment (ionChange)="canviPestanya(pestanya)" [(ngModel)]="pestanya" color="blanc" class="barraopcions md">
+      <ion-segment-button value="detall" layout="icon-start">
+        <ion-icon name="information-circle-outline" class="mitja"></ion-icon>
+        <ion-label>Detall</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="assistencia" layout="icon-start">
+        <ion-icon src="assets/icons/icon_lista.svg" class="mitja"></ion-icon>
+        <ion-label>Assistència</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="castells" layout="icon-start">
+        <ion-icon src="assets/icons/icon_castells.svg" class="mitja"></ion-icon>
+        <ion-label>Que fem</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="logs" layout="icon-start">
+        <ion-icon name="bookmark-outline" class="mitja"></ion-icon>
+        <ion-label>Logs</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-header>
+
+  <ion-content>
+    <esdeveniment-castell-comp *ngIf="pestanya=='castells'" [esdeveniment]="esdevenimentDetall!">
+    </esdeveniment-castell-comp>
+
+    <log-comp [esdeveniment]="esdevenimentDetall!" *ngIf="pestanya=='logs'">
+    </log-comp>
+
+    <div *ngIf="pestanya=='assistencia'">
+      <assistencia-esdeveniment-comp [esdeveniment]="esdevenimentDetall!"></assistencia-esdeveniment-comp>
+    </div>
+    <div *ngIf="pestanya=='detall'">
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="12" align-self-stretch align-self-center>
+            <ion-card-content [innerHtml]="esdevenimentDetall!.Descripcio!" class="text">
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="esdevenimentDetall?.OfereixTransport && esdevenimentDetall?.AssistenciaPersonal?.Assistire">
+          <ion-col size="12" class="subTitolApartat line-superior">
+            <ion-item lines="none">
+              <ion-icon src="assets/icons/icon_transport.svg" class="gran" color="primary"></ion-icon>
+              <ion-label class="titolTransport"> Transport </ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="esdevenimentDetall?.OfereixTransport && esdevenimentDetall?.AssistenciaPersonal?.Assistire">
+          <ion-col size="8" class="subTitolApartat line-superior">
+            <ion-item lines="none">
+              <ion-label class="transportOpcio"> Anada </ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col size="4" class="line-superior centreContenidor">
+            <p-toggleButton ample (onChange)="canviarFormulari()" [disabled]="esdevenimentDetall!.BloquejarAssistencia!"
+              onLabel="Amb la colla" offLabel="Pel meu compte" onIcon="pi pi-compass" offIcon="pi pi-compass"
+              [(ngModel)]="esdevenimentDetall!.AssistenciaPersonal!.TransportAnada!"></p-toggleButton>
+          </ion-col>
+          <ion-col size="8" class="subTitolApartat line-superior">
+            <ion-item lines="none">
+              <ion-label class="transportOpcio"> Tornada </ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col size="4" class="line-superior centreContenidor">
+            <p-toggleButton ample (onChange)="canviarFormulari()" [disabled]="esdevenimentDetall!.BloquejarAssistencia!"
+              onLabel="Amb la colla" offLabel="Pel meu compte" onIcon="pi pi-compass" offIcon="pi pi-compass"
+              [(ngModel)]="esdevenimentDetall!.AssistenciaPersonal!.TransportTornada!"></p-toggleButton>
+          </ion-col>
+        </ion-row>
+        <div class="animate__animated animate__fadeIn" *ngIf="esdevenimentDetall?.AssistenciaPersonal?.Assistire==true">
+          <ion-row *ngFor="let pregunta of esdevenimentDetall!.AssistenciaPersonal!.Preguntes!">
+            <ion-col *ngIf="pregunta.TipusPregunta=='10'" size="8" class="subTitolApartat line-superior">
+              <ion-item lines="none">
+                <ion-label class="titolTransport">
+                  {{pregunta.Pregunta}}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col *ngIf="pregunta.TipusPregunta=='10'" size="4" class="line-superior centreContenidor">
+              <p-toggleButton tipus="rodo" (onChange)="canviarFormulari()"
+                [disabled]="esdevenimentDetall!.BloquejarAssistencia!" [(ngModel)]="pregunta.Resposta"></p-toggleButton>
+            </ion-col>
+            <ion-col *ngIf="pregunta.TipusPregunta=='30'" size="6" class="subTitolApartat line-superior">
+              <ion-item lines="none">
+                <ion-label class="titolTransport">
+                  {{pregunta.Pregunta}}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6" *ngIf="pregunta.TipusPregunta=='30'" class="line-superior centreContenidor">
+              <ion-textarea [disabled]="esdevenimentDetall!.BloquejarAssistencia!" cols="2"
+                [(ngModel)]="pregunta.Resposta"></ion-textarea>
+            </ion-col>
+            <ion-col size="8" *ngIf="pregunta.TipusPregunta=='20'" class="subTitolApartat line-superior">
+              <ion-item lines="none">
+                <ion-label class="titolTransport">
+                  {{pregunta.Pregunta}}
+                </ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col *ngIf="pregunta.TipusPregunta=='20'" size="4" class="line-superior centreContenidor">
+              <ion-select (ionChange)="canviarFormulari()" placeholder="Selecciona una"
+                [disabled]="esdevenimentDetall!.BloquejarAssistencia!" [(ngModel)]="pregunta.Resposta">
+                <ion-select-option *ngFor="let item of pregunta.Valores">{{item}}</ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+        </div>
+        <div class="animate__animated animate__fadeIn" *ngIf="esdevenimentDetall?.AssistenciaPersonal?.Assistire==true">
+          <ion-row>
+            <ion-col size="8" class="subTitolApartat line-superior">
+              <ion-item lines="none">
+                <ion-label class="titolTransport">Acompanyants</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col size="4" class="line-superior centreContenidor">
+              <ion-item lines="none"
+                [style.display]="esdevenimentDetall?.AssistenciaPersonal?.NumAcompanyants==0 ? 'none'  : 'block'">
+                <ion-label class="titolTransport">
+                  {{esdevenimentDetall?.AssistenciaPersonal?.NumAcompanyants}}
+                  persones
+                </ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col ion-item size="12" class="text">
+              <ion-range (ionBlur)="canviarFormulari()" [disabled]="esdevenimentDetall?.BloquejarAssistencia!" min="0"
+                max="10" step="1" pin snaps="true"
+                [(ngModel)]="esdevenimentDetall!.AssistenciaPersonal!.NumAcompanyants">
+                <ion-icon name="person-remove-outline" size="small" slot="start"></ion-icon>
+                <ion-icon name="person-add-outline" slot="end"></ion-icon>
+              </ion-range>
+            </ion-col>
+            <ion-col ion-item size="12" class="text line-superior line-inferior">
+              <ion-label position="floating">Observacions</ion-label>
+              <ion-textarea [disabled]="esdevenimentDetall?.BloquejarAssistencia!" (ionBlur)="canviarFormulari()"
+                cols="5" placeholder="Ex. arribare a les 19:30 .."
+                [(ngModel)]="esdevenimentDetall!.AssistenciaPersonal!.Observacions"></ion-textarea>
+            </ion-col>
+          </ion-row>
+        </div>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="12" size-md="6" size-lg="4" size-xl="4"
+            *ngFor="let assistencia of esdevenimentDetall!.Delegats">
+            <assistenciaform-comp (onChange)="actualitzarEsdeveniment()" #assistenciaForm
+              [esdeveniment]="esdevenimentDetall!" [assistencia]="assistencia"></assistenciaform-comp>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-md="6" size-lg="4" size-xl="4"
+            *ngFor="let assistencia of esdevenimentDetall?.Referenciats">
+            <assistenciaform-comp [esdeveniment]="esdevenimentDetall!" [assistencia]="assistencia">
+            </assistenciaform-comp>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" [style.display]="!esdevenimentDetall?.Direccio ? 'none'  : 'block'" class="titolUbicacio">
+            Ubicació</ion-col>
+          <ion-col ion-item size="12" no-lines class="text"
+            [style.display]="!esdevenimentDetall?.Direccio ? 'none'  : 'block'" text-wrap>
+            <ion-icon name="pin" color="primary"></ion-icon>
+            <ion-label> {{esdevenimentDetall?.Direccio}} </ion-label>
+          </ion-col>
+
+          <ion-col size="12" [style.display]="!loadMap ? 'none'  : 'block'">
+            <google-map width="100%" height="250px" [center]="posicio!" [zoom]="zoom">
+              <map-marker [position]="posicio!" [options]="markerOptions"></map-marker>
+            </google-map>
+          </ion-col>
+          <ion-col size="12">
+            <ion-button ion-button expand="full" color="secondary" (click)="obrirGoogleMaps()" icon-start
+              [class.hide]="!esdevenimentDetall?.Longitud || !esdevenimentDetall?.Latitud">
+              <ion-icon name="map"></ion-icon>
+              Obre el Google Maps
+            </ion-button>
+          </ion-col>
+          <ion-col size="12">
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <br />
+      <br />
+
+      <ion-footer class="peu-assistencia">
+        <div class="peu-data">
+          Actualització:{{esdevenimentDetall!.DataDescarrega }}
+        </div>
+        <div class="assistencia-div">
+          <ion-button [disabled]="esdevenimentDetall?.BloquejarAssistencia" (click)="confirmar(true)" color="tertiary"
+            expand="full" size="large" style="margin: 0px 0px 0px 0px">
+            <ion-icon name="thumbs-up-outline" class="mitja"
+              [class.noseleccionat]="esdevenimentDetall?.AssistenciaPersonal!.Assistire !== true"
+              slot="start"></ion-icon>
+            <ion-label [class.noseleccionat]="esdevenimentDetall?.AssistenciaPersonal!.Assistire !== true">Assistiré
+            </ion-label>
+          </ion-button>
+        </div>
+        <div class="assistencia-div">
+          <ion-button [disabled]="esdevenimentDetall?.BloquejarAssistencia!" expand="full" (click)="confirmar(false)"
+            color="tertiary" size="large" style="margin: 0px 0px 0px 0px">
+            <ion-icon name="thumbs-down-outline" class="mitja"
+              [class.noseleccionat]="esdevenimentDetall?.AssistenciaPersonal?.Assistire !== false" slot="start">
+            </ion-icon>
+            <ion-label [class.noseleccionat]="esdevenimentDetall?.AssistenciaPersonal?.Assistire !== false">No assistiré
+            </ion-label>
+          </ion-button>
+        </div>
+      </ion-footer>
+    </div>
+    <ion-fab vertical="center" horizontal="end" slot="fixed"
+      *ngIf="isJunta() || isAdmin() || isTecnica() || isTecnicaNivell2() || isSecretari() || this.isOrganitzador() || this.isCapMusic()"
+      #fab>
+      <ion-fab-button>
+        <ion-icon name="share"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <ion-fab-button *ngIf="potEditar() " (click)="esborrarEsdeveniment()" data-desc="Esborrar">
+          <ion-icon name="trash-bin" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="!menuBloquejat && potEditar()" (click)="bloquejar()" data-desc="Bloquejar">
+          <ion-icon name="lock-closed" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="menuBloquejat && potEditar()" (click)="desbloquejar()" data-desc="Desbloquejar">
+          <ion-icon name="lock-open" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="!menuActiu && potEditar()" (click)="activar()" data-desc="Activar Esdeveniment">
+          <ion-icon name="notifications-circle" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="menuActiu && potEditar()" (click)="anular()" data-desc="Anular Esdeveniment">
+          <ion-icon name="notifications-off-circle" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="potEditar()" (click)="copiarEsdeveniment()" data-desc="Clonar">
+          <ion-icon name="copy" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="potEditar()" (click)="editEsdeveniment()" data-desc="Editar">
+          <ion-icon name="create" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="bpotCrearCastell" (click)="crearCastell()" data-desc="Nova estructura">
+          <ion-icon name="add" color="secondary"></ion-icon>
+        </ion-fab-button>
+
+      </ion-fab-list>
+
+      <ion-fab-list side="bottom">
+        <ion-fab-button (click)="exportar()" data-desc="Exportar Assistència">
+          <ion-icon name="cloud-download" color="secondary"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="pervisioAssitencia()" data-desc="Previsió Assistència">
+          <ion-icon name="accessibility-outline" color="secondary"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+  </ion-content>
+</ng-template>

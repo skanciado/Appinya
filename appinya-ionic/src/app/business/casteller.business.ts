@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
 import { Diccionari } from "../entities/Diccionari";
 import {
@@ -38,7 +39,7 @@ export class CastellersBs {
     protected castellerService: CastellersService,
     protected usuariService: UsuariService,
     protected storeData: StoreData
-  ) {}
+  ) { }
   /**
    * Desar Casteller
    * @param casteller
@@ -71,7 +72,7 @@ export class CastellersBs {
     cas: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService.esborrarCasteller(cas, user).toPromise();
+    return await lastValueFrom(this.castellerService.esborrarCasteller(cas, user));
   }
   /**
    * Copia un esdeveniment però deixant-lo actiu a una altre esdeveniment
@@ -143,14 +144,14 @@ export class CastellersBs {
     castellers: ICastellerModel[]
   ): Promise<number> {
     if (castellers && castellers.length > 0) {
-      castellers.forEach((casteller) => {
-        if (casteller.Actiu) this.storeData.desarCasteller(casteller);
+      for (let casteller of castellers) {
+        if (casteller.Actiu) await this.storeData.desarCasteller(casteller);
         else {
-          if (this.obtenirCasteller(casteller.Id)) {
+          if (casteller.Id) {
             this.storeData.esborrarCasteller(casteller.Id);
           }
         }
-      });
+      }
       await this.storeData.desarCastellersEnLocalDB();
       return castellers.length;
     } else return 0;
@@ -159,9 +160,9 @@ export class CastellersBs {
    * Obtenir la foto del casteller
    * @param id id del casteller
    */
-  public async obtenirFotoCasteller(id: string): Promise<string> {
+  public async obtenirFotoCasteller(id: string): Promise<string | undefined> {
     let cas: ICastellerModel = await this.obtenirCasteller(id);
-    return cas ? cas.Foto : null;
+    return cas?.Foto;
   }
   /**
    * Obtenir el casteller
@@ -178,18 +179,16 @@ export class CastellersBs {
     idCasteller: string
   ): Promise<ICastellerDetallModel> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService
-      .ObtenirCastellerDetall(idCasteller, user)
-      .toPromise();
+    return await lastValueFrom(this.castellerService
+      .ObtenirCastellerDetall(idCasteller, user));
   }
   /**
    * Retorna informació del casteller associada com rols usuari, estadistica completa .....
    * */
   async obtenirCastellerDetallPerUsuari(): Promise<ICastellerDetallModel> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService
-      .ObtenirCastellerDetallPerUsuari(user)
-      .toPromise();
+    return await lastValueFrom(this.castellerService
+      .ObtenirCastellerDetallPerUsuari(user));
   }
   /**
    * Retorna els castellers amb la llista de ids enviat
@@ -281,7 +280,7 @@ export class CastellersBs {
    */
   async teCamisa(cas: ICastellerModel): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService.teCamisa(cas, user).toPromise();
+    return await lastValueFrom(this.castellerService.teCamisa(cas, user));
   }
   /**
    * Vol Rebre noticies al correo electronic el casteller loginejat
@@ -289,7 +288,7 @@ export class CastellersBs {
    */
   async rebreEmailNoticies(rebre: boolean): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.rebreCorreusNoticies(rebre, user).toPromise();
+    return await lastValueFrom(this.usuariService.rebreCorreusNoticies(rebre, user));
   }
   /**
    * Vol Rebre fotos al correo electronic el casteller loginejat
@@ -297,7 +296,7 @@ export class CastellersBs {
    */
   async rebreEmailFotos(rebre: boolean): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.rebreCorreuFotos(rebre, user).toPromise();
+    return await lastValueFrom(this.usuariService.rebreCorreuFotos(rebre, user));
   }
   /**
    * Guardar la foto al servidor
@@ -309,9 +308,8 @@ export class CastellersBs {
     idCasteller: string
   ): Promise<IRespostaServidorAmbRetorn<string>> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService
-      .desarFotoByCasteller(foto, idCasteller, user)
-      .toPromise();
+    return await lastValueFrom(this.usuariService
+      .desarFotoByCasteller(foto, idCasteller, user));
   }
   /**
    * Esborrar delegacio d'assitencia d'un casteller
@@ -323,9 +321,8 @@ export class CastellersBs {
     emisor: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService
-      .esborrarDelegacio(receptor, emisor, user)
-      .toPromise();
+    return await lastValueFrom(this.castellerService
+      .esborrarDelegacio(receptor, emisor, user));
   }
   /**
    * Crear delegacio d'assitencia d'un casteller
@@ -337,16 +334,15 @@ export class CastellersBs {
     emisor: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService
-      .crearDelegacio(receptor, emisor, user)
-      .toPromise();
+    return await lastValueFrom(this.castellerService
+      .crearDelegacio(receptor, emisor, user));
   }
   /**
    *Exportar la base de dades casteller en excel
    * */
   public async exportarExcel(): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService.enviarCorreuExportacio(user).toPromise();
+    return await lastValueFrom(this.castellerService.enviarCorreuExportacio(user));
   }
   /**
    * Guardar un responsable legal al casteller
@@ -354,9 +350,9 @@ export class CastellersBs {
    */
   public async desarResponsableLegal(
     res: IResponsableLegalModel
-  ): Promise<IRespostaServidorAmbRetorn<IResponsableLegalModel>> {
+  ): Promise<IRespostaServidorAmbRetorn<IResponsableLegalModel> | undefined> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService.desarResponsableLegal(res, user).toPromise();
+    return await lastValueFrom(this.castellerService.desarResponsableLegal(res, user));
   }
   /**
    * Esborrar Responsable Legal
@@ -368,9 +364,8 @@ export class CastellersBs {
     idTipusResponsable: string
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService
-      .esborrarResponsableLegal(idCasteller, idTipusResponsable, user)
-      .toPromise();
+    return await lastValueFrom(this.castellerService
+      .esborrarResponsableLegal(idCasteller, idTipusResponsable, user));
   }
   /**
    * Enviar Invitacio
@@ -380,7 +375,7 @@ export class CastellersBs {
     cas: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.enviaInvitacio(cas, user).toPromise();
+    return await lastValueFrom(this.usuariService.enviaInvitacio(cas, user));
   }
   /**
    * Esborrar Invitacio
@@ -390,7 +385,7 @@ export class CastellersBs {
     cas: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.esborrarInvitacio(cas, user).toPromise();
+    return await lastValueFrom(this.usuariService.esborrarInvitacio(cas, user));
   }
   /**
    * Crear Referenciat Tecnic
@@ -400,7 +395,7 @@ export class CastellersBs {
     cas: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService.crearReferenciatTecnic(cas, user).toPromise();
+    return await lastValueFrom(this.castellerService.crearReferenciatTecnic(cas, user));
   }
   /**
    * Esborrar Referenciat Tecnic
@@ -410,9 +405,8 @@ export class CastellersBs {
     cas: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.castellerService
-      .esborrarReferenciatTecnic(cas, user)
-      .toPromise();
+    return await lastValueFrom(this.castellerService
+      .esborrarReferenciatTecnic(cas, user));
   }
   /**
    * Acceptar Solicitud
@@ -422,7 +416,7 @@ export class CastellersBs {
     cas: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.acceptarInvitacio(cas, user).toPromise();
+    return await lastValueFrom(this.usuariService.acceptarInvitacio(cas, user));
   }
   /**
    * Esborrar Solicitud
@@ -432,6 +426,6 @@ export class CastellersBs {
     cas: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.esborrarSolicitud(cas, user).toPromise();
+    return await lastValueFrom(this.usuariService.esborrarSolicitud(cas, user));
   }
 }

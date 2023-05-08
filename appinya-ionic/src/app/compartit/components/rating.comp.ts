@@ -25,7 +25,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
   styleUrls: ["./rating.comp.scss"],
 })
 export class RatingComponent {
-  constructor() {}
+  constructor() { }
 
   starts: number = 0;
   conversio: number = 1;
@@ -42,7 +42,7 @@ export class RatingComponent {
   }
   @Output() onChange = new EventEmitter<number>();
 
-  starSelect(num) {
+  starSelect(num: any) {
     if (this.starts == num) {
       num = 0;
     }

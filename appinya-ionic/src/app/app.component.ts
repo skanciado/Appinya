@@ -1,6 +1,7 @@
+
 /**
  *  Appinya Open Source Project
- *  Copyright (C) 2021  Daniel Horta Vidal
+ *  Copyright (C) 2023  Daniel Horta Vidal
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as
@@ -16,72 +17,62 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+import { Component, } from "@angular/core";
 
-import { Component, Input, ViewChildren } from "@angular/core"; 
-
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
 import {
   MenuController,
   Platform,
   NavController,
   AlertController,
   ToastController,
-  LoadingController,
-  IonTabs,
 } from "@ionic/angular";
 import { Router, NavigationEnd } from "@angular/router";
-import { StoreData } from "./services/storage.data";
-import { UsuariBs } from "./business/Usuari.business";
 import { Menu } from "./entities/Menu";
 import { DeviceService } from "./services/device.service";
 import { delay, filter, mergeMap, retryWhen, tap } from "rxjs/operators";
 import { EventService } from "./services/event.service";
 import { RestService } from "./services/RestBase.service";
-import { PaginaNavegacio } from "./compartit/components/PaginaNavegacio";
-import { SelectItem, PrimeNGConfig } from "primeng/api";
-/**
- * Classe Principal del programa
- */
+
+import { PrimeNGConfig } from "primeng/api";
+import { SplashScreen } from "@awesome-cordova-plugins/splash-screen/ngx";
+import { StatusBar } from "@awesome-cordova-plugins/status-bar/ngx";
+import { Constants } from "./Constants";
 @Component({
-  selector: "app-root",
-  templateUrl: "app.component.html",
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
 })
-export class AppComponent extends PaginaNavegacio {
+export class AppComponent {
   //@ViewChildren("tabs") tabs: IonTabs;
   version: String = "Web";
-  menuUsuari: Menu[];
-  menuAmagat: boolean;
-  tabBarAmagat: boolean;
-  senseConexio: boolean;
+  menuUsuari: Menu[] = [];
+  menuAmagat: boolean = true;
+  tabBarAmagat: boolean = true;
+  senseConexio: boolean = false;
   tabSelected: number = 3;
+  tab1URL: String = Constants.URL_NOTICIES;
+  tab2URL: String = Constants.URL_AGENDA;
+  tab3URL: String = Constants.URL_HOME;
+  tab4URL: String = Constants.URL_OPTIONS;
   constructor(
     private primengConfig: PrimeNGConfig,
     private platform: Platform,
     protected route: Router,
-    protected navCtrl: NavController,
-    protected storeData: StoreData,
     protected alertCtrl: AlertController,
     protected toastCtrl: ToastController,
-    protected loadingCtrl: LoadingController,
     protected menu: MenuController,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    protected usuariBs: UsuariBs,
+    protected splashScreen: SplashScreen,
+    protected statusBar: StatusBar,
     protected eventService: EventService,
     protected deviceService: DeviceService,
     private restService: RestService
   ) {
-    super(
-      usuariBs,
-      route,
-      navCtrl,
-      toastCtrl,
-      alertCtrl,
-      loadingCtrl,
-      storeData
-    );
+
     this.initializeApp();
+  }
+  onTabsWillChange(event: any) {
+    console.info(event.tab);
+
   }
 
   /**
@@ -100,16 +91,16 @@ export class AppComponent extends PaginaNavegacio {
         let str = e.url;
         console.info("Navegar a " + str);
         if (
-          str.includes("/public/optimitzar") ||
-          str.includes("/public/acces") ||
-          str.includes("/public/inicialitzar")
+          str.includes(Constants.URL_OPTIMITIZAR) ||
+          str.includes(Constants.URL_ACCES) ||
+          str.includes(Constants.URL_INICIALITZAR)
         )
           this.tabBarAmagat = true;
         else this.tabBarAmagat = false;
-        if (str.includes("/public/home")) this.tabSelected = 3;
-        else if (str.includes("/public/bustia")) this.tabSelected = 4;
-        else if (str.includes("/public/agenda")) this.tabSelected = 2;
-        else if (str.includes("/public/noticies")) this.tabSelected = 1;
+        if (str.includes(Constants.URL_HOME)) this.tabSelected = 3;
+        else if (str.includes(Constants.URL_BUSTIA)) this.tabSelected = 4;
+        else if (str.includes(Constants.URL_CALENDAR)) this.tabSelected = 2;
+        else if (str.includes(Constants.URL_NOTICIES)) this.tabSelected = 1;
         else this.tabSelected = 5;
       });
     console.info("S ha carregat Informació Usuari");
@@ -125,13 +116,16 @@ export class AppComponent extends PaginaNavegacio {
     });
     // Back button intervencio
     this.platform.backButton.subscribeWithPriority(10, () => {
-      console.log("BackButton bloquejat!");
+      console.log(Constants.MSM_BACK_BUTTON_DISABLED);
     });
     // Observador de errors
     this.eventService.obtenirObservableError((t: string) => {
-      this.presentarAlerta("Error del sistema", t);
+      this.presentarAlerta(Constants.MSM_TITOL_ERROR_SYS, t);
     });
-
+    // Observador de errors
+    this.eventService.obtenirObservableCredebcials((t: string) => {
+      this.presentarAlerta(Constants.MSM_TITOL_ERROR_CRE, t);
+    });
     // Observador de l'estat de la conexio
     this.eventService.obtenirObservableConexio((t: boolean) => {
       console.info("Conexió " + t);
@@ -171,6 +165,46 @@ export class AppComponent extends PaginaNavegacio {
           );
       }
     });
+  }
+  public async presentarMissatgeAmbConexio() {
+    let toast = await this.toastCtrl.create({
+      message:
+        '<ion-icon class="mitja" color="blanc" name="wifi"></ion-icon>  Connexió a internet activa',
+      color: "verd",
+      position: "middle",
+      duration: 1000,
+    });
+    toast.present();
+  }
+  public async presentarMissatgeSenseConexio() {
+    let toast = await this.toastCtrl.create({
+      message:
+        '<ion-icon class="mitja" color="blanc" name="wifi"></ion-icon>  No hi ha connexió a internet',
+      color: "primary",
+      position: "middle",
+      duration: 1000,
+    });
+    toast.present();
+  }
+  public async presentarAlerta(titol: string, missatge: string): Promise<void> {
+    // create an alert instance
+    let alert = await this.alertCtrl.create({
+      header: titol,
+      message: missatge,
+    });
+    return alert.present();
+  }
+  /**
+   * Presentar Missatge a l'usuari
+   * @param missatge missatge a presentar
+   * @param temps temps de durada del missatge
+   */
+  public async presentarMissatge(missatge: string, temps: number) {
+    let toast = await this.toastCtrl.create({
+      message: missatge,
+      duration: temps,
+    });
+    toast.present();
   }
 
   //amagarMenu() {
@@ -258,3 +292,4 @@ export class AppComponent extends PaginaNavegacio {
     // this.sincronitzacioDBBs.actualitzarPaquets(true);
   }
 }
+

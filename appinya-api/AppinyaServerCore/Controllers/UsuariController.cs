@@ -53,12 +53,12 @@ namespace AppinyaServerCore.Controllers
         private readonly IEmailService _emailService; 
         private readonly IAutentificacioService _autentificacioService;
         private readonly IAssistenciaService _assistenciaService;
-        
+         
         #endregion; 
 
         public UsuariController(
             ILogger<UsuariController> logger,
-            IOptions<AppSettings> appSettings,
+            IOptions<AppSettings> appSettings, 
             IEmailService emailServices, 
             IAutentificacioService autentificacioService,
             IUsuariService usuariService,
@@ -69,7 +69,7 @@ namespace AppinyaServerCore.Controllers
         {
             if (appSettings == null) throw new ArgumentNullException(nameof(appSettings));
             _emailService = emailServices;
-            _appSettings = appSettings.Value;
+            _appSettings = appSettings.Value; 
             _usuariService = usuariService;
             _castellerService = castellerService;
             _assistenciaService = assistenciaService; 

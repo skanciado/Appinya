@@ -18,19 +18,19 @@
  *
  **/  
 -->
-<div class="noticia-container">
+<div class="noticia-container" *ngIf="noticia">
   <div class="noticia animate__animated animate__fadeIn">
-    <div class="noticia-foto" *ngIf="noticia.Foto">
-      <img [src]="noticia.Foto" />
+    <div class="noticia-foto" *ngIf="noticia!.Foto">
+      <img [src]="noticia!.Foto" />
     </div>
     <div class="noticia-edit">
       <ion-fab-button size="small" color="blanc" [hidden]="!editar" (click)="editarNoticia()">
         <ion-icon name="pencil-outline" color="primary"></ion-icon>
       </ion-fab-button>
     </div>
-    <div class="noticia-titol" text-wrap>{{noticia.Titol}}</div>
+    <div class="noticia-titol" text-wrap>{{noticia!.Titol}}</div>
 
-    <div *ngIf="visioReduida==false || !noticia.Foto" class="noticia-contingut" [innerHtml]="noticia.Descripcio"
+    <div *ngIf="visioReduida==false || !noticia!.Foto" class="noticia-contingut" [innerHtml]="noticia!.Descripcio"
       [@expand]="expand"></div>
     <div *ngIf="visioReduida==false && canExpand">
       <p (click)="expandirNoticia()" class="noticia-ampliar" *ngIf="expand=='inactive'">
@@ -43,12 +43,12 @@
 
     <div *ngIf="visioReduida==false">
       <ion-item class="noticia-peu">
-        <ion-button slot="start" fill="clear" [disabled]="!noticia.Url" ion-button clear small color="primary" icon-left
-          (click)="anarAUrl()">
+        <ion-button slot="start" fill="clear" [disabled]="!noticia!.Url" ion-button clear small color="primary"
+          icon-left (click)="anarAUrl()">
           <ion-icon name="open-outline" class="mitja"></ion-icon>
           Enllaç
         </ion-button>
-        <ion-button slot="end" fill="clear" [disabled]="!noticia.UsuariReferencia" ion-button clear small
+        <ion-button slot="end" fill="clear" [disabled]="!noticia!.UsuariReferencia" ion-button clear small
           color="primary" icon-left (click)="anarAContacto( )">
           <ion-icon name="mail-outline" class="mitja"></ion-icon>
           Contacte

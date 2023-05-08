@@ -16,6 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
 import {
   INoticiaModel,
@@ -32,7 +34,7 @@ export class NoticiesBs {
   constructor(
     protected noticiesService: NoticiesService,
     protected storeData: StoreData
-  ) {}
+  ) { }
 
   /**
    * Actualitzacio de noticies i fotos en la base de dades local del dispositiu
@@ -42,18 +44,17 @@ export class NoticiesBs {
    */
   public async actualitzarNoticies(
     noticies: INoticiaModel[],
-    dataActual?: string
+    dataActual: string = new Date().toJSON()
   ): Promise<number> {
     let lstNotificacions: INoticiaModel[] = [];
-    if (!dataActual) dataActual = new Date().toJSON();
 
     if (noticies) {
       noticies.forEach((noticia) => {
         var index: number = -1;
         if (
           noticia.Activa &&
-          (noticia.Indefinida ||
-            noticia.Data.substring(0, 10) >= dataActual.substring(0, 10))
+          (noticia.Indefinida || (noticia.Data &&
+            noticia.Data.substring(0, 10) >= dataActual.substring(0, 10)))
         ) {
           this.storeData.desarNoticia(noticia);
           lstNotificacions.push(noticia);
@@ -73,13 +74,8 @@ export class NoticiesBs {
    * @param loading Loading message
    */
   public async obtenirNoticiesActuals(reg: number): Promise<INoticiaModel[]> {
-    let online = await this.storeData.esOnline();
-    let user = await this.storeData.obtenirUsuariSession();
-    if (online) {
-      return this.noticiesService.obtenirActuals(reg, "", user).toPromise();
-    } else {
-      return this.storeData.obtenirNoticies();
-    }
+
+    return this.storeData.obtenirNoticies(reg);
   }
   /**
    * Retorna les noticies del servidor (no es guarden les antigues en el dispostius)
@@ -88,7 +84,7 @@ export class NoticiesBs {
    */
   public async obtenirHistoricNoticies(reg: number): Promise<INoticiaModel[]> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.noticiesService.obtenirHistoric(reg, "", user).toPromise();
+    return await lastValueFrom(this.noticiesService.obtenirHistoric(reg, "", user));
   }
   /**
    * OBtenir Noticia del servidor
@@ -97,7 +93,7 @@ export class NoticiesBs {
    */
   public async obtenirNoticiaServidor(id: string): Promise<INoticiaModel> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.noticiesService.obtenirNoticia(id, user).toPromise();
+    return await lastValueFrom(this.noticiesService.obtenirNoticia(id, user));
   }
   /**
    * Desar Noticia en el sistema servidor
@@ -109,7 +105,7 @@ export class NoticiesBs {
   ): Promise<IRespostaServidorAmbRetorn<INoticiaModel>> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.noticiesService.desarNoticia(noticia, user).toPromise();
+    return await lastValueFrom(this.noticiesService.desarNoticia(noticia, user));
   }
   /**
    * Esborrar una noticia
@@ -120,16 +116,14 @@ export class NoticiesBs {
     noticia: INoticiaModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.noticiesService.esborrarNoticia(noticia, user).toPromise();
+    return await lastValueFrom(this.noticiesService.esborrarNoticia(noticia, user));
   }
   /**
    * Obtenir Noticia Model
    * @param idNoticia
    * @returns
    */
-  public async obtenirNoticiaModel(idNoticia: string): Promise<INoticiaModel> {
-    return (await this.storeData.obtenirNoticies()).find((t) => {
-      return t.Id == idNoticia;
-    });
+  public async obtenirNoticiaModel(idNoticia: string): Promise<INoticiaModel | undefined> {
+    return this.storeData.obtenirNoticia(idNoticia);
   }
 }

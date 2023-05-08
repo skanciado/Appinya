@@ -45,26 +45,26 @@ import { CastellersBs } from "src/app/business/casteller.business";
 })
 export class CastellersPopUp extends PaginaLlista implements OnInit {
   @ViewChild("textCerca") textCercaComponent: any;
-  @ViewChild("carregant") carregant: CarregantLogoComponent;
+  @ViewChild("carregant") carregant: CarregantLogoComponent | undefined;
   bmostraCerca: boolean = false;
   queryText: string = "";
   posicionsFiltre: string[] = [];
-  idCasteller: string;
+  idCasteller: string = "0";
 
   constructor(
-    protected usuariBs: UsuariBs,
+    usuariBs: UsuariBs,
     protected castellerBs: CastellersBs,
     protected sincronitzacioDBBs: SincronitzacioDBBs,
     protected router: Router,
     protected navParams: NavParams,
     protected activatedRoute: ActivatedRoute,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
     protected modalCtrl: ModalController,
-    protected navCtrl: NavController,
-    protected storeData: StoreData,
+    navCtrl: NavController,
+    storeData: StoreData,
     protected device: DeviceService,
-    protected toastCtrl: ToastController,
+    toastCtrl: ToastController,
     protected modalController: ModalController
   ) {
     super(
@@ -94,7 +94,7 @@ export class CastellersPopUp extends PaginaLlista implements OnInit {
     this.bmostraCerca = false;
     this.idCasteller = this.navParams.get("idCasteller");
     //this.id = this.activatedRoute.snapshot.paramMap.get("id");
-    this.carregant.carregarPromise(this.canviarCerca());
+    this.carregant!.carregarPromise(this.canviarCerca());
   }
 
   /**
@@ -126,7 +126,7 @@ export class CastellersPopUp extends PaginaLlista implements OnInit {
    * Cerca de text
    * @param event
    */
-  async cercarText(event) {
+  async cercarText(event: any) {
     if (this.queryText.length != 0 && this.queryText.length < 3) return;
     this.actualitzarLlista(await this.obtenirElements());
   }
@@ -160,7 +160,7 @@ export class CastellersPopUp extends PaginaLlista implements OnInit {
    * Canviar la cerca de Actuals a historics
    * */
   async canviarCerca() {
-    this.iniciarLlista(await this.obtenirElements(), this.actualitar, null, 20);
+    this.iniciarLlista(await this.obtenirElements(), this.actualitar, async (reg) => [], 20);
   }
   /**
    * Metode de Presentacio de PopUp de filtres

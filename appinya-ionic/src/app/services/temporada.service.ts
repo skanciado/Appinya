@@ -31,8 +31,8 @@ import { StoreData } from './storage.data';
 export class TemporadaService extends RestService {
 
   constructor(
-    protected http: HttpClient,
-    protected store: StoreData) {
+    http: HttpClient,
+    store: StoreData) {
     super(http, store );
   }
 

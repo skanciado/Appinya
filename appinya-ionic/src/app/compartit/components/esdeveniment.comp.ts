@@ -24,9 +24,10 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { AssistenciaBs } from "src/app/business/assistencia.business";
-import { EsdevenimentBs } from "src/app/business/Esdeveniments.business";
+import { EsdevenimentBs } from "src/app/business/esdeveniments.business";
 import { SincronitzacioDBBs } from "src/app/business/sincronitzacioDB.business";
 import { UsuariBs } from "src/app/business/Usuari.business";
+import { Constants } from "src/app/Constants";
 import { ErrorSenseInternet } from "src/app/entities/Errors";
 import { DeviceService } from "src/app/services/device.service";
 import { EventService } from "src/app/services/event.service";
@@ -41,23 +42,23 @@ import { PaginaGenerica } from "./PaginaGenerica";
 })
 export class EsdevenimentComponent extends PaginaGenerica {
   @Input("esdeveniment")
-  public esdeveniment: IEsdevenimentModel;
+  public esdeveniment: IEsdevenimentModel | undefined;
   @Input("enabled")
   public enabled: boolean = true;
-  historic;
+  historic: any;
   constructor(
     protected usuariBS: UsuariBs,
     protected toastCtlr: ToastController,
     protected alertCtlr: AlertController,
-    protected toastCtrl: ToastController,
-    protected loadingCtrl: LoadingController,
+    toastCtrl: ToastController,
+    loadingCtrl: LoadingController,
     protected navCtrl: NavController,
     protected esdevenimentBs: EsdevenimentBs,
     protected sincronitzacioDBBs: SincronitzacioDBBs,
     protected assistenciaBs: AssistenciaBs,
     protected eventService: EventService,
     protected deviceService: DeviceService,
-    protected storeData: StoreData
+    storeData: StoreData
   ) {
     super(usuariBS, toastCtlr, alertCtlr, loadingCtrl, storeData);
   }
@@ -70,11 +71,16 @@ export class EsdevenimentComponent extends PaginaGenerica {
       this.presentarMissatge("Esdeveniment no actiu", 3000);
       return;
     }
-    let last = this.esdeveniment.Assistire;
+    if (!this.esdeveniment) {
+      this.presentarMissatge("Esdeveniment no actiu ", 3000);
+      return;
+    }
+    let last = this.esdeveniment?.Assistire;
     if (!this.deviceService.teConexio()) {
       this.presentarMissatgeSenseConexio();
       return;
     }
+
     this.esdeveniment.Assistire = ass ? true : false;
     this.assistenciaBs
       .confirmarAssistenciaPersonal(
@@ -83,16 +89,27 @@ export class EsdevenimentComponent extends PaginaGenerica {
       )
       .then(async (t) => {
         if (t.Correcte) {
+          if (!this.esdeveniment) {
+            console.warn("Esdeveniment no actiu ");
+            return;
+          }
           // si es correcte actualitzem paquet
           this.esdeveniment.Assistire = ass ? true : false;
           this.sincronitzacioDBBs.actualitzarPaquets().then(async (t) => {
             // canviem el valor de l'assistencia
-
+            if (!this.esdeveniment) {
+              console.warn("Esdeveniment no actiu ");
+              return;
+            }
             this.esdeveniment = await this.esdevenimentBs.obtenirEsdeveniment(
-              this.esdeveniment.Id
+              this.esdeveniment?.Id
             );
           });
         } else {
+          if (!this.esdeveniment) {
+            this.presentarMissatge("Esdeveniment no actiu ", 3000);
+            return;
+          }
           this.esdeveniment.Assistire = last;
           let toast = await this.toastCtrl.create({
             message: t.Missatge,
@@ -104,7 +121,9 @@ export class EsdevenimentComponent extends PaginaGenerica {
         console.log("Enviat al servidor " + this.esdeveniment.Assistire);
       })
       .catch(async (er) => {
-        this.esdeveniment.Assistire = last;
+        if (this.esdeveniment) {
+          this.esdeveniment.Assistire = last;
+        }
         if (er instanceof ErrorSenseInternet)
           this.eventService.enviarEventSenseConexio();
         else {
@@ -119,13 +138,13 @@ export class EsdevenimentComponent extends PaginaGenerica {
         }
       });
   }
-  canviPestanya(event) {
+  canviPestanya(event: any) {
     console.log("Segment changed", event);
   }
   /**
    * Veure detall del esdeveniment
    */
   async veuredetall() {
-    this.navCtrl.navigateForward(`public/esdeveniment/${this.esdeveniment.Id}`);
+    this.navCtrl.navigateForward(`${Constants.URL_ESDEVENIMENT_DET}/${this.esdeveniment?.Id}`);
   }
 }

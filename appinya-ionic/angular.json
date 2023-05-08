@@ -1,22 +1,14 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "defaultProject": "app",
   "newProjectRoot": "projects",
   "projects": {
     "app": {
+      "projectType": "application",
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "projectType": "application",
       "prefix": "app",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -26,17 +18,8 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "src/assets/generic",
-                "output": "assets/colla"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/assets/logo",
-                "output": "assets/logo"
-              },
               {
                 "glob": "**/*",
                 "input": "src/assets",
@@ -46,24 +29,38 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              },
-              "src/manifest.json"
-            ],
-            "styles": [
-              {
-                "input": "src/theme/variables.generic.scss",
-                "inject": true
-              },
-              {
-                "input": "src/global.scss",
-                "inject": true
               }
             ],
-            "scripts": [],
-            "serviceWorker": true,
-            "ngswConfigPath": "ngsw-config.json"
+            "styles": [
+              "src/theme/variables.scss",
+              "src/global.scss"
+            ],
+            "scripts": [
+              "node_modules/quill/dist/quill.js"
+            ]
           },
           "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "5kb",
+                  "maximumError": "10kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "jdbcn.pro": {
               "assets": [
                 {
@@ -99,22 +96,61 @@
                   "with": "src/environments/environment.jdbcn.pro.ts"
                 }
               ],
-              "optimization": true,
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json",
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "5kb",
+                  "maximumError": "10kb"
                 }
-              ]
+              ],
+              "outputHashing": "all"
+            },
+            "conlloga.dev": {
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "src/assets/jdbcn",
+                  "output": "assets/colla"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "src/assets",
+                  "output": "assets"
+                },
+                {
+                  "glob": "**/*.svg",
+                  "input": "node_modules/ionicons/dist/ionicons/svg",
+                  "output": "./svg"
+                },
+                "src/manifest.json"
+              ],
+              "styles": [
+                {
+                  "input": "src/theme/variables.jdbcn.scss",
+                  "inject": true
+                },
+                {
+                  "input": "src/global.scss",
+                  "inject": true
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.jdbcn.dev.ts"
+                }
+              ],
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             },
             "jdbcn.dev": {
               "assets": [
@@ -158,41 +194,7 @@
               "sourceMap": true,
               "namedChunks": true
             },
-            "conlloga.dev": {
-              "assets": [
-                {
-                  "glob": "**/*",
-                  "input": "src/assets/conlloga",
-                  "output": "assets/colla"
-                },
-                {
-                  "glob": "**/*",
-                  "input": "src/assets",
-                  "output": "assets"
-                },
-                {
-                  "glob": "**/*.svg",
-                  "input": "node_modules/ionicons/dist/ionicons/svg",
-                  "output": "./svg"
-                },
-                "src/manifest.json"
-              ],
-              "styles": [
-                {
-                  "input": "src/theme/variables.conlloga.scss",
-                  "inject": true
-                },
-                {
-                  "input": "src/global.scss",
-                  "inject": true
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.conlloga.dev.ts"
-                }
-              ],
+            "development": {
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -200,38 +202,23 @@
               "sourceMap": true,
               "namedChunks": true
             },
-            "production": {
-              "optimization": true,
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json",
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            },
             "ci": {
               "progress": false
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "app:build",
-            "disableHostCheck": true
-          },
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "development": {
+              "browserTarget": "app:build:development"
+            },
+            "conlloga.dev": {
+              "browserTarget": "app:build:conlloga.dev"
             },
             "jdbcn.pro": {
               "browserTarget": "app:build:jdbcn.pro"
@@ -239,13 +226,11 @@
             "jdbcn.dev": {
               "browserTarget": "app:build:jdbcn.dev"
             },
-            "conlloga.dev": {
-              "browserTarget": "app:build:conlloga.dev"
-            },
             "ci": {
               "progress": false
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -260,21 +245,24 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "styles": [],
-            "scripts": [],
+            "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "favicon.ico",
-                "input": "src/",
-                "output": "/"
-              },
               {
                 "glob": "**/*",
                 "input": "src/assets",
-                "output": "/assets"
+                "output": "assets"
               },
-              "src/manifest.json"
-            ]
+              {
+                "glob": "**/*.svg",
+                "input": "node_modules/ionicons/dist/ionicons/svg",
+                "output": "./svg"
+              }
+            ],
+            "styles": [
+              "src/theme/variables.scss",
+              "src/global.scss"
+            ],
+            "scripts": []
           },
           "configurations": {
             "ci": {
@@ -284,70 +272,22 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "app:serve:production"
-            },
-            "ci": {
-              "devServerTarget": "app:serve:ci"
-            }
-          }
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "app:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
-            },
-            "jdbcn": {
-              "browserTarget": "app:build:jdbcn"
-            },
-            "jdbcn.dev": {
-              "browserTarget": "app:build:jdbcn.dev"
-            },
-            "jdbcn.pro": {
-              "browserTarget": "app:build:jdbcn.pro"
-            }
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "app:ionic-cordova-build",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
-              "devServerTarget": "app:serve:production"
-            }
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
     }
   },
   "cli": {
-    "defaultCollection": "@ionic/angular-toolkit",
-    "analytics": "3d27ad5a-19b9-4c62-92a0-b55da994d24d"
+    "schematicCollections": [
+      "@ionic/angular-toolkit"
+    ],
+    "analytics": "851df07e-e44d-4ed1-82bb-7e16158cd95a"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

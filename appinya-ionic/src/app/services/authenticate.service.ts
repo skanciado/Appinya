@@ -36,7 +36,9 @@ import { StoreData } from "./storage.data";
   providedIn: "root",
 })
 export class AuthenticateService extends RestService {
-  constructor(protected http: HttpClient, protected store: StoreData) {
+  constructor(
+    http: HttpClient, 
+    store: StoreData) {
     super(http, store);
   }
   /**
@@ -71,7 +73,7 @@ export class AuthenticateService extends RestService {
     let oblidarContrasenya$ = this.http.get<IRespostaServidor>(
       `${this.obtenirURLServidor()}/api/v1.0/autenticacio/contrasenya/oblidar?email=` +
         usuari,
-      this.obtenirHeaders(null)
+      this.obtenirHeaders()
     );
 
     return oblidarContrasenya$;

@@ -1,0 +1,62 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+-->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button color="blanc" (click)="cancelar()">X</ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button color="blanc" (click)="guardar()" strong>Guardar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>És una Prova?</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="castell!.Prova" (ionChange)="canviarTipusCastell()"></ion-checkbox>
+    </ion-item><ion-item *ngIf="castell!.Prova">
+      <ion-label>Amb Xarxa?</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="castell!.Xarxa"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-select placeholder="Tipus Castell" [(ngModel)]="castell!.IdTipusCastell">
+        <ion-select-option *ngFor="let t of tipuscastell" value="{{t.Id}}">{{t.Descripcio}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="fixed">Ordre</ion-label>
+      <ion-input type="number" [(ngModel)]="castell!.Ordre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select placeholder="Estat" [(ngModel)]="castell!.IdEstatCastell">
+        <ion-select-option *ngFor="let t of tipusestat" value="{{t.Id}}">{{t.Descripcio}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Observacions</ion-label>
+      <ion-textarea cols="10" rows="10" placeholder="Observacions" [(ngModel)]="castell!.Observacions!"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>

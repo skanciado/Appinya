@@ -71,7 +71,7 @@ export interface IAssistenciaDetallForm {
   NoAssisteixenSense: number;
   AssisteixenSanitaris: number;
   NoAssisteixenSanitaris: number;
-  Acompanyants: number;
+  Acompanyants?: number;
   PrimerAssisteix?: IAssistenciaModelList;
   UltimAssisteix?: IAssistenciaModelList;
   Fantasma?: IAssistenciaModelList;
@@ -147,7 +147,7 @@ export interface IDeuteModel {
 
 export interface ICastellerModel {
   Id: string;
-  IdUsuari: string;
+  IdUsuari?: string;
   Nom: string;
   Cognom: string;
   Alias: string;
@@ -162,14 +162,14 @@ export interface ICastellerModel {
   Carrec: string;
   Direccio: string;
   CodiPostal: string;
-  IdMunicipi: string;
-  IdProvincia: string;
-  Municipi: string;
-  Provincia: string;
+  IdMunicipi?: string;
+  IdProvincia?: string;
+  Municipi?: string;
+  Provincia?: string;
   VisDireccio: boolean;
   Assegurat: boolean;
   Edat: number;
-  DataNaixement: string;
+  DataNaixement?: string;
   VisDataNaixement: boolean;
   TeCamisa: boolean;
   DataEntregaCamisa?: string;
@@ -261,7 +261,7 @@ export interface IAssistenciaModel {
   TransportAnada?: boolean;
   TransportTornada?: boolean;
   Preguntes: IPreguntaModel[];
-  DataModificacio?: Date;
+  DataModificacio: Date;
 }
 /**
  * Petició d'actualitzacio Id
@@ -275,7 +275,7 @@ export interface IPreguntaModel {
   ComboRespuesta: string[]; // Camp Calculat
 }
 
-export class IEsdevenimentModelList {
+export interface IEsdevenimentModelList {
   Id: string;
   Titol: string;
   Descripcio: string;
@@ -302,9 +302,9 @@ export interface IEsdevenimentModel {
   TipusEsdeveniment: string;
   DataIni: string;
   DataFi: string;
-  Latitud: number;
-  Longitud: number;
-  Responsable: string;
+  Latitud?: number;
+  Longitud?: number;
+  Responsable?: string;
   Confirmat: boolean;
   OfereixTransport: boolean;
   Anulat: boolean;
@@ -326,7 +326,7 @@ export interface IEsdevenimentDetallFormModel extends IEsdevenimentDetallModel {
   Delegats: IAssistenciaModel[];
   BloquejarAssistencia: boolean;
   TipusEsdeveniment: string;
-  DataDescarrega: String;
+  DataDescarrega: string;
 }
 
 export interface IEsdevenimentDetallModel extends IEsdevenimentModel {
@@ -351,11 +351,11 @@ export interface INoticiaModel {
   Descripcio: string;
   IdTipusNoticia: any;
   Indefinida: boolean;
-  Data: string;
+  Data?: string;
   Url: string;
-  UsuariReferencia: ICastellerModel;
+  UsuariReferencia?: ICastellerModel;
   Activa: boolean;
-  Foto: String;
+  Foto?: String;
 }
 export interface IAlbumsModel {
   Id: string;
@@ -363,9 +363,9 @@ export interface IAlbumsModel {
   Descripcio: string;
   Data: string;
   Url: string;
-  Fotograf: ICastellerModel;
+  Fotograf?: ICastellerModel;
   Activa: boolean;
-  Portada: String;
+  Portada?: String;
   Likes?: number /* de treball */;
   JoLike?: boolean /* de treball */;
   estat?: string /* de treball */;

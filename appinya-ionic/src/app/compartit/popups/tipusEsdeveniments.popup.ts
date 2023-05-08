@@ -43,16 +43,16 @@ export class TipusEsdevenimentPopUp extends PopUpGeneric implements OnInit {
     isChecked: boolean;
     icon: String;
   }> = [];
-  @Input() tipusInclos: Array<any>;
+  @Input() tipusInclos: Array<any> | undefined;
   constructor(
-    protected usuariBS: UsuariBs,
-    protected toastCtrl: ToastController,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected route: Router,
+    usuariBS: UsuariBs,
+    toastCtrl: ToastController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
+    route: Router,
     protected navParams: NavParams,
-    protected storeData: StoreData,
-    protected modalController: ModalController
+    storeData: StoreData,
+    modalController: ModalController
   ) {
     super(
       usuariBS,
@@ -106,7 +106,7 @@ export class TipusEsdevenimentPopUp extends PopUpGeneric implements OnInit {
     this.modalController.dismiss(tipusInclos);
   }
 
-  cancelar() {
+  override cancelar() {
     this.modalController.dismiss(null);
   }
 }

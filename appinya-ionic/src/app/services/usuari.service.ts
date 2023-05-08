@@ -40,8 +40,8 @@ import {
 })
 export class UsuariService extends RestService {
   constructor(
-    protected http: HttpClient,
-    protected store: StoreData,
+    http: HttpClient,
+    store: StoreData,
     protected platform: Platform
   ) {
     super(http, store);

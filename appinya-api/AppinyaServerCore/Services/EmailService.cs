@@ -39,6 +39,8 @@ namespace AppinyaServerCore.Services
 
     public interface IEmailService
     {
+        public Boolean ServeiActiu();
+
         public void EnviarInformacioSistema(string missatge);
         public void EnviarParticiparEmail(String usuari, String missatge, int tipusContacte);
 
@@ -82,7 +84,10 @@ namespace AppinyaServerCore.Services
 
             _appinyaDbContext = appinyaDbContext;
         }
-
+        public Boolean ServeiActiu()
+        {
+            return _emailSettings.MailingEnable;
+        }
         /// <summary>
         /// Informar al administrador que hi ha hagut un error
         /// </summary>

@@ -1,0 +1,54 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+-->
+
+<div *ngIf="estatCarrega!=1">
+  <ion-refresher slot="fixed" (ionRefresh)="ferActualitzar($event)">
+    <ion-refresher-content pullingText="Puja per actualitzar"></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list *ngIf="estatCarrega==3">
+    <ion-item *ngFor="let ass of llistaItems" (click)="veureDetall(ass.Esdeveniment.Id)">
+      <div slot="start">{{ass.Esdeveniment.DataIni | date:'dd/MM/yy'}}</div>
+      <ion-label>{{ass.Esdeveniment.Titol}}</ion-label>
+      <div slot="end">
+        <ion-icon name=""></ion-icon>
+        <ion-icon class="mitja" *ngIf="ass.Assistire === true" name="thumbs-up" color="verd"
+          title="Assistir"></ion-icon>
+        <ion-icon class="mitja" *ngIf="ass.Assistire === false" name="thumbs-down-outline" title="No Assistir"
+          color="primary"></ion-icon>
+        <ion-icon class="mitja" *ngIf="!ass.Assistire && ass.Assistire !== false" name="help-outline"
+          color="primary"></ion-icon>
+        <ion-icon *ngIf="ass.ConfirmacioTecnica" name="checkmark-done-outline" color="verd"
+          title="Confirmat Tècnicament"></ion-icon>
+        <ion-icon *ngIf="!ass.ConfirmacioTecnica" color="primary" name="caret-back-outline"
+          title="Pdte. Confirmar"></ion-icon>
+      </div>
+    </ion-item>
+    <ion-infinite-scroll (ionInfinite)="ferScrollInfinit($event)" threshold="100px">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregant">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-list>
+
+  <notrobat descripcio="No hi ha assistència" iconName="calendar-outline" *ngIf="estatCarrega==5"></notrobat>
+  <senseconexio descripcio="No hi ha assistència" iconName="calendar-outline" *ngIf="estatCarrega==4"></senseconexio>
+  <ion-button shape="round" expand="block" (click)="veureAssistencia()">Veure gràfiques d'assistència</ion-button>
+</div>

@@ -41,9 +41,9 @@ import {
 })
 export class AdministradorService extends RestService {
   constructor(
-    protected http: HttpClient,
-    protected store: StoreData,
-    protected platform: Platform
+    http: HttpClient,
+    store: StoreData,
+    platform: Platform
   ) {
     super(http, store);
   }

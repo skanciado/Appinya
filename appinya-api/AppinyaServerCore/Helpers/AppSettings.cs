@@ -41,10 +41,11 @@ namespace AppinyaServerCore.Helpers
         public string UrlRetrats { get; set; }
 
         public string UrlNoticies { get; set; }
-        public string UrlConfirmacioEmail { get; set; }
+        public string UrlConfirmacioEmail { get; set; } 
         public String UsuariAdmin { get; set; }
         public String PasswordAdmin { get; set; }
-
+         
+        
         public String UsuariTest { get; set; }
         public String PasswordTest { get; set; }
 

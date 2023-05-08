@@ -1,7 +1,7 @@
 {
-  "name": "appinya",
+  "name": "appinya-ionic6",
   "integrations": {
-    "cordova": {}
-  },  
+    "capacitor": {}
+  },
   "type": "angular"
 }

@@ -48,14 +48,14 @@ export class PosicionsSelectPopUp extends PopUpGeneric {
   }> = [];
 
   constructor(
-    protected usuariBS: UsuariBs,
-    protected toastCtrl: ToastController,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected route: Router,
+    usuariBS: UsuariBs,
+    toastCtrl: ToastController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
+    route: Router,
     protected navParams: NavParams,
-    protected storeData: StoreData,
-    protected modalController: ModalController
+    storeData: StoreData,
+    modalController: ModalController
   ) {
     super(
       usuariBS,

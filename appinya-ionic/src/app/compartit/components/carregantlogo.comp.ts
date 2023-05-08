@@ -66,7 +66,7 @@ export class CarregantLogoComponent {
    * @param onload postfuncio despres de la carrega
    * @returns
    */
-  public carregarPromise(promesa: Promise<any>, onload?: (a) => void) {
+  public carregarPromise(promesa: Promise<any>, onload?: (a: any) => void) {
     if (promesa == null) {
       return;
     }

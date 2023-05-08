@@ -28,11 +28,12 @@ import { StoreData } from "../../services/storage.data";
 import { IEsdevenimentModel } from "../../entities/interfaces";
 import { UsuariBs } from "src/app/business/Usuari.business";
 import { Router } from "@angular/router";
-import { EsdevenimentBs } from "src/app/business/Esdeveniments.business";
+import { EsdevenimentBs } from "src/app/business/esdeveniments.business";
 import { PaginaLlista } from "src/app/compartit/components/PaginaLlista";
 import { SincronitzacioDBBs } from "src/app/business/sincronitzacioDB.business";
 import { DeviceService } from "src/app/services/device.service";
 import { AssistenciaBs } from "src/app/business/assistencia.business";
+import { Constants } from "src/app/Constants";
 @Component({
   selector: "confirmaciolist",
   templateUrl: "confirmaciolist.page.html",
@@ -46,18 +47,18 @@ export class ConfirmacioListPage extends PaginaLlista implements OnInit {
   tipusCerca: string = "actual";
   tipusInclos: any[] = [];
   constructor(
-    protected usuariBs: UsuariBs,
+    usuariBs: UsuariBs,
     protected esdevenimentBS: EsdevenimentBs,
     protected assistenciaBS: AssistenciaBs,
     protected sincronitzacioDBBs: SincronitzacioDBBs,
     protected router: Router,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
     protected modalCtrl: ModalController,
-    protected navCtrl: NavController,
-    protected storeData: StoreData,
+    navCtrl: NavController,
+    storeData: StoreData,
     protected device: DeviceService,
-    protected toastCtrl: ToastController,
+    toastCtrl: ToastController,
     protected modalController: ModalController
   ) {
     super(
@@ -97,8 +98,7 @@ export class ConfirmacioListPage extends PaginaLlista implements OnInit {
     if (this.tipusCerca != "historic") {
       let lst = await await this.esdevenimentBS.obtenirEsdevenimentsActuals(
         this.queryText,
-        this.tipusInclos,
-        0
+        this.tipusInclos
       );
       this.actualitzarLlistaAdvanced(lst);
     } else {
@@ -136,15 +136,15 @@ export class ConfirmacioListPage extends PaginaLlista implements OnInit {
    * Paginacio nomes si es OnLine
    * @param regIni
    */
-  async paginacioActualFuncio(regIni: number) {
+  async paginacioActualFuncio(regIni: number): Promise<IEsdevenimentModel[]> {
     let online = await this.storeData.esOnline();
     if (online || this.llistaItems.length == 0)
       // Si es online o esta buit
       return await this.esdevenimentBS.obtenirEsdevenimentsActuals(
         this.queryText,
-        this.tipusInclos,
-        regIni
+        this.tipusInclos
       );
+    else return [];
   }
   /**
    * Canviar la cerca de Actuals a historics
@@ -153,18 +153,25 @@ export class ConfirmacioListPage extends PaginaLlista implements OnInit {
     this.llistaItems = [];
     if (this.tipusCerca != "historic") {
       this.iniciarLlista(
-        [],
+        await this.esdevenimentBS.obtenirEsdevenimentsActuals(
+          this.queryText,
+          this.tipusInclos
+        ),
         this.actualitarPaquets,
         this.paginacioActualFuncio,
-        10
+        Constants.PAGINACIO
       );
     } else {
       let date: Date = new Date();
       this.iniciarLlista(
-        [],
+        await this.esdevenimentBS.obtenirEsdevenimentsHistorics(
+          this.queryText,
+          this.tipusInclos,
+          0
+        ),
         this.actualitarPaquets,
         this.paginacioHistoricFuncio,
-        10
+        Constants.PAGINACIO
       );
     }
   }

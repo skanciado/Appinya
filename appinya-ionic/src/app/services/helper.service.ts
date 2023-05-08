@@ -29,8 +29,8 @@ import { IEntitatHelper, ITipusBasicsActualitzacio, IUsuariSessio } from '../ent
 export class HelperService extends RestService{
     
   constructor(
-    protected http: HttpClient,
-    protected store: StoreData ) {
+    http: HttpClient,
+    store: StoreData ) {
         super(http, store);
     }
    

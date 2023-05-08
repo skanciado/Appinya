@@ -5,7 +5,8 @@
     <author email="skanciado@gmail.com" href="http://">Daniel Horta Vidal</author>
     <content src="index.html" />
     <access allows-arbitrary-loads-for-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" origin="*" />
-    <allow-intent href="http://*/*" />
+    
+        <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" launch-external="true" />
     <allow-intent href="sms:*" launch-external="true" />

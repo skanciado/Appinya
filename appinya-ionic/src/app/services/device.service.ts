@@ -19,7 +19,7 @@
 import { Injectable } from "@angular/core";
 import { StoreData } from "./storage.data";
 import { Platform } from "@ionic/angular";
-import { AppVersion } from "@ionic-native/app-version/ngx";
+import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
 /**
  * Classe de Informació del Dispostiu
  */
@@ -34,7 +34,7 @@ export class DeviceService {
   constructor(
     protected storeData: StoreData,
     protected platform: Platform,
-    protected appVersion: AppVersion
+    private appVersion: AppVersion
   ) {
     this.plataforma = platform.platforms().toString();
     this.pantallaGran = platform.is("desktop") || platform.is("tablet");
@@ -77,27 +77,23 @@ export class DeviceService {
   /**
    *  Obtenir Versio
    */
-  public obtenirVersio() {
+  public async obtenirVersio() {
     if (!this.entornWeb) {
-      this.appVersion
-        .getVersionNumber()
-        .then((t) => {
-          let version: string[] = t.split(".");
-          if (version.length == 1) return Number.parseInt(t);
-          else {
-            return;
-            Number.parseInt(version[0]) * 10000 +
-              Number.parseInt(version[1]) * 100 +
-              Number.parseInt(version[2]);
-          }
-          return;
+      try {
+        let t = await this.appVersion.getVersionNumber();
+        let version: string[] = t.split(".");
+        if (version.length == 1) return Number.parseInt(t);
+        else {
+          return
           Number.parseInt(version[0]) * 10000 +
             Number.parseInt(version[1]) * 100 +
             Number.parseInt(version[2]);
-        })
-        .catch((t) => {
-          return 0;
-        });
+        }
+
+      } catch (e) {
+        console.warn("PlugIn Version no activado " + e)
+        return 0;
+      }
     } else {
       return 0;
     }

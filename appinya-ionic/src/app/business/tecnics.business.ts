@@ -38,7 +38,7 @@ export class TecnicsBs {
   constructor(
     protected tecnicService: TecnicsService,
     protected storeData: StoreData
-  ) {}
+  ) { }
   /**
    * Desar Casteller
    * @param casteller

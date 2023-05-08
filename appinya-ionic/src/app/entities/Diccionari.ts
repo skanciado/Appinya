@@ -31,6 +31,19 @@ export class Diccionari<T> implements IDiccionari<T> {
 
   private count: number = 0;
 
+  private _initialize: boolean =false;
+
+  public get initialize() {
+    return this._initialize;
+  }
+  public set initialize(v:boolean) {
+     this._initialize = v;
+  } 
+  constructor() {
+    this._initialize = false;
+  }
+
+
   public ContainsKey(key: string): boolean {
     return this.items.hasOwnProperty(key);
   }

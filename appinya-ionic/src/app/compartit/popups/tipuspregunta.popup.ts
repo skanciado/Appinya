@@ -38,18 +38,18 @@ import { PopUpGeneric } from "../components/PopUpGeneric";
   styleUrls: ["./tipuspregunta.popup.scss"],
 })
 export class TipusPreguntaPopUp extends PopUpGeneric implements OnInit {
-  pregunta: IPreguntaModel;
+  pregunta: IPreguntaModel | undefined;
   nova: boolean = true;
-  @Input() preguntes: Array<any>;
+  @Input() preguntes: Array<any> | undefined;
   constructor(
-    protected usuariBS: UsuariBs,
-    protected toastCtrl: ToastController,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected route: Router,
+    usuariBS: UsuariBs,
+    toastCtrl: ToastController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
+    route: Router,
     protected navParams: NavParams,
-    protected storeData: StoreData,
-    protected modalController: ModalController
+    storeData: StoreData,
+    modalController: ModalController
   ) {
     super(
       usuariBS,
@@ -82,23 +82,23 @@ export class TipusPreguntaPopUp extends PopUpGeneric implements OnInit {
     }
   }
   agregarOpcio() {
-    this.pregunta.Valores.push("Nova Opció");
+    this.pregunta?.Valores.push("Nova Opció");
   }
-  eliminarOpcio(op) {
-    let i = this.pregunta.Valores.indexOf(op);
-    this.pregunta.Valores.splice(i, 1);
+  eliminarOpcio(op: any) {
+    let i = this.pregunta?.Valores.indexOf(op);
+    if (i) this.pregunta?.Valores.splice(i, 1);
   }
-  canviarTipus(id) {
-    this.pregunta.TipusPregunta = id;
+  canviarTipus(id: any) {
+    if (this.pregunta) this.pregunta.TipusPregunta = id;
   }
-  cancelar() {
+  override cancelar() {
     this.modalController.dismiss(null);
   }
-  trackEditList(index, item) {
+  trackEditList(index: any, item: any) {
     return index;
   }
   desar() {
-    if (!this.pregunta.Pregunta) {
+    if (!this.pregunta?.Pregunta) {
       this.presentarMissatgeError("El camp Pregunta és obligatori");
     } else if (
       this.pregunta.TipusPregunta == "20" &&

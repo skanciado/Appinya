@@ -63,16 +63,16 @@ import { UsuariBs } from "src/app/business/Usuari.business";
   ],
 })
 export class NoticiaPopUp extends PopUpGeneric {
-  noticia: INoticiaModel;
+  noticia: INoticiaModel | undefined;
   constructor(
-    protected usuariBS: UsuariBs,
-    protected toastCtrl: ToastController,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected route: Router,
+    usuariBS: UsuariBs,
+    toastCtrl: ToastController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
+    route: Router,
     protected navParams: NavParams,
-    protected storeData: StoreData,
-    protected modalController: ModalController
+    storeData: StoreData,
+    modalController: ModalController
   ) {
     super(
       usuariBS,
@@ -92,19 +92,19 @@ export class NoticiaPopUp extends PopUpGeneric {
   public editar: boolean = false;
 
   async ngOnInit() {
-    this.noticia = this.navParams.get("noticia") || null;
-    console.info("mostrar noticia" + this.noticia.Id);
+    this.noticia = this.navParams.get("noticia");
+    console.info("mostrar noticia" + this.noticia!.Id);
     this.expand = "active";
-    this.canExpand = this.noticia.Descripcio.length > 350;
+    this.canExpand = this.noticia!.Descripcio.length > 350;
   }
 
   expandirNoticia() {
     this.expand = this.expand == "active" ? "inactive" : "active";
   }
   anarAUrl() {
-    window.open(this.noticia.Url, "_noticia");
+    window.open(this.noticia!.Url, "_noticia");
   }
   anarAContacto() {
-    window.open(`mailto:${this.noticia.UsuariReferencia.Email}`, "_noticia");
+    window.open(`mailto:${this.noticia!.UsuariReferencia!.Email}`, "_noticia");
   }
 }

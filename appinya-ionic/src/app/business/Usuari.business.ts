@@ -1,6 +1,6 @@
 /**
  *  Appinya Open Source Project
- *  Copyright (C) 2019  Daniel Horta Vidal
+ *  Copyright (C) 2022  Daniel Horta Vidal
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as
@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
 import { StoreData } from "../services/storage.data";
 import { UsuariService } from "../services/usuari.service";
@@ -134,16 +135,15 @@ export class UsuariBs {
     protected autentificacioService: AuthenticateService,
     protected castellerService: CastellersService,
     protected storeData: StoreData
-  ) {}
+  ) { }
   /**
    * Enviar dades equivodades a Secretaria
    * @param casteller
    */
   public async enviarEmailConformacioDades(casteller: ICastellerModel) {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService
-      .enviarEmailConformacioDades(casteller, user)
-      .toPromise();
+    return lastValueFrom(this.usuariService
+      .enviarEmailConformacioDades(casteller, user));
   }
   /**
    * Enviar un missatge a la comisio
@@ -152,16 +152,15 @@ export class UsuariBs {
    */
   public async enviarEmailComisio(qui: string, missatge: string) {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService
-      .enviarEmailComisio(qui, missatge, user)
-      .toPromise();
+    return lastValueFrom(this.usuariService
+      .enviarEmailComisio(qui, missatge, user));
   }
   /**
    * Refresca Token
    */
   public async refrescarToken() {
     let user = await this.storeData.obtenirUsuariSession();
-    const token = await this.usuariService.refreshToken(user).toPromise();
+    const token = await lastValueFrom(this.usuariService.refreshToken(user));
     this.storeData.desarUsuariSessio(token);
   }
   /**
@@ -175,9 +174,8 @@ export class UsuariBs {
     roles: string[]
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return await this.autentificacioService
-      .desarRoles(email, roles, user)
-      .toPromise();
+    return await lastValueFrom(this.autentificacioService
+      .desarRoles(email, roles, user));
   }
 
   /**
@@ -190,7 +188,7 @@ export class UsuariBs {
     casteller: ICastellerModel
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return await this.usuariService.crearUsuari(casteller, user).toPromise();
+    return await lastValueFrom(this.usuariService.crearUsuari(casteller, user));
   }
   /**
    * Obtenir Rols disponibles
@@ -221,7 +219,7 @@ export class UsuariBs {
    */
   public async obtenirUsuariActual(): Promise<IUsuariModel> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.obtenirUsuariActual(user).toPromise();
+    return await lastValueFrom(this.usuariService.obtenirUsuariActual(user));
   }
   /**
    * Obter l'usuari de la base de dades del mòbil
@@ -234,7 +232,7 @@ export class UsuariBs {
    */
   public async obtenirUsuariPerEmail(email: string): Promise<IUsuariModel> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.usuariService.obtenirUsuari(email, user).toPromise();
+    return await lastValueFrom(this.usuariService.obtenirUsuari(email, user));
   }
   /**
    * Obter l'usuari de la base de dades del mòbil
@@ -250,9 +248,8 @@ export class UsuariBs {
     let usuari = await this.storeData.obtenirUsuari();
     if (online) {
       let user = await this.storeData.obtenirUsuariSession();
-      return this.castellerService
-        .obtenirCasteller(usuari.CastellerId, user)
-        .toPromise();
+      return await lastValueFrom(this.castellerService
+        .obtenirCasteller(usuari.CastellerId, user));
     } else {
       return this.storeData.obtenirCasteller(usuari.CastellerId);
     }
@@ -260,12 +257,11 @@ export class UsuariBs {
   /**
    * Refresca les credencials de l'usuari en cas d error llença una excepció
    */
-  public async refrescarUsuari(): Promise<IUsuariSessio> {
+  public async refrescarUsuari(): Promise<IUsuariSessio | null> {
     let userLocal = await this.storeData.obtenirUsuariSession();
     if (!userLocal) return null;
-    let user = await this.usuariService
-      .obtenirUsuariInfo(userLocal)
-      .toPromise();
+    let user = await lastValueFrom(this.usuariService
+      .obtenirUsuariInfo(userLocal));
     if (user) {
       if (user.Rols != userLocal.Rols) {
         throw new ErrorRefrescarCredencials();
@@ -276,12 +272,13 @@ export class UsuariBs {
       return null;
     }
   }
+
   /**
    * Valida si el rol de l'usuari actual es aquest
-   * @param rol nom del rol
+   * @param rol nom del rol 
    */
-  public async esRol(rol: string): Promise<boolean> {
-    let usuari = await this.storeData.obtenirUsuari();
+  public esRol(rol: string, usuari: IUsuariModel): boolean {
+
     if (!usuari) return false;
     else if (
       usuari.CastellerId &&

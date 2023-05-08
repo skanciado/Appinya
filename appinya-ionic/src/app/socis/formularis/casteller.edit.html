@@ -1,0 +1,247 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/  
+-->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{nomcomplet}}</ion-title>
+    <ion-button slot="primary" [disabled]="formulari?.invalid" shape="round" (click)="onSubmit()">
+      Guardar
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="formulari">
+  <form [formGroup]="formulari" (ngSubmit)="onSubmit()">
+    <div id="foto-casteller">
+      <img id="foto" #image [src]="Foto?.value" />
+
+      <div id="foto-agregar" (click)="grabarFoto()">Afegeix Foto</div>
+      <div id="foto-esborrar">
+        <ion-button fill="clear" icon-only (click)="esborrarFoto()">
+          <ion-icon name="trash" is-active="false"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+    <ion-item style="display: none">
+      <input #imageInput type="file" id="fileupload" accept="image/*" (change)="descargarFitxer(imageInput);" />
+      <ion-button color="light">Descarregar fitxer</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" color="primary" name="person-outline"></ion-icon>
+      <ion-input placeholder="Nom" formControlName="Nom"></ion-input>
+      <p slot="end">
+        <sup>(Nom)</sup>
+      </p>
+    </ion-item>
+    <div *ngIf="Nom?.invalid" class="alert alert-danger">
+      <p class="alert-danger" *ngIf="Nom?.errors?.['required']">
+        <sup>*</sup> El nom és obligatori
+      </p>
+    </div>
+    <ion-item>
+      <ion-icon slot="start" color="primary" name="person-outline"></ion-icon>
+      <ion-input placeholder="Cognom" formControlName="Cognom"></ion-input>
+      <p slot="end">
+        <sup>(Cognoms)</sup>
+      </p>
+    </ion-item>
+    <div *ngIf="Cognom?.invalid" class="alert alert-danger">
+      <p class="alert-danger" *ngIf="Cognom?.errors?.['required']">
+        <sup>*</sup> El cognom és obligatori
+      </p>
+    </div>
+    <ion-item>
+      <ion-icon slot="start" color="primary" name="star-outline"></ion-icon>
+      <ion-input placeholder="Alias" formControlName="Alias"></ion-input>
+      <p slot="end">
+        <sup>(Alias)</sup>
+      </p>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" color="primary" name="ribbon-outline"></ion-icon>
+      <ion-input placeholder="Carrec" formControlName="Carrec"></ion-input>
+      <p slot="end">
+        <sup>(Càrrec)</sup>
+      </p>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" color="primary" name="finger-print-outline"></ion-icon>
+
+      <ion-select placeholder="Tipus document" formControlName="IdTipusDocument" (ionChange)="canviarProvincia()">
+        <ion-select-option *ngFor="let t of tipusdocuments" value="{{t.Id}}">{{t.Descripcio}}</ion-select-option>
+      </ion-select>
+      <ion-input placeholder="Id Document" formControlName="Document"></ion-input>
+      <p slot="end">
+        <sup>(Tipus Document)</sup>
+      </p>
+    </ion-item>
+    <div *ngIf="(formulari?.errors?.['tipusDNI'] || Document?.invalid)  && (Document?.dirty || Document?.touched)">
+      <p class="alert-danger" *ngIf="formulari?.errors?.['tipusDNI']">
+        <sup>*</sup> El document és obligatori
+      </p>
+    </div>
+    <ion-item>
+      <ion-icon slot="start" color="primary" name="at-circle-outline"></ion-icon>
+      <ion-input placeholder="Email" formControlName="Email"></ion-input>
+    </ion-item>
+    <div *ngIf="(formulari?.errors?.['emailRequired'] || Email?.invalid)  && (Email?.dirty || Email?.touched)">
+      <p class="alert-danger" *ngIf="formulari?.errors?.['emailRequired']">
+        <sup>*</sup> L'email és obligatori
+      </p>
+      <p class="alert-danger" *ngIf="Email?.errors?.['email']">
+        <sup>*</sup> Email mal formatejat
+      </p>
+    </div>
+
+    <ion-item class="opcio-data">
+      <ion-icon slot="start" color="primary" name="calendar-outline"></ion-icon>
+      <ion-label> Data Naixement </ion-label>
+      <ion-datetime formControlName="DataNaixement" placeholder="Data Naixement"></ion-datetime>
+    </ion-item>
+    <div *ngIf="DataNaixement?.invalid && (DataNaixement?.dirty || DataNaixement?.touched)" class="alert alert-danger">
+      <p class="alert-danger" *ngIf="DataNaixement?.errors?.['required']">
+        <sup>*</sup> La data naixement és obligatòria
+      </p>
+    </div>
+    <ion-item class="opcio-data border-top" lines="none">
+      <ion-icon slot="start" color="primary" name="location-outline"></ion-icon>
+      Adreça
+    </ion-item>
+
+    <ion-item class="opcio-data border-botton" lines="none">
+      <div slot="start"></div>
+      <ion-input placeholder="Codi Postal" formControlName="CodiPostal"></ion-input>
+      <p slot="end">
+        <sup>(CP)</sup>
+      </p>
+    </ion-item>
+    <div *ngIf="CodiPostal?.invalid && (CodiPostal?.dirty || CodiPostal?.touched)">
+      <p class="alert-danger" *ngIf="CodiPostal?.errors?.['required']">
+        <sup>*</sup> El codi postal és obligatori
+      </p>
+    </div>
+    <ion-item class="opcio-data border-botton" lines="none">
+      <div slot="start"></div>
+      <ion-textarea placeholder="Adreça" rows="2" formControlName="Direccio"></ion-textarea>
+      <p slot="end">
+        <sup>(adreça)</sup>
+      </p>
+    </ion-item>
+    <div *ngIf="Direccio?.invalid && (Direccio?.dirty || Direccio?.touched)">
+      <p class="alert-danger" *ngIf="Direccio?.errors?.['required']">
+        <sup>*</sup> L'adreça és obligatòria
+      </p>
+    </div>
+
+    <ion-item class="opcio-data border-botton" lines="none">
+      <div slot="start"></div>
+      <ion-select placeholder="Província" formControlName="IdProvincia" (ionChange)="canviarProvincia()">
+        <ion-select-option *ngFor="let prov of provincies" value="{{prov.Id}}">{{prov.Descripcio}}</ion-select-option>
+      </ion-select>
+
+      <p slot="end">
+        <sup>(Província)</sup>
+      </p>
+    </ion-item>
+    <ion-item class="opcio-data border-botton" lines="none" *ngIf="IdProvincia">
+      <div slot="start"></div>
+      <ion-select okText="Municipi" placeholder="Municipi" formControlName="IdMunicipi">
+        <ion-select-option *ngFor="let muni of municipis" value="{{muni.Id}}">{{muni.Descripcio}}</ion-select-option>
+      </ion-select>
+
+      <p slot="end">
+        <sup>(Municipi)</sup>
+      </p>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton" lines="none">
+      <ion-icon slot="start" color="primary" name="bus-outline"></ion-icon>
+      <ion-label> Assegurat </ion-label>
+      <ion-toggle formControlName="Assegurat" color="primary"></ion-toggle>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton" lines="none">
+      <ion-icon slot="start" color="primary" name="medkit-outline"></ion-icon>
+      <ion-label> Sanitari </ion-label>
+      <ion-toggle formControlName="Sanitari" color="primary"></ion-toggle>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton" lines="none">
+      <ion-icon slot="start" color="primary" name="shirt-outline"></ion-icon>
+      <ion-label> Té camisa </ion-label>
+      <ion-toggle formControlName="TeCamisa" color="primary"></ion-toggle>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton" lines="none" *ngIf="TeCamisa!.value">
+      <ion-icon slot="start" color="primary" name="shirt-outline"></ion-icon>
+      <ion-label> Data d'entrega </ion-label>
+      <ion-datetime display=" DD MMM YYYY" picker-format="DD MM YYYY" formControlName="DataEntregaCamisa"
+        placeholder="Data Entrega"></ion-datetime>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton" lines="none">
+      <ion-icon slot="start" color="primary" name="headset-outline"></ion-icon>
+      <ion-label> Té casc </ion-label>
+      <ion-toggle formControlName="TeCasc" color="primary"></ion-toggle>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton" lines="none" *ngIf="TeCasc!.value">
+      <ion-icon slot="start" color="primary" name="headset-outline"></ion-icon>
+      <ion-label> És de lloguer? </ion-label>
+      <ion-toggle formControlName="EsCascLloguer" color="primary"></ion-toggle>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton">
+      <ion-icon slot="start" color="primary" name="call-outline"></ion-icon>
+      <ion-input type="number" placeholder="Telèfon (principal)" formControlName="Telefon1"></ion-input>
+      <p slot="end">
+        <sup>(Principal)</sup>
+      </p>
+    </ion-item>
+    <ion-item class="opcio-data border-top border-botton">
+      <ion-icon slot="start" color="primary" name="call-outline"></ion-icon>
+      <ion-input type="number" placeholder="Telèfon (secundari)" formControlName="Telefon2"></ion-input>
+      <p slot="end">
+        <sup>(Secundari)</sup>
+      </p>
+    </ion-item>
+    <ion-item *ngIf="ResponsablesLegals!.value.length==0" class="animate__animated animate__backInUp">
+      <ion-icon slot="start" color="primary" name="person-outline"></ion-icon>
+      <ion-button fill="clear" (click)="editarResponsable()">Afegeix responsable legal
+      </ion-button>
+    </ion-item>
+
+    <div *ngIf="ResponsablesLegals!.value.length>0" class="animate__animated animate__backInUp">
+      <ion-item class="opcio-data border-top" lines="none">
+        <ion-icon slot="start" color="primary" name="people-circle-outline"></ion-icon>
+        Responsables legals
+        <ion-icon slot="end" color="primary" name="add-circle-outline" (click)="editarResponsable()"></ion-icon>
+      </ion-item>
+      <ion-item class="animate__animated animate__backInUp" *ngFor="let res of ResponsablesLegals!.value"
+        (click)="editarResponsable(res)">
+        <ion-avatar slot="start">
+          <img [src]="urlFoto + '/' + res.IdCastellerResponsable" />
+        </ion-avatar>
+        <ion-label>
+          <h3>{{res.Nom}} {{res?.Cognoms}}</h3>
+          <p>Telf:{{res?.Telefon1}}</p>
+        </ion-label>
+
+        <ion-icon slot="end" color="primary" name="trash-bin-outline" (click)="esborrarResponse(res)"></ion-icon>
+      </ion-item>
+    </div>
+  </form>
+</ion-content>

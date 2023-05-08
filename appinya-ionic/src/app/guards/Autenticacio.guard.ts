@@ -25,6 +25,8 @@ import {
 } from "@angular/router";
 import { StoreData } from "../services/storage.data";
 import { UsuariBs } from "../business/Usuari.business";
+import { Constants } from "../Constants";
+import { EventService } from "../services/event.service";
 @Injectable({
   providedIn: "root",
 })
@@ -35,8 +37,9 @@ export class AutenticacioGuard implements CanActivate {
   constructor(
     protected storeData: StoreData,
     protected usuariBs: UsuariBs,
-    protected router: Router
-  ) {}
+    protected router: Router,
+    protected eventService: EventService
+  ) { }
 
   /**
    * Metode evaluador dels permisos
@@ -52,16 +55,17 @@ export class AutenticacioGuard implements CanActivate {
     let usr = await this.storeData.obtenirUsuari();
     if (!usr) {
       console.info("No té permisos " + next.url);
-      this.router.navigate(["/public/acces"]);
+      this.router.navigate([Constants.URL_ACCES]);
+      this.eventService.enviarEventCredebcials("No te usuari en la sessió")
     }
 
     if (roles && roles.length > 0) {
       for (const rol of roles) {
-        if (this.usuariBs.esRol(rol)) return true;
+        if (this.usuariBs.esRol(rol, usr)) return true;
       }
       console.info("No té permisos " + next.url);
-      this.router.navigate(["/public/acces"]);
-
+      this.router.navigate([Constants.URL_ACCES]);
+      this.eventService.enviarEventCredebcials(`No te permisos per accedir a /${next.url}`)
       return false;
     } else return true;
   }

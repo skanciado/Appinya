@@ -31,7 +31,7 @@ import { UsuariBs } from "src/app/business/Usuari.business";
 import { StoreData } from "src/app/services/storage.data";
 import { Constants } from "src/app/Constants";
 
-import { ArrayUtils } from "src/app/utils/arrayUtils";
+import { ArrayUtils } from "src/app/utils/ArrayUtils";
 
 @Injectable()
 export class PaginaLlista extends PaginaNavegacio {
@@ -43,16 +43,16 @@ export class PaginaLlista extends PaginaNavegacio {
   protected paginacio: number = 20;
   public estatCarrega: number = Constants.ESTAT_LLISTAT_CARREGANT;
 
-  protected funcioActualitzacio: () => Promise<void>;
-  protected funcioPaginacio: (reg: number) => Promise<any[]>;
+  protected funcioActualitzacio: () => Promise<void> = async () => { return; };
+  protected funcioPaginacio: (reg: number) => Promise<any[]> = async (reg: number) => { return []; };
   constructor(
-    protected usuariBS: UsuariBs,
-    protected route: Router,
-    protected navCtrl: NavController,
-    protected toastCtlr: ToastController,
-    protected alertCtlr: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected storeData: StoreData
+    usuariBS: UsuariBs,
+    route: Router,
+    navCtrl: NavController,
+    toastCtlr: ToastController,
+    alertCtlr: AlertController,
+    loadingCtrl: LoadingController,
+    storeData: StoreData
   ) {
     super(
       usuariBS,
@@ -85,12 +85,11 @@ export class PaginaLlista extends PaginaNavegacio {
     // S'inicia la funcio d'actualització si accedeix amb una llista de treball es carrega i despres s'actualitza
     if (this.llistaTreball && this.llistaTreball.length > 0) {
       this.seguentPagina();
-      if (this.funcioActualitzacio) this.funcioActualitzacio();
-    } else if (this.funcioPaginacio) {
-      // Si esta buit i la funció paginar està informada, s'executa la paginacio
-      this.seguentPagina();
-    } else if (this.funcioActualitzacio) {
-      this.funcioActualitzacio()
+      //this.funcioActualitzacio();
+    } else {
+      // Si esta buit i la funció paginar està informada, s'executa la paginacio 
+      this.estatCarrega = Constants.ESTAT_LLISTAT_SENSE_RESULTATS;
+      /*this.funcioActualitzacio()
         .then((t) => {
           if (this.llistaTreball.length == 0)
             this.estatCarrega = Constants.ESTAT_LLISTAT_SENSE_RESULTATS;
@@ -101,18 +100,9 @@ export class PaginaLlista extends PaginaNavegacio {
         .catch((e) => {
           this.estatCarrega = Constants.ESTAT_LLISTAT_SENSE_RESULTATS;
           throw e;
-        });
-    } else {
-      // Si no hi ha funcio d'actualització
-      if (!this.llistaItems || this.llistaItems.length == 0) {
-        this.estatCarrega = Constants.ESTAT_LLISTAT_SENSE_RESULTATS;
-      } else {
-        this.llistaItems = [];
-        this.seguentPagina();
-      }
+        });*/
     }
   }
-
   /**
    * Actualitzar llista per força un canvi
    * @param llista
@@ -143,7 +133,7 @@ export class PaginaLlista extends PaginaNavegacio {
    * Per pagina una nova pagina en el llistat
    * */
   public seguentPagina(): void {
-    if (this.funcioPaginacio) {
+    if (this.funcioPaginacio != undefined) {
       this.funcioPaginacio(this.llistaTreball.length)
         .then((t) => {
           if (t) this.llistaTreball.push(...t);

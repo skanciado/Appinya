@@ -30,19 +30,21 @@ import {
   IUsuariModel,
   IUsuariSessio,
   IEsdevenimentDetallFormModel,
+  IEsdevenimentModel,
 } from "../entities/interfaces";
 import { Diccionari } from "../entities/Diccionari";
 
 import { ErrorLocalStore } from "../entities/Errors";
+import { Constants } from "../Constants";
 @Injectable({
   providedIn: "root",
 })
 export class StoreData {
   /*Variables de Session Activa*/
   private _esdevenimentsActuals: IEsdevenimentResumModel[] = [];
-  private _esdeveniments: Diccionari<IEsdevenimentResumModel>;
-  private _esdevenimentsDetall: Diccionari<IEsdevenimentDetallFormModel>;
-  private _castellers: Diccionari<ICastellerModel> = null;
+  private _esdeveniments: Diccionari<IEsdevenimentResumModel> = new Diccionari<IEsdevenimentResumModel>();
+  private _esdevenimentsDetall: Diccionari<IEsdevenimentDetallFormModel> = new Diccionari<IEsdevenimentDetallFormModel>();
+  private _castellers: Diccionari<ICastellerModel> = new Diccionari<ICastellerModel>();
   private _noticies: INoticiaModel[] = [];
   private _albums: IAlbumsModel[] = [];
 
@@ -53,7 +55,7 @@ export class StoreData {
   private TEMPORADA = "TEMPORADA";
   private CALENDARI = "CALENDARI";
   private ESDEVENIMENT_DETALL = "CALENDARI_DETALL";
-  private CASTELLERS = "PERSONES";
+  private SOCIS = "SOCIS";
   private NOTICIES = "NOTICIES";
   private ALBUMS = "ALBUMS";
   private VERSIO = "VERSIO";
@@ -80,11 +82,16 @@ export class StoreData {
     this._storage = storage;
     this._storage.set("TEST", "TEST");
   }
+
   /**
    * Carregar de la informacio Publica de la app Noticies,Esdeveniments ....
    */
   public carregarLocalInformacioPublica(): Promise<Boolean> {
     console.info("Carregant informació pública");
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     var p1: Promise<void> = this._storage.get(this.CALENDARI).then((value) => {
       this._esdeveniments = new Diccionari();
       if (value) {
@@ -113,8 +120,11 @@ export class StoreData {
    */
   public async carregarLocalCastellers(): Promise<Boolean> {
     console.info("Carregant informació Castellers");
-    let value2 = await this._storage.get(this.CALENDARI);
-    let value = await this._storage.get(this.CASTELLERS);
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
+    let value = await this._storage.get(this.SOCIS);
     this._castellers = new Diccionari();
     if (value)
       (value as Array<ICastellerModel>).forEach((es) => {
@@ -126,18 +136,30 @@ export class StoreData {
    * Desar l'usuari ha demanat que sigui online
    */
   public desarOnline(online: boolean): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.ONLINE, online);
   }
   /**
    * L'usuari ha demanat que sigui online
    */
   public esOnline(): Promise<boolean> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.ONLINE);
   }
   /**
    * Obtenir Tipus de Noticies
    */
   public obtenirTipusNoticies(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_NOTICIES);
   }
 
@@ -145,36 +167,60 @@ export class StoreData {
    * Obtenir Tipus Esdeveniments
    */
   public obtenirTipusEsdeveniments(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_ESDEVENIMENTS);
   }
   /**
    * Obtenir Tipus Relacions
    */
   public obtenirTipusRelacions(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_RELACIONS);
   }
   /**
    * Obtenir Tipus Castells
    */
   public obtenirTipusCastell(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_CASTELL);
   }
   /**
    * Obtenir Tipus Proves Castells
    */
   public obtenirTipusProves(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_PROVES);
   }
   /**
    * Obtenir Tipus Estat Castells
    */
   public obtenirTipusEstatCastell(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_ESTAT_CASTELL);
   }
   /**
    * Desar tipus de Noticies
    */
   public desarTipusNoticies(tipusNotices: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_NOTICIES, tipusNotices);
   }
   /**
@@ -182,6 +228,10 @@ export class StoreData {
    * @param lstTipus
    */
   public desarTipusRelacio(lstTipus: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_RELACIONS, lstTipus);
   }
   /**
@@ -189,6 +239,10 @@ export class StoreData {
    * @param lstTipus
    */
   public desarTipusCastell(lstTipus: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_CASTELL, lstTipus);
   }
   /**
@@ -196,6 +250,10 @@ export class StoreData {
    * @param lstTipus
    */
   public desarTipusProves(lstTipus: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_PROVES, lstTipus);
   }
   /**
@@ -203,19 +261,35 @@ export class StoreData {
    * @param lstTipus
    */
   public desarTipusEstatCastell(lstTipus: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_ESTAT_CASTELL, lstTipus);
   }
 
   public desarTipusDocuments(lstTipus: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_DOCUMENT, lstTipus);
   }
   /**
    * Obtenir Relacio
    */
   public obtenirTipusRelacio(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_RELACIONS);
   }
   public obtenirTipusDocument(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_DOCUMENT);
   }
   /**
@@ -223,12 +297,20 @@ export class StoreData {
    * @param lstTipus
    */
   public desarTipusEsdeveniments(lstTipus: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_ESDEVENIMENTS, lstTipus);
   }
   /**
    * Obtenir Tipus de Posicions
    */
   public obtenirTipusPosicions(): Promise<IEntitatHelper[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TIPUS_POSICIONS);
   }
   /**
@@ -236,6 +318,10 @@ export class StoreData {
    * @param posicions
    */
   public desarTipusPosicions(posicions: IEntitatHelper[]): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TIPUS_POSICIONS, posicions);
   }
 
@@ -243,12 +329,20 @@ export class StoreData {
    * Obteinir la informacio del usuari logineixat
    * */
   public obtenirUsuariSession(): Promise<IUsuariSessio> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.USER_SESSIO);
   }
   /**
    * Obteinir la informacio del Token
    * */
   public async obtenirToken(): Promise<String> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     let user = await this._storage.get(this.USER_SESSIO);
     return user ? user.Token : null;
   }
@@ -256,6 +350,10 @@ export class StoreData {
    * Obteinir la informacio del Refresh Token
    * */
   public async obtenirRefreshToken(): Promise<String> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     let user = await this._storage.get(this.USER_SESSIO);
     return user ? user.Token : null;
   }
@@ -263,7 +361,11 @@ export class StoreData {
    * Guarda l'usuari en la sessio'
    * @param user
    */
-  public async desarUsuariSessio(user: IUsuariSessio): Promise<any> {
+  public async desarUsuariSessio(user: IUsuariSessio | null): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.USER_SESSIO, user);
   }
 
@@ -271,6 +373,10 @@ export class StoreData {
    * Mostra si s'ha finalitzat el proces de sincronitzacio
    * */
   public obtenirPrimeraSincronitzacio(): Promise<boolean> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.PRIMERA_SINCRONITZACIO);
   }
 
@@ -279,6 +385,10 @@ export class StoreData {
    * @param isPrimera
    */
   public desarPrimeraSincronitzacio(isPrimera: boolean): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.PRIMERA_SINCRONITZACIO, isPrimera);
   }
 
@@ -287,8 +397,12 @@ export class StoreData {
    * Obtenir la base de dades de castellers local
    * */
   public async obtenirCasteller(id: string): Promise<ICastellerModel> {
-    if (!this._castellers) {
-      let lst: ICastellerModel[] = await this._storage.get(this.CASTELLERS);
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
+    if (this._castellers.Values.length == 0) {
+      let lst: ICastellerModel[] = await this._storage.get(this.SOCIS);
       this.inicialitzarCastellers(lst);
     }
     return this._castellers.Item(id);
@@ -298,8 +412,12 @@ export class StoreData {
    * Obtenir la base de dades de castellers local
    * */
   public async obtenirCastellers(): Promise<ICastellerModel[]> {
-    if (!this._castellers) {
-      let lst: ICastellerModel[] = await this._storage.get(this.CASTELLERS);
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
+    if (this._castellers.Values.length == 0) {
+      let lst: ICastellerModel[] = await this._storage.get(this.SOCIS);
       this.inicialitzarCastellers(lst);
     }
     return this._castellers.Values();
@@ -307,8 +425,12 @@ export class StoreData {
   public async obtenirDictionaryCastellers(): Promise<
     Diccionari<ICastellerModel>
   > {
-    if (!this._castellers) {
-      let lst: ICastellerModel[] = await this._storage.get(this.CASTELLERS);
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
+    if (this._castellers.Values.length == 0) {
+      let lst: ICastellerModel[] = await this._storage.get(this.SOCIS);
       this.inicialitzarCastellers(lst);
     }
     return this._castellers;
@@ -319,6 +441,10 @@ export class StoreData {
    */
   public inicialitzarCastellers(castellers: ICastellerModel[]): void {
     this._castellers = new Diccionari();
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     if (castellers) {
       castellers.forEach((casteller) => {
         if (casteller.Actiu) this._castellers.Add(casteller.Id, casteller);
@@ -329,7 +455,7 @@ export class StoreData {
           }
         }
       });
-      this._storage.set(this.CASTELLERS, this._castellers.Values());
+      this._storage.set(this.SOCIS, this._castellers.Values());
     }
   }
 
@@ -337,7 +463,11 @@ export class StoreData {
    * Desar Castellers en la base de dades
    * */
   public async desarCastellersEnLocalDB(): Promise<void> {
-    return this._storage.set(this.CASTELLERS, this._castellers.Values());
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
+    return this._storage.set(this.SOCIS, this._castellers.Values());
   }
 
   /**
@@ -353,7 +483,7 @@ export class StoreData {
    * @param casteller
    */
   public async desarCasteller(casteller: ICastellerModel) {
-    if (!this._castellers) {
+    if (this._castellers.Count() == 0) {
       let b = await this.carregarLocalCastellers();
     }
     this._castellers.Add(casteller.Id, casteller); //Object.assign(new ICastellerModel, casteller));
@@ -363,6 +493,10 @@ export class StoreData {
    * Refrescar Noticies en la base de dades local
    * */
   public async refrescaNoticies(): Promise<INoticiaModel[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     if (!this._loadStore) {
       await this.carregarLocalInformacioPublica();
       if (!this._loadStore)
@@ -372,6 +506,8 @@ export class StoreData {
     }
     if (!this._noticies) return [];
     this._noticies = this._noticies.sort((n1, n2) => {
+      if (!n1.Data) return -1;
+      if (!n2.Data) return -1;
       if (n1.Data < n2.Data) return 1;
       //if (n1.Indefinida != n2.Indefinida && n2.Indefinida) return 1;
       if (n1.Data > n2.Data) return -1;
@@ -387,6 +523,10 @@ export class StoreData {
    * Refrescar fotos en la base de dades local
    * */
   public async refrescaAlbums(): Promise<IAlbumsModel[]> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     if (!this._loadStore) {
       await this.carregarLocalInformacioPublica();
       if (!this._loadStore)
@@ -468,13 +608,35 @@ export class StoreData {
 
     return this._esdevenimentsActuals;
   }
+  /*public async obtenirEsdevenimentsActualsPaginats(regIni: number = 0): Promise<
+    IEsdevenimentResumModel[]
+  > {
+    if (!this._loadStore) {
+      await this.carregarLocalInformacioPublica();
+      if (!this._loadStore)
+        throw new ErrorLocalStore(
+          "Error en la lectura de Esdeveniments [loadStore]"
+        );
+    }
 
+    this.refrescarEsdevenimentsActuals();
+    let pagina: IEsdevenimentModel[] = [];
+    for (var i = regIni; i < this._esdevenimentsActuals.length; i++) {
+      pagina.push(this._esdevenimentsActuals[0]);
+      if (pagina.length >= Constants.PAGINACIO) return pagina;
+    }
+    return pagina;
+  }*/
   /**
    * Retorna el diccionari d'esdeveniments
    * */
   public async obtenirEsdeveniments(): Promise<
     Diccionari<IEsdevenimentResumModel>
   > {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     if (!this._loadStore) {
       await this.carregarLocalInformacioPublica();
       if (!this._loadStore)
@@ -488,7 +650,8 @@ export class StoreData {
   }
   public async obtenirEsdeveniment(
     id: string
-  ): Promise<IEsdevenimentResumModel> {
+  ): Promise<IEsdevenimentResumModel | undefined> {
+
     if (!this._loadStore) {
       await this.carregarLocalInformacioPublica();
       if (!this._loadStore)
@@ -496,14 +659,19 @@ export class StoreData {
           "Error en la lectura de Esdeveniments [loadStore]"
         );
     }
-    if (!this._esdeveniments) return null;
+    if (!this._esdeveniments) return;
     if (this._esdeveniments.ContainsKey(id))
       return this._esdeveniments.Item(id);
+    return;
   }
 
   public async obtenirEsdevenimentDetall(
     id: string
-  ): Promise<IEsdevenimentDetallFormModel> {
+  ): Promise<IEsdevenimentDetallFormModel | null> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     if (!this._esdevenimentsDetall) {
       console.info("Cargar Diccionari Esdeveniment Detall");
       let value = await this._storage.get(this.ESDEVENIMENT_DETALL);
@@ -523,6 +691,10 @@ export class StoreData {
    * Desar esdeveniments en la base de dades local
    * */
   public async desarEsdevenimentsEnLocalDB() {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     if (!this._loadStore) {
       return;
     }
@@ -534,6 +706,8 @@ export class StoreData {
   public async desarEsdevenimentsDetall(
     esdeveniment: IEsdevenimentDetallFormModel
   ) {
+    if (this._storage == null)
+      throw new ErrorLocalStore("Storage no inicialitzado");
     this._esdevenimentsDetall.Add(esdeveniment.Id, esdeveniment);
     await this._storage.set(
       this.ESDEVENIMENT_DETALL,
@@ -567,6 +741,10 @@ export class StoreData {
    * Desar noticies en local
    * */
   public desarNoticiesEnLocalDB(): void {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     this._storage.set(this.NOTICIES, this._noticies);
   }
 
@@ -619,6 +797,10 @@ export class StoreData {
    * Desaruna fotos en local
    * */
   public async desarAlbumEnLocalDB(): Promise<void> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     if (!this._loadStore) {
       return;
     }
@@ -665,12 +847,20 @@ export class StoreData {
    * @param date
    */
   public desarUsuari(usuari: IUsuariModel): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.USER_INFO, usuari);
   }
   /**
    * Obtenir Usuari del Model
    */
   public async obtenirUsuari(): Promise<IUsuariModel> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.USER_INFO);
   }
 
@@ -679,12 +869,20 @@ export class StoreData {
    * @param date
    */
   public desarDataActualitzacio(date: string): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.DATE_ACTUALITZACIO, date);
   }
   /**
    * Obtenir la versio de la base de dades del mobil
    * */
   public obtenirDataActualitzacio(): Promise<string> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.DATE_ACTUALITZACIO);
   }
 
@@ -692,20 +890,28 @@ export class StoreData {
    * Obtenir la versio de la base de dades del mobil
    * */
   public obtenirVersioDB(): Promise<number> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.VERSIO);
   }
   /**
    * Desar versio de la base de dades
    * @param versio
    */
-  public desarVersioDB(versio: number): Promise<any> {
+  public desarVersioDB(versio: number | undefined): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.VERSIO, versio);
   }
 
   /**
    * Obtenir les noticies locals
    * */
-  public async obtenirNoticies(): Promise<INoticiaModel[]> {
+  public async obtenirNoticies(reg: number): Promise<INoticiaModel[]> {
     if (!this._loadStore) {
       await this.carregarLocalInformacioPublica();
       if (!this._loadStore)
@@ -714,9 +920,29 @@ export class StoreData {
         );
     }
     if (!this._noticies) return [];
-    return this._noticies;
+    let wrk: INoticiaModel[] = [];
+    for (let i = reg; i < this._noticies.length && (i - reg) <= Constants.PAGINACIO; i++) {
+      wrk.push(this._noticies[i]);
+    }
+    return wrk;
   }
+  public async obtenirNoticia(id: string): Promise<INoticiaModel | undefined> {
+    if (!this._loadStore) {
+      await this.carregarLocalInformacioPublica();
+      if (!this._loadStore)
+        throw new ErrorLocalStore(
+          "Error en la lectura de Noticies [loadStore]"
+        );
+    }
+    if (!this._noticies) return;
+    return this._noticies.find(n => {
+      if (n.Id == id)
+        return true;
+      return false;
+    })
 
+
+  }
   /**
    * Obtenir les fotos locals
    * */
@@ -733,6 +959,10 @@ export class StoreData {
    * Obtenir la temporada
    */
   public obtenirTemporada(): Promise<ITemporadaModel> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.get(this.TEMPORADA);
   }
   /**
@@ -740,6 +970,10 @@ export class StoreData {
    * @param temp
    */
   public desarTemporada(temp: ITemporadaModel): Promise<any> {
+    if (this._storage == null) {
+      console.error("Storage no inicialitzado");
+      throw new ErrorLocalStore("Storage no inicialitzado");
+    }
     return this._storage.set(this.TEMPORADA, temp);
   }
 
@@ -748,7 +982,8 @@ export class StoreData {
    */
   public async cleanMemoria() {
     let usr = await this.obtenirUsuariSession();
-    await this._storage.clear();
+    if (this._storage != null)
+      await this._storage.clear();
     this.desarUsuariSessio(usr);
     this._noticies = [];
     this._loadStore = true;

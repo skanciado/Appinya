@@ -30,8 +30,8 @@ import { IResumHomeModel, IUsuariSessio } from '../entities/interfaces';
 export class HomeService extends RestService {
 
   constructor(
-    protected http: HttpClient,
-    protected store: StoreData) {
+    http: HttpClient,
+    store: StoreData) {
     super(http, store);
   }
 

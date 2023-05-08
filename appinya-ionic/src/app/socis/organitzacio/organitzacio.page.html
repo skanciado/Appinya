@@ -1,0 +1,48 @@
+<!--/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2019  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+-->
+<div>
+  <div class="titol">Organització</div>
+  <div class="sottitol">
+    Aquí et presentem a la gent que està implicada en l'organització d'aquesta
+    gran família. Ajuda'ns a ser més grans!
+  </div>
+  <div class="capcelera-logo"></div>
+</div>
+<div class="organitzacio">
+  <p-organizationChart [value]="data">
+    <ng-template let-node pTemplate="person">
+      <div class="node-header p-corner-top">{{node.label}}</div>
+      <div class="node-content" *ngFor="let a of node.data.Castellers" (click)="seleccion(a,node.data.Organitzacio)">
+        <ion-avatar style="display: inline-block">
+          <img [src]="a?.Foto ? a.Foto : 'assets/img/user/user-anonymous.jpg'" />
+        </ion-avatar>
+        <div class="alias">{{a.Alias}}</div>
+      </div>
+    </ng-template>
+    <ng-template let-node pTemplate="empty">
+      <div class="node-header p-corner-top">{{node.label}}</div>
+      <div class="node-content" (click)="seleccion(node.data.Organitzacio)">
+        <ion-icon name="add" color="primary"></ion-icon>
+        <div class="empty-person">(No assignat)</div>
+      </div>
+    </ng-template>
+  </p-organizationChart>
+</div>

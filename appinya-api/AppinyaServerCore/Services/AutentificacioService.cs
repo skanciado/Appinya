@@ -89,13 +89,17 @@ namespace AppinyaServerCore.Services
         public async Task<UsuariSessio> ObtenirUsuariValidacio(string usuari)
         {
             if (usuari == null) return null;
-            if (esUsuariLocal(usuari))
+            var iuser = _userManager.Users.Where(x => x.UserName == usuari).FirstOrDefault();
+            if (iuser == null)
             {
-                return crearInstanciaUsuariLocal(usuari);
+                if (esUsuariLocal(usuari))
+                {
+                    return crearInstanciaUsuariLocal(usuari);
+                }
+                return null;
             }
 
-            var iuser = _userManager.Users.Where(x => x.UserName == usuari).FirstOrDefault();
-            if (iuser == null) return null;
+          
             UsuariSessio user = iuser;
             user.Rols = await _userManager.GetRolesAsync(iuser);
             user.Token = createToken(user.Usuari, user.Rols);
@@ -220,7 +224,8 @@ namespace AppinyaServerCore.Services
 
                 user = new UsuariSessio()
                 {
-                    Id = _appSettings.UsuariAdmin,
+                    Id = Guid.NewGuid().ToString(),
+                    LocalUser = true,
                     Nom = _appSettings.UsuariAdmin,
                     Usuari = _appSettings.UsuariAdmin,
                     Email = _appSettings.UsuariAdmin,
@@ -234,7 +239,8 @@ namespace AppinyaServerCore.Services
             }
             user = new UsuariSessio()
             {
-                Id = _appSettings.UsuariAdmin,
+                Id = Guid.NewGuid().ToString(),
+                LocalUser = true,
                 Nom = _appSettings.UsuariTest,
                 Usuari = _appSettings.UsuariTest,
                 Email = _appSettings.UsuariTest,
@@ -311,14 +317,17 @@ namespace AppinyaServerCore.Services
         {
             if (email == null) return null;
             UsuariSessio user = null;
-            if (esUsuariLocal(email))
-            {
-                return crearInstanciaUsuariLocal(email);
+            var iuser = _userManager.Users.Where(x => x.UserName == email).FirstOrDefault();
+            if (iuser == null)
+            { 
+                if (esUsuariLocal(email))
+                {
+                    return crearInstanciaUsuariLocal(email);
+                }
+                return null;
             }
 
-
-            var iuser = _userManager.Users.Where(x => x.UserName == email).FirstOrDefault();
-            if (iuser == null) return null;
+         
             user = iuser;
             user.Rols = await _userManager.GetRolesAsync(iuser);
             return user;
@@ -332,10 +341,7 @@ namespace AppinyaServerCore.Services
         {
             if (userParam == null) throw new ArgumentNullException(nameof(userParam));
 
-            if (esUsuariLocal(userParam.Email))
-            {
-                throw new ArgumentException("No es pot esborrar un usuari local de proves");
-            }
+            
             bool mostraContrasenya = false;
             // Crea una contrasenya random
             if (String.IsNullOrEmpty(userParam.Contrasenya))
@@ -392,7 +398,11 @@ namespace AppinyaServerCore.Services
                 Dictionary<String, String> parameters = new Dictionary<string, string>();
                 parameters.Add("usuari", userParam.Email);
                 parameters.Add("password", (mostraContrasenya) ? userParam.Contrasenya : "***********");
-                _emailService.EnviarEmailBenvinguda(userParam.Email, parameters);
+                
+                if (_emailService.ServeiActiu())
+                    _emailService.EnviarEmailBenvinguda(userParam.Email, parameters);
+                else
+                    _logger.LogInformation($" WARNING: Creació d'usuari {userParam.Email} amb password {userParam.Contrasenya}");
                 return CrearRespotaOK();
             }
             String errors = "";

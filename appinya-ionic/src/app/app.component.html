@@ -20,56 +20,28 @@
 -->
 <ion-tabs>
   <div slot="bottom">
-    <div
-      class="senseconexio"
-      [style.display]="senseConexio ? 'block' : 'none'"
-      (click)="reconect()"
-    >
+    <div class="senseconexio" [style.display]="senseConexio ? 'block' : 'none'" (click)="reconect()">
       <ion-icon name="wifi"></ion-icon> Sense conexió
     </div>
     <div class="version-appinya">Versió {{ version }}</div>
   </div>
 
-  <ion-tab-bar
-    #tabbar
-    slot="bottom"
-    color="primary"
-    [ngClass]="{ tabVisible: !tabBarAmagat, tabHidden: tabBarAmagat }"
-  >
-    <ion-tab-button
-      tab="public/noticies"
-      [ngClass]="{ tabActiu: tabSelected == 1 }"
-    >
+  <ion-tab-bar #tabbar slot="bottom" color="primary" [ngClass]="{ tabVisible: !tabBarAmagat, tabHidden: tabBarAmagat }">
+    <ion-tab-button tab="socis/noticies" [ngClass]="{ tabActiu: tabSelected == 1 }">
       <ion-icon class="gran" src="assets/icons/icon_anunci.svg"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="public/agendalist">
-      <ion-icon
-        class="gran"
-        src="assets/icons/icon_calendari.svg"
-        [class.tabActiu]="tabSelected == 2"
-      ></ion-icon>
+    <ion-tab-button tab="socis/agendalist">
+      <ion-icon class="gran" src="assets/icons/icon_calendari.svg" [class.tabActiu]="tabSelected == 2"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button tab="public/home"> 
-      <ion-icon
-        class="gran"
-        src="assets/icons/icon_home.svg"
-        [class.tabActiu]="tabSelected == 3"
-      ></ion-icon>
+    <ion-tab-button tab="socis/home">
+      <ion-icon class="gran" src="assets/icons/icon_home.svg" [class.tabActiu]="tabSelected == 3"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button tab="public/bustia">
-      <ion-icon
-        class="gran"
-        src="assets/icons/icon_bustia.svg"
-        [class.tabActiu]="tabSelected == 4"
-      ></ion-icon>
+    <ion-tab-button tab="socis/bustia">
+      <ion-icon class="gran" src="assets/icons/icon_bustia.svg" [class.tabActiu]="tabSelected == 4"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button tab="public/opcions">
-      <ion-icon
-        class="gran"
-        src="assets/icons/icon_hamburguer.svg"
-        [class.tabActiu]="tabSelected == 5"
-      ></ion-icon>
+    <ion-tab-button tab="socis/opcions">
+      <ion-icon class="gran" src="assets/icons/icon_hamburguer.svg" [class.tabActiu]="tabSelected == 5"></ion-icon>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

@@ -18,7 +18,7 @@
  **/
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-
+import { lastValueFrom } from 'rxjs';
 import {
   NavParams,
   ModalController,
@@ -47,14 +47,14 @@ export class TemporadaPopUp extends PopUpGeneric implements OnInit {
 
   constructor(
     protected temporadaService: TemporadaService,
-    protected usuariBS: UsuariBs,
-    protected toastCtrl: ToastController,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected route: Router,
+    usuariBS: UsuariBs,
+    toastCtrl: ToastController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
+    route: Router,
     protected navParams: NavParams,
-    protected storeData: StoreData,
-    protected modalController: ModalController
+    storeData: StoreData,
+    modalController: ModalController
   ) {
     super(
       usuariBS,
@@ -74,9 +74,8 @@ export class TemporadaPopUp extends PopUpGeneric implements OnInit {
     let totes: boolean = this.navParams.get("totes") || true;
     let date = new Date();
     this.storeData.obtenirUsuariSession().then(async (user) => {
-      let temporadas = await this.temporadaService
-        .obtenirTemporades(user)
-        .toPromise();
+      let temporadas = await lastValueFrom(this.temporadaService
+        .obtenirTemporades(user));
       temporadas.forEach((t1) => {
         if (totes == true || t1.DataFi < date.toISOString())
           this.temporades.push({
@@ -87,7 +86,7 @@ export class TemporadaPopUp extends PopUpGeneric implements OnInit {
       });
     });
   }
-  seleccionar(temp) {
+  seleccionar(temp: any) {
     this.modalController.dismiss(temp.temporada);
   }
 }

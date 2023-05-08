@@ -20,7 +20,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-input color="blanc" placeholder="Introdueix pregunta" [(ngModel)]="pregunta.Pregunta"></ion-input>
+        <ion-input color="blanc" placeholder="Introdueix pregunta" [(ngModel)]="pregunta!.Pregunta"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row></ion-row>
@@ -32,25 +32,25 @@
     <ion-row class="ion-justify-content-center">
       <ion-col size="4">
         <div (click)="canviarTipus(10)">
-          <img src="assets/img/pregunta1.png" [class.selected]="pregunta.TipusPregunta=='10'" />
+          <img src="assets/img/pregunta1.png" [class.selected]="pregunta!.TipusPregunta=='10'" />
         </div>
       </ion-col>
       <ion-col size="4">
         <div (click)="canviarTipus(20)">
-          <img src="assets/img/pregunta2.png" [class.selected]="pregunta.TipusPregunta=='20'" />
+          <img src="assets/img/pregunta2.png" [class.selected]="pregunta!.TipusPregunta=='20'" />
         </div>
       </ion-col>
       <ion-col size="4">
         <div (click)="canviarTipus(30)">
-          <img src="assets/img/pregunta3.png" [class.selected]="pregunta.TipusPregunta=='30'" />
+          <img src="assets/img/pregunta3.png" [class.selected]="pregunta!.TipusPregunta=='30'" />
         </div>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="pregunta.TipusPregunta=='20'">
+    <ion-row *ngIf="pregunta!.TipusPregunta=='20'">
       <ion-col size="12">
         <ion-list>
-          <ion-item *ngFor="let op of pregunta.Valores; let i = index;trackBy:trackEditList">
-            <ion-input slot="start" color="blanc" [(ngModel)]="pregunta.Valores[i]"></ion-input>
+          <ion-item *ngFor="let op of pregunta!.Valores; let i = index;trackBy:trackEditList">
+            <ion-input slot="start" color="blanc" [(ngModel)]="pregunta!.Valores[i]"></ion-input>
             <ion-icon (click)="eliminarOpcio(op)" slot="end" name="trash-outline"></ion-icon>
           </ion-item>
 

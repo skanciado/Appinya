@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
 import { Constants } from "../Constants";
 import {
@@ -35,20 +36,20 @@ export class AlbumsBs {
   constructor(
     protected albumService: AlbumService,
     protected storeData: StoreData
-  ) {}
+  ) { }
   /**
    * Obtenir Album per Id
    * @param idAlbum
    * @returns
    */
-  public async obtenirAlbumModel(idAlbum: string): Promise<IAlbumsModel> {
+  public async obtenirAlbumModel(idAlbum: string): Promise<IAlbumsModel | undefined> {
     return (await this.storeData.refrescaAlbums()).find((t) => {
       return t.Id == idAlbum;
     });
   }
-  public async obtenirNoticiaServidor(id: string): Promise<IAlbumsModel> {
+  public async obtenirNoticiaServidor(id: string): Promise<IAlbumsModel | undefined> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.albumService.obtenirAlbum(id, user).toPromise();
+    return await lastValueFrom(this.albumService.obtenirAlbum(id, user));
   }
   /**
    * Guarda en la capa de persistencia del dispositiu linformació actualitzada dels likes
@@ -123,7 +124,7 @@ export class AlbumsBs {
     idTemporada: number
   ): Promise<IAlbumsModel[]> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.albumService.obtenirAlbums(idTemporada, user).toPromise();
+    return await lastValueFrom(this.albumService.obtenirAlbums(idTemporada, user));
   }
 
   /**
@@ -133,18 +134,18 @@ export class AlbumsBs {
    */
   public async esborrar(foto: IAlbumsModel): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.albumService.esborrarAlbum(foto, user).toPromise();
+    return await lastValueFrom(this.albumService.esborrarAlbum(foto, user));
   }
 
   /**
    * Donar Like Fotos
-   * @param foto  Foto objecte
+   * @param foto  Foto objecte 
    */
   public async like(
     foto: IAlbumsModel
   ): Promise<IRespostaServidorAmbRetorn<number>> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.albumService.like(foto, user).toPromise();
+    return await lastValueFrom(this.albumService.like(foto, user));
   }
   /**
    * Esborrar Like Fotos
@@ -154,7 +155,7 @@ export class AlbumsBs {
     foto: IAlbumsModel
   ): Promise<IRespostaServidorAmbRetorn<number>> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.albumService.eliminarLike(foto, user).toPromise();
+    return await lastValueFrom(this.albumService.eliminarLike(foto, user));
   }
 
   /**
@@ -163,7 +164,7 @@ export class AlbumsBs {
    */
   public async obtenirLikes(idTemporada: number): Promise<ILikesHelper[]> {
     let user = await this.storeData.obtenirUsuariSession();
-    return this.albumService.obtenirLikes(idTemporada, user).toPromise();
+    return await lastValueFrom(this.albumService.obtenirLikes(idTemporada, user));
   }
 
   /**

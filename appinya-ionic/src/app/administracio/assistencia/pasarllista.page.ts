@@ -36,14 +36,14 @@ import {
 import { UsuariBs } from "src/app/business/Usuari.business";
 import { OverlayEventDetail } from "@ionic/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { EsdevenimentBs } from "src/app/business/Esdeveniments.business";
+import { EsdevenimentBs } from "src/app/business/esdeveniments.business";
 import { PaginaLlista } from "src/app/compartit/components/PaginaLlista";
 import { SincronitzacioDBBs } from "src/app/business/sincronitzacioDB.business";
 import { DeviceService } from "src/app/services/device.service";
 import { AssistenciaBs } from "src/app/business/assistencia.business";
 import { CarregantLogoComponent } from "src/app/compartit/components/carregantlogo.comp";
 import { PosicionsPopUp } from "src/app/compartit/popups/posicions.popup";
-import { ArrayUtils } from "src/app/utils/arrayUtils";
+import { ArrayUtils } from "src/app/utils/ArrayUtils";
 import { EventService } from "src/app/services/event.service";
 import { ErrorSenseInternet } from "src/app/entities/Errors";
 interface IPassarListaModel {
@@ -58,32 +58,32 @@ interface IPassarListaModel {
 })
 export class PasarLlistaPage extends PaginaLlista implements OnInit {
   @ViewChild("textCerca") textCercaComponent: any;
-  @ViewChild("carregant") carregant: CarregantLogoComponent;
-  @ViewChild("lista") lista: IonItemSliding;
+  @ViewChild("carregant") carregant: CarregantLogoComponent | undefined;
+  @ViewChild("lista") lista: IonItemSliding | undefined;
   bmostraCerca: boolean = false;
   bpotConfirmar: boolean = false;
   queryText: string = "";
   tipusCerca: string = "assistents";
-  esdevenimentDetall: IEsdevenimentDetallModel;
+  esdevenimentDetall: IEsdevenimentDetallModel | undefined;
   posicionsFiltre: string[] = [];
-  id: string;
+  id: string = "";
   // grupsCastellers: Array<{ nom: string, icon: string, castellers: Casteller[] }> = [];
 
   constructor(
-    protected usuariBs: UsuariBs,
+    usuariBs: UsuariBs,
     protected esdevenimentBS: EsdevenimentBs,
     protected assistenciaBs: AssistenciaBs,
     protected sincronitzacioDBBs: SincronitzacioDBBs,
     protected router: Router,
     protected eventService: EventService,
     protected activatedRoute: ActivatedRoute,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
     protected modalCtrl: ModalController,
-    protected navCtrl: NavController,
-    protected storeData: StoreData,
+    navCtrl: NavController,
+    storeData: StoreData,
     protected device: DeviceService,
-    protected toastCtrl: ToastController,
+    toastCtrl: ToastController,
     protected modalController: ModalController
   ) {
     super(
@@ -104,7 +104,12 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
   async ngOnInit() {
     this.tipusCerca = "assistents";
     this.bmostraCerca = false;
-    this.id = this.activatedRoute.snapshot.paramMap.get("id");
+    let wid = this.activatedRoute.snapshot.paramMap.get("id");
+    if (wid)
+      this.id = wid;
+    else
+      console.error("No existe el Id");
+
   }
   /**
    * Despres de incializar la part grafica
@@ -112,8 +117,12 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
   ngAfterViewInit() {
     this.tipusCerca = "assistents";
     this.bmostraCerca = false;
-    this.id = this.activatedRoute.snapshot.paramMap.get("id");
-    this.carregant.carregarPromise(this.canviarCerca());
+    let wid = this.activatedRoute.snapshot.paramMap.get("id");
+    if (wid)
+      this.id = wid;
+    else
+      console.error("No existe el Id");
+    this.carregant!.carregarPromise(this.canviarCerca());
   }
   /**
    * Boto per mostar el textbox de cerca
@@ -142,7 +151,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
    * Cerca de text
    * @param event
    */
-  async cercarText(event) {
+  async cercarText(event: any) {
     if (this.queryText.length != 0 && this.queryText.length < 3) return;
     this.actualitzarLlista(await this.obtenirElements());
   }
@@ -158,7 +167,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
   public async canviarTipusParticipants() {
     this.sincronitzacioDBBs.actualitzarPaquets().then(async (t) => {
       let esd = await this.esdevenimentBS.obtenirEsdeveniment(this.id);
-      if (esd.DataActualitzacio != this.esdevenimentDetall.DataActualitzacio) {
+      if (esd!.DataActualitzacio != this.esdevenimentDetall!.DataActualitzacio) {
         this.esdevenimentDetall =
           await this.esdevenimentBS.obtenirEsdevenimentDetallModel(this.id);
         this.actualitzarLlista(await this.obtenirElements());
@@ -172,8 +181,8 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
   private async obtenirElements(): Promise<IPassarListaModel[]> {
     if (this.tipusCerca == "assistents") {
       return (
-        await this.esdevenimentBS.obtenirCastellersAssistents(
-          this.esdevenimentDetall,
+        await this.esdevenimentBS.obtenirCastellersAssistencia(
+          this.esdevenimentDetall!.CastellersAssitiran || [],
           this.queryText,
           this.posicionsFiltre
         )
@@ -186,8 +195,8 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
       });
     } else if (this.tipusCerca == "noassistents") {
       return (
-        await this.esdevenimentBS.obtenirCastellersNoAssistents(
-          this.esdevenimentDetall,
+        await this.esdevenimentBS.obtenirCastellersAssistencia(
+          this.esdevenimentDetall!.CastellersNoAssitiran || [],
           this.queryText,
           this.posicionsFiltre
         )
@@ -201,7 +210,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
     } else {
       return (
         await this.esdevenimentBS.obtenirCastellersPdtConfirmar(
-          this.esdevenimentDetall,
+          this.esdevenimentDetall!,
           this.queryText,
           this.posicionsFiltre
         )
@@ -211,8 +220,9 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
           assistencia: {
             Casteller: t.Id,
             ConfirmacioTecnica: false,
-            Esdeveniment: this.esdevenimentDetall.Id,
+            Esdeveniment: this.esdevenimentDetall!.Id,
             Preguntes: [],
+            DataModificacio: new Date()
           },
           delete: false,
         };
@@ -229,7 +239,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
     cas.assistencia.Assistire = false;
     cas.assistencia.ConfirmacioTecnica = true;
     this.assistenciaBs
-      .confirmacioTecnica(this.esdevenimentDetall.Id, [cas.assistencia])
+      .confirmacioTecnica(this.esdevenimentDetall!.Id, [cas.assistencia])
       .then((t) => {
         if (t.Correcte == false) {
           this.presentarMissatgeError(t.Missatge);
@@ -241,7 +251,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
           this.presentarMissatgeSenseConexio();
         } else this.presentarMissatgeError(e);
       });
-    this.lista.closeOpened();
+    this.lista!.closeOpened();
   }
   /**
    * Metode per indicar la no assistencia negativa d'un casteller
@@ -252,7 +262,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
     cas.assistencia.Assistire = true;
     cas.assistencia.ConfirmacioTecnica = true;
     this.assistenciaBs
-      .confirmacioTecnica(this.esdevenimentDetall.Id, [cas.assistencia])
+      .confirmacioTecnica(this.esdevenimentDetall!.Id, [cas.assistencia])
       .then((t) => {
         if (t.Correcte == false) {
           this.presentarMissatgeError(t.Missatge);
@@ -264,7 +274,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
           this.presentarMissatgeSenseConexio();
         } else this.presentarMissatgeError(e);
       });
-    this.lista.closeOpened();
+    this.lista!.closeOpened();
   }
 
   /**
@@ -272,8 +282,8 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
    * @param event
    * @param cas
    */
-  onDrag(event, cas: IPassarListaModel) {
-    event.target.getSlidingRatio().then((res) => {
+  onDrag(event: any, cas: IPassarListaModel) {
+    event.target.getSlidingRatio().then((res: any) => {
       if (res == -1) {
         if (this.tipusCerca == "assistents") {
           cas.delete = true;
@@ -317,7 +327,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
    * */
   async canviarCerca() {
     this.esdevenimentDetall =
-      await this.esdevenimentBS.obtenirEsdevenimentDetallModelStored(this.id);
+      await this.esdevenimentBS.obtenirEsdevenimentDetallModelStored(this.id) || undefined;
     if (this.esdevenimentDetall == null) {
       try {
         this.esdevenimentDetall =
@@ -334,14 +344,14 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
     this.bpotConfirmar = await this.assistenciaBs.potConfirmarAssistencia(
       this.esdevenimentDetall.TipusEsdeveniment
     );
-    this.iniciarLlista(await this.obtenirElements(), this.actualitar, null, 20);
+    this.iniciarLlista(await this.obtenirElements(), this.actualitar, async reg => [], 20);
 
     if (this.esdevenimentDetall != null) {
       this.esdevenimentBS
         .obtenirEsdevenimentDetallModel(this.id)
         .then(async (eve) => {
           if (
-            this.esdevenimentDetall.DataActualitzacio != eve.DataActualitzacio
+            this.esdevenimentDetall!.DataActualitzacio != eve.DataActualitzacio
           ) {
             this.esdevenimentDetall = eve;
             this.bpotConfirmar =
@@ -351,7 +361,7 @@ export class PasarLlistaPage extends PaginaLlista implements OnInit {
             this.iniciarLlista(
               await this.obtenirElements(),
               this.actualitar,
-              null,
+              async reg => [],
               20
             );
           }

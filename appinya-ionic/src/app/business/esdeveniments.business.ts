@@ -1,6 +1,6 @@
 /**
  *  Appinya Open Source Project
- *  Copyright (C) 2019  Daniel Horta Vidal
+ *  Copyright (C) 2023  Daniel Horta Vidal
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as
@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from "@angular/core";
 import { Constants } from "../Constants";
 import {
@@ -55,7 +56,7 @@ export class EsdevenimentBs {
     protected castellersBs: CastellersBs,
     protected storeData: StoreData,
     protected deviceService: DeviceService
-  ) {}
+  ) { }
 
   public async actualitzarEsdevenimentsActuals() {
     await this.storeData.carregarLocalInformacioPublica();
@@ -65,44 +66,69 @@ export class EsdevenimentBs {
    */
   public async obtenirEsdevenimentsActuals(
     text?: string,
-    tipus?: IEntitatHelper[],
-    regIni?: number
+    tipus?: IEntitatHelper[]
   ): Promise<IEsdevenimentModel[]> {
-    let online = await this.storeData.esOnline();
-    let usuari = await this.storeData.obtenirUsuariSession();
     tipus = tipus || [];
-    if (!online) {
-      return (await this.storeData.obtenirEsdevenimentsActuals()).filter(
-        (esdev) => {
-          if (
-            text &&
-            esdev.Descripcio.toLowerCase().indexOf(text.toLowerCase()) <= -1 &&
-            esdev.Titol.toLowerCase().indexOf(text.toLowerCase()) <= -1
-          ) {
-            return false;
-          }
-          if (!tipus || tipus.length == 0) return true;
-          for (var z = 0; z < tipus.length; z++) {
-            if (tipus[z].Id == esdev.TipusEsdeveniment) {
-              return true;
-            }
-          }
+    return (await this.storeData.obtenirEsdevenimentsActuals()).filter(
+      (esdev) => {
+        if (
+          text &&
+          esdev.Descripcio.toLowerCase().indexOf(text.toLowerCase()) <= -1 &&
+          esdev.Titol.toLowerCase().indexOf(text.toLowerCase()) <= -1
+        ) {
           return false;
         }
-      );
-    } else
-      return this.esdevenimentService
-        .obtenirEsdevenimentsActuals(
-          text,
-          tipus.map((i) => {
-            return i.Id;
-          }),
-          regIni ?? 0,
-          usuari
-        )
-        .toPromise();
-  }
+        if (!tipus || tipus.length == 0) return true;
+        for (var z = 0; z < tipus.length; z++) {
+          if (tipus[z].Id == esdev.TipusEsdeveniment) {
+            return true;
+          }
+        }
+        return false;
+      }
+    );
 
+  }
+  /**
+   * 
+   * @param text Obtenir esdeveniments amb paginació
+   * @param tipus 
+   * @param regIni 
+   * @returns 
+   */
+  public async obtenirEsdevenimentsActualsPaginats(
+    text?: string,
+    tipus?: IEntitatHelper[],
+    regIni: number = 0
+  ): Promise<IEsdevenimentModel[]> {
+    tipus = tipus || [];
+    let res: IEsdevenimentModel[] = (await this.storeData.obtenirEsdevenimentsActuals()).filter(
+      (esdev) => {
+        if (
+          text &&
+          esdev.Descripcio.toLowerCase().indexOf(text.toLowerCase()) <= -1 &&
+          esdev.Titol.toLowerCase().indexOf(text.toLowerCase()) <= -1
+        ) {
+          return false;
+        }
+        if (!tipus || tipus.length == 0) return true;
+        for (var z = 0; z < tipus.length; z++) {
+          if (tipus[z].Id == esdev.TipusEsdeveniment) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+    );
+
+    let pagina: IEsdevenimentModel[] = [];
+    for (var i = regIni; i < res.length; i++) {
+      pagina.push(res[i]);
+      if (pagina.length >= Constants.PAGINACIO) return pagina;
+    }
+    return pagina;
+  }
   /**
    * Retorna els esdeveniments actuals (no passats)
    */
@@ -128,6 +154,7 @@ export class EsdevenimentBs {
       return Constants.ESDEVENIMENT_COMERCIAL_ICON;
     else if (esdeveniment.TipusEsdeveniment == Constants.ESDEVENIMENT_MUSICS)
       return Constants.ESDEVENIMENT_MUSICS_ICON;
+    else return "";
   }
   /**
    * Copia un esdeveniment però deixant-lo actiu a una altre esdeveniment
@@ -135,36 +162,40 @@ export class EsdevenimentBs {
    */
   public async clonarEsdeveniment(
     idEsdeveniment: string
-  ): Promise<IEsdevenimentModel> {
-    let esdevenimentWrk: IEsdevenimentModel = await this.obtenirEsdeveniment(
+  ): Promise<IEsdevenimentModel | undefined> {
+    let esdevenimentWrk: IEsdevenimentModel | undefined = await this.obtenirEsdeveniment(
       idEsdeveniment
     );
-    return {
-      Id: "0",
-      DataIni: esdevenimentWrk.DataIni,
-      DataFi: esdevenimentWrk.DataFi,
-      Descripcio: esdevenimentWrk.Descripcio,
-      Titol: esdevenimentWrk.Titol,
-      TipusEsdeveniment: esdevenimentWrk.TipusEsdeveniment,
-      Latitud: esdevenimentWrk.Latitud,
-      Longitud: esdevenimentWrk.Longitud,
-      OfereixTransport: esdevenimentWrk.OfereixTransport,
-      Anulat: false,
-      Responsable: esdevenimentWrk.Responsable,
-      Bloquejat: false,
-      Direccio: esdevenimentWrk.Direccio,
-      Confirmat: null,
-      Actiu: true,
-      Assistencia: 0,
-      Confirmats: 0,
-      NoAssistencia: 0,
-      Preguntes: [],
-      Temporada: 0,
-      TransportAnada: false,
-      TransportTornada: false,
-      Assistire: false,
-      DataActualitzacio: "",
-    };
+    if (esdevenimentWrk)
+      return {
+        Id: "0",
+        DataIni: esdevenimentWrk.DataIni,
+        DataFi: esdevenimentWrk.DataFi,
+        Descripcio: esdevenimentWrk.Descripcio,
+        Titol: esdevenimentWrk.Titol,
+        TipusEsdeveniment: esdevenimentWrk.TipusEsdeveniment,
+        Latitud: esdevenimentWrk.Latitud,
+        Longitud: esdevenimentWrk.Longitud,
+        OfereixTransport: esdevenimentWrk.OfereixTransport,
+        Anulat: false,
+        Responsable: esdevenimentWrk.Responsable,
+        Bloquejat: false,
+        Direccio: esdevenimentWrk.Direccio,
+        Confirmat: false,
+        Actiu: true,
+        Assistencia: 0,
+        Confirmats: 0,
+        NoAssistencia: 0,
+        Preguntes: [],
+        Temporada: 0,
+        TransportAnada: false,
+        TransportTornada: false,
+        Assistire: false,
+        DataActualitzacio: "",
+      };
+    else {
+      return undefined;
+    }
   }
 
   /**
@@ -260,7 +291,7 @@ export class EsdevenimentBs {
           Nom: cas.Nom,
           Casteller: cas.Id,
           Esdeveniment: esdeveniment.Id,
-          DataModificacio: new Date(ass.DataModificacio),
+          DataModificacio: ass.DataModificacio,
           NumAcompanyants: ass.NumAcompanyants,
           Observacions: ass.Observacions,
           Transport: ass.Transport,
@@ -323,14 +354,14 @@ export class EsdevenimentBs {
           !esdevenimentDetall.PrimerAssisteix ||
           (esdevenimentDetall.PrimerAssisteix.DataModificacio &&
             esdevenimentDetall.PrimerAssisteix.DataModificacio.getTime() >
-              assDet.DataModificacio.getTime())
+            assDet.DataModificacio.getTime())
         )
           esdevenimentDetall.PrimerAssisteix = assDet;
         if (
           !esdevenimentDetall.UltimAssisteix ||
           (esdevenimentDetall.UltimAssisteix.DataModificacio &&
             esdevenimentDetall.UltimAssisteix.DataModificacio.getTime() <
-              assDet.DataModificacio.getTime())
+            assDet.DataModificacio.getTime())
         )
           esdevenimentDetall.UltimAssisteix = assDet;
         if (assDet.ConfirmacioTecnica && !assDet.Assistire == false)
@@ -409,7 +440,6 @@ export class EsdevenimentBs {
           Nom: cas.Nom,
           Cognoms: cas.Cognom,
           Alias: cas.Alias,
-          Assistire: null,
           Preguntes: esdeveniment.Preguntes,
           TransportAnada: false,
           TransportTornada: false,
@@ -433,7 +463,6 @@ export class EsdevenimentBs {
           Nom: cas.Nom,
           Cognoms: cas.Cognom,
           Alias: cas.Alias,
-          Assistire: null,
           Preguntes: esdeveniment.Preguntes,
           TransportAnada: false,
           TransportTornada: false,
@@ -567,14 +596,14 @@ export class EsdevenimentBs {
         } else return false;
       }
 
-      let obj: IAssistenciaModel = esdeveniment.CastellersAssitiran.find(
+      let obj: IAssistenciaModel | undefined = esdeveniment.CastellersAssitiran?.find(
         (ass) => {
           if (ass.Casteller == cas.Id) return true;
           return false;
         }
       );
       if (obj) return false;
-      obj = esdeveniment.CastellersNoAssitiran.find((ass) => {
+      obj = esdeveniment.CastellersNoAssitiran?.find((ass) => {
         if (ass.Casteller == cas.Id) return true;
         return false;
       });
@@ -583,79 +612,15 @@ export class EsdevenimentBs {
       return true;
     });
   }
-  /**
-   * Retorna els castellers que NO assistiran a un esdeveniment
-   * @param esdeveniment Esdeveniment objecte de la cerca
-   * @param text text de cerca per castellers
-   * @param posicionsFiltre filtre de posicions del casteller
-   */
-  public async obtenirCastellersNoAssistents(
-    esdeveniment: IEsdevenimentDetallModel,
-    text: string,
-    posicionsFiltre: string[]
-  ): Promise<{ casteller: ICastellerModel; assistencia: IAssistenciaModel }[]> {
-    let lstCas: {
-      casteller: ICastellerModel;
-      assistencia: IAssistenciaModel;
-    }[] = [];
-    esdeveniment.CastellersNoAssitiran.forEach(async (ass) => {
-      let cas: ICastellerModel = await this.castellersBs.obtenirCasteller(
-        ass.Casteller
-      );
-      let nom: String = cas.Nom.normalize("NFD").replace(
-        /[\u0300-\u036f]/g,
-        ""
-      );
-      let cognom: String = cas.Cognom.normalize("NFD").replace(
-        /[\u0300-\u036f]/g,
-        ""
-      );
-      let alias: String = cas.Alias.normalize("NFD").replace(
-        /[\u0300-\u036f]/g,
-        ""
-      );
-      let nomComplet: string = nom.toLowerCase() + " " + cognom.toLowerCase();
 
-      if (posicionsFiltre && posicionsFiltre.length > 0) {
-        if (cas && cas.Posicions) {
-          var indexWrk: number = cas.Posicions.findIndex((t) => {
-            var index: number = posicionsFiltre.findIndex((d) => {
-              if (d == t.IdPosicio) return true;
-              else return false;
-            });
-            if (index >= 0) return true;
-            else return false;
-          });
-          if (indexWrk < 0) return false;
-        } else return false;
-      }
-
-      if (text) {
-        let queryNormal: String = text
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "");
-        if (nom.toLowerCase().indexOf(queryNormal.toLowerCase()) > -1)
-          lstCas.push({ assistencia: ass, casteller: cas });
-        else if (cognom.toLowerCase().indexOf(queryNormal.toLowerCase()) > -1)
-          lstCas.push({ assistencia: ass, casteller: cas });
-        else if (alias.toLowerCase().indexOf(queryNormal.toLowerCase()) > -1)
-          lstCas.push({ assistencia: ass, casteller: cas });
-        else if (nomComplet.indexOf(queryNormal.toLowerCase()) > -1)
-          lstCas.push({ assistencia: ass, casteller: cas });
-      } else {
-        lstCas.push({ assistencia: ass, casteller: cas });
-      }
-    });
-    return lstCas;
-  }
   /**
    * Retorna els castellers que assistiran a un esdeveniment
    * @param esdeveniment Esdeveniment objecte de la cerca
    * @param text text de cerca per castellers
    * @param posicionsFiltre filtre de posicions del casteller
    */
-  public async obtenirCastellersAssistents(
-    esdeveniment: IEsdevenimentDetallModel,
+  public async obtenirCastellersAssistencia(
+    list: IAssistenciaModel[],
     text: string,
     posicionsFiltre: string[]
   ): Promise<{ casteller: ICastellerModel; assistencia: IAssistenciaModel }[]> {
@@ -663,7 +628,7 @@ export class EsdevenimentBs {
       casteller: ICastellerModel;
       assistencia: IAssistenciaModel;
     }[] = [];
-    esdeveniment.CastellersAssitiran.forEach(async (ass) => {
+    for (var ass of list) {
       let cas: ICastellerModel = await this.castellersBs.obtenirCasteller(
         ass.Casteller
       );
@@ -680,22 +645,23 @@ export class EsdevenimentBs {
         ""
       );
       let nomComplet: string = nom.toLowerCase() + " " + cognom.toLowerCase();
-
+      let skipPosition: boolean = false;
       if (posicionsFiltre && posicionsFiltre.length > 0) {
         if (cas && cas.Posicions) {
           var indexWrk: number = cas.Posicions.findIndex((t) => {
+            // Encontramos la posicion en el filtro
             var index: number = posicionsFiltre.findIndex((d) => {
               if (d == t.IdPosicio) return true;
               else return false;
             });
+            //Si encontramos la posicion el el filtro OK
             if (index >= 0) return true;
             else return false;
           });
-          if (indexWrk < 0) return false;
-        } else return false;
+          if (indexWrk < 0) skipPosition = true;
+        } else skipPosition = true;
       }
-
-      if (text) {
+      if (skipPosition == false && text) {
         let queryNormal: String = text
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "");
@@ -710,7 +676,8 @@ export class EsdevenimentBs {
       } else {
         lstCas.push({ assistencia: ass, casteller: cas });
       }
-    });
+    }
+
     return lstCas;
   }
   /**
@@ -720,9 +687,9 @@ export class EsdevenimentBs {
    */
   public async obtenirEsdevenimentDetallModelStored(
     idEsdeveniment: string
-  ): Promise<IEsdevenimentDetallFormModel> {
+  ): Promise<IEsdevenimentDetallFormModel | null> {
     let online = await this.storeData.esOnline();
-    let esdevenimentDetall: IEsdevenimentDetallFormModel;
+    let esdevenimentDetall: IEsdevenimentDetallFormModel | null = null;
 
     if (!online) {
       // No online
@@ -732,6 +699,7 @@ export class EsdevenimentBs {
       );
     }
     return esdevenimentDetall;
+
   }
   /**
    * Actualitzar Esdeveniment amb el servidor
@@ -755,7 +723,6 @@ export class EsdevenimentBs {
       if (esdevenimentDetall.AssistenciaPersonal == null) {
         esdevenimentDetall.AssistenciaPersonal = {
           Casteller: usuari.CastellerId,
-          Assistire: null,
           Preguntes: JSON.parse(JSON.stringify(esdevenimentDetall.Preguntes)),
           TransportAnada: false,
           TransportTornada: false,
@@ -770,13 +737,13 @@ export class EsdevenimentBs {
         // validem les preguntes s'han agregat noves
         esdevenimentDetall.Preguntes.forEach((p1) => {
           let find = false;
-          esdevenimentDetall.AssistenciaPersonal.Preguntes.forEach((p2) => {
+          esdevenimentDetall?.AssistenciaPersonal?.Preguntes.forEach((p2) => {
             if (p1.IdPregunta == p2.IdPregunta) {
               find = true;
             }
           });
           if (!find) {
-            esdevenimentDetall.AssistenciaPersonal.Preguntes.push(
+            esdevenimentDetall?.AssistenciaPersonal?.Preguntes.push(
               JSON.parse(JSON.stringify(p1))
             );
           }
@@ -786,7 +753,7 @@ export class EsdevenimentBs {
       this.storeData.obtenirTipusEsdeveniments().then((tipus) => {
         esdevenimentDetall.TipusEsdeveniment = tipus.find((t) => {
           return t.Id == esdevenimentDetall.TipusEsdeveniment;
-        }).Descripcio;
+        })?.Descripcio ?? "";
       });
 
       /*
@@ -794,44 +761,43 @@ export class EsdevenimentBs {
        */
       esdevenimentDetall.Referenciats = [];
       usuari.Adjunts.forEach((cas) => {
-        let ass1 = esdevenimentDetall.CastellersAssitiran.find((ass) => {
+        let ass1 = esdevenimentDetall?.CastellersAssitiran?.find((ass) => {
           return ass.Casteller == cas;
         });
         if (ass1) {
           esdevenimentDetall.Preguntes.forEach((p1) => {
             let find = false;
-            ass1.Preguntes.forEach((p2) => {
+            ass1?.Preguntes.forEach((p2) => {
               if (p1.IdPregunta == p2.IdPregunta) {
                 find = true;
               }
             });
             if (!find) {
-              ass1.Preguntes.push(JSON.parse(JSON.stringify(p1)));
+              ass1?.Preguntes.push(JSON.parse(JSON.stringify(p1)));
             }
           });
           esdevenimentDetall.Referenciats.push(ass1);
         } else {
-          let noass = esdevenimentDetall.CastellersNoAssitiran.find((ass) => {
+          let noass = esdevenimentDetall?.CastellersNoAssitiran?.find((ass) => {
             return ass.Casteller == cas;
           });
           if (noass) {
             // validem les preguntes s'han agregat noves
             esdevenimentDetall.Preguntes.forEach((p1) => {
               let find = false;
-              noass.Preguntes.forEach((p2) => {
+              noass?.Preguntes.forEach((p2) => {
                 if (p1.IdPregunta == p2.IdPregunta) {
                   find = true;
                 }
               });
               if (!find) {
-                noass.Preguntes.push(JSON.parse(JSON.stringify(p1)));
+                noass?.Preguntes.push(JSON.parse(JSON.stringify(p1)));
               }
             });
             esdevenimentDetall.Referenciats.push(noass);
           } else {
             esdevenimentDetall.Referenciats.push(<IAssistenciaModel>{
               Casteller: cas,
-              Assistire: null,
               Preguntes: JSON.parse(
                 JSON.stringify(esdevenimentDetall.Preguntes)
               ),
@@ -850,44 +816,43 @@ export class EsdevenimentBs {
       /** Delegats */
       esdevenimentDetall.Delegats = [];
       usuari.Delegacions.forEach((cas) => {
-        let ass1 = esdevenimentDetall.CastellersAssitiran.find((ass) => {
+        let ass1 = esdevenimentDetall?.CastellersAssitiran?.find((ass) => {
           return ass.Casteller == cas;
         });
         if (ass1) {
           esdevenimentDetall.Preguntes.forEach((p1) => {
             let find = false;
-            ass1.Preguntes.forEach((p2) => {
+            ass1?.Preguntes.forEach((p2) => {
               if (p1.IdPregunta == p2.IdPregunta) {
                 find = true;
               }
             });
             if (!find) {
-              ass1.Preguntes.push(JSON.parse(JSON.stringify(p1)));
+              ass1?.Preguntes.push(JSON.parse(JSON.stringify(p1)));
             }
           });
           esdevenimentDetall.Delegats.push(ass1);
         } else {
-          let noass = esdevenimentDetall.CastellersNoAssitiran.find((ass) => {
+          let noass = esdevenimentDetall?.CastellersNoAssitiran?.find((ass) => {
             return ass.Casteller == cas;
           });
           if (noass) {
             // validem les preguntes s'han agregat noves
             esdevenimentDetall.Preguntes.forEach((p1) => {
               let find = false;
-              noass.Preguntes.forEach((p2) => {
+              noass?.Preguntes.forEach((p2) => {
                 if (p1.IdPregunta == p2.IdPregunta) {
                   find = true;
                 }
               });
               if (!find) {
-                noass.Preguntes.push(JSON.parse(JSON.stringify(p1)));
+                noass?.Preguntes.push(JSON.parse(JSON.stringify(p1)));
               }
             });
             esdevenimentDetall.Delegats.push(noass);
           } else {
             esdevenimentDetall.Delegats.push(<IAssistenciaModel>{
               Casteller: cas,
-              Assistire: null,
               TransportAnada: false,
               TransportTornada: false,
               ConfirmacioTecnica: false,
@@ -920,9 +885,8 @@ export class EsdevenimentBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.esdevenimentService
-      .desarEsdeveniment(esdeveniment, user)
-      .toPromise();
+    return await lastValueFrom(this.esdevenimentService
+      .desarEsdeveniment(esdeveniment, user));
   }
 
   /**
@@ -938,13 +902,11 @@ export class EsdevenimentBs {
     let user = await this.storeData.obtenirUsuariSession();
 
     if (bloqueig)
-      return this.esdevenimentService
-        .bloquejarEsdeveniment(esd, user)
-        .toPromise();
+      return await lastValueFrom(this.esdevenimentService
+        .bloquejarEsdeveniment(esd, user));
     else
-      return this.esdevenimentService
-        .desBloquejarEsdeveniment(esd, user)
-        .toPromise();
+      return await lastValueFrom(this.esdevenimentService
+        .desBloquejarEsdeveniment(esd, user));
   }
   /**
    * Esborrar un esdeveniment del sistema
@@ -956,16 +918,15 @@ export class EsdevenimentBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.esdevenimentService.esborrarEsdeveniment(esd, user).toPromise();
+    return await lastValueFrom(this.esdevenimentService.esborrarEsdeveniment(esd, user));
   }
   public async obtenirEsdevenimentServer(
     esd: string
   ): Promise<IEsdevenimentDetallModel> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.esdevenimentService
-      .obtenirDetallEsdeveniments(esd, user)
-      .toPromise();
+    return await lastValueFrom(this.esdevenimentService
+      .obtenirDetallEsdeveniments(esd, user));
   }
   /**
    * Anular un esdeveniment del sistema
@@ -977,9 +938,8 @@ export class EsdevenimentBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.esdevenimentService
-      .anularEsdeveniment(esdeveniment, user)
-      .toPromise();
+    return await lastValueFrom(this.esdevenimentService
+      .anularEsdeveniment(esdeveniment, user));
   }
   /**
    * Activa  un esdeveniment anulat del sistema
@@ -991,9 +951,8 @@ export class EsdevenimentBs {
   ): Promise<IRespostaServidor> {
     let user = await this.storeData.obtenirUsuariSession();
 
-    return this.esdevenimentService
-      .activarEsdeveniment(esdeveniment, user)
-      .toPromise();
+    return await lastValueFrom(this.esdevenimentService
+      .activarEsdeveniment(esdeveniment, user));
   }
   /**
    * Actualitza en la base de dades local les actualitzacions dels esdeveniments
@@ -1003,13 +962,13 @@ export class EsdevenimentBs {
     esdeveniments: IEsdevenimentModel[]
   ): Promise<number> {
     let online = await this.storeData.esOnline();
-    if (online) return; // no se actualiza si no es offline
+    if (online) return 0; // no se actualiza si no es offline
     // si la llista esta plena
 
     if (esdeveniments.length > 0) {
       for (let index = 0; index < esdeveniments.length; index++) {
         const esdeveniment = esdeveniments[index];
-        let esdAnt: IEsdevenimentModel = await this.obtenirEsdeveniment(
+        let esdAnt: IEsdevenimentModel | undefined = await this.obtenirEsdeveniment(
           esdeveniment.Id
         );
         if (esdeveniment.Actiu) {
@@ -1038,13 +997,13 @@ export class EsdevenimentBs {
     let usuari = await this.storeData.obtenirUsuariSession();
     if (!online) return (await this.storeData.obtenirEsdeveniments()).Values();
     else
-      return this.esdevenimentService.obtenirEsdeveniments(usuari).toPromise();
+      return await lastValueFrom(this.esdevenimentService.obtenirEsdeveniments(usuari));
   }
   /**
    * Retorna l'esdeveniment objecte del ID
    * @param id Identificador de l esdeveniment
    */
-  public obtenirEsdeveniment(id: string): Promise<IEsdevenimentModel> {
+  public obtenirEsdeveniment(id: string): Promise<IEsdevenimentModel | undefined> {
     return this.storeData.obtenirEsdeveniment(id);
   }
   /**
@@ -1056,9 +1015,8 @@ export class EsdevenimentBs {
     castell: IEsdevenimentCastellModel
   ): Promise<IRespostaServidorAmbRetorn<IEsdevenimentCastellModel>> {
     let usuari = await this.storeData.obtenirUsuariSession();
-    return this.esdevenimentService
-      .modificarCastell(castell, usuari)
-      .toPromise();
+    return await lastValueFrom(this.esdevenimentService
+      .modificarCastell(castell, usuari));
   }
   /**
    * Esborrar Castell a esdevenimnet
@@ -1069,33 +1027,34 @@ export class EsdevenimentBs {
     castell: IEsdevenimentCastellModel
   ): Promise<IRespostaServidor> {
     let usuari = await this.storeData.obtenirUsuariSession();
-    return this.esdevenimentService
-      .esborrarCastell(castell, usuari)
-      .toPromise();
+    return await lastValueFrom(this.esdevenimentService
+      .esborrarCastell(castell, usuari));
   }
   /**
    * Convertir EsdevenimentModel a EsdevenimentModelList
    * @param esd
    */
   public convertirAModelList(esd: IEsdevenimentModel): IEsdevenimentModelList {
-    let esdList: IEsdevenimentModelList = new IEsdevenimentModelList();
-    esdList.Titol = esd.Titol;
-    esdList.DataIni = esd.DataIni;
-    esdList.DataFi = esd.DataFi;
-    esdList.Icona = this.obtenirIconTipusEsdeveniments(esd);
-    esdList.TipusEsdeveniment = esd.TipusEsdeveniment;
-    esdList.Bloquejat = esd.Bloquejat;
-    esdList.Descripcio = esd.Descripcio;
-    esdList.OfereixTransport = esd.OfereixTransport;
-    esdList.Temporada = esd.Temporada;
-    esdList.Id = esd.Id;
-    esdList.Confirmats = esd.Confirmats;
-    esdList.Direccio = esd.Direccio;
-    esdList.Assistire = esd.Assistire;
-    esdList.Assistencia = esd.Assistencia;
-    esdList.NoAssistencia = esd.NoAssistencia;
-    esdList.Anulat = esd.Anulat;
-    esdList.Actiu = esd.Actiu;
+    let esdList: IEsdevenimentModelList = <IEsdevenimentModelList>{
+      Titol: esd.Titol,
+      DataIni: esd.DataIni,
+      DataFi: esd.DataFi,
+      Icona: this.obtenirIconTipusEsdeveniments(esd),
+      TipusEsdeveniment: esd.TipusEsdeveniment,
+      Bloquejat: esd.Bloquejat,
+      Descripcio: esd.Descripcio,
+      OfereixTransport: esd.OfereixTransport,
+      Temporada: esd.Temporada,
+      Id: esd.Id,
+      Confirmats: esd.Confirmats,
+      Direccio: esd.Direccio,
+      Assistire: esd.Assistire,
+      Assistencia: esd.Assistencia,
+      NoAssistencia: esd.NoAssistencia,
+      Anulat: esd.Anulat,
+      Actiu: esd.Actiu
+
+    };
     return esdList;
   }
   /**
@@ -1126,7 +1085,8 @@ export class EsdevenimentBs {
     let usuari = await this.storeData.obtenirUsuariSession();
     date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
     let dateS: String = date.toISOString();
-    tipus = tipus || [];
+    let wtipus = tipus || [];
+
     if (!online) {
       let esdDic: Diccionari<IEsdevenimentModel> =
         await this.storeData.obtenirEsdeveniments();
@@ -1154,24 +1114,25 @@ export class EsdevenimentBs {
           ) {
             return false;
           }
-          if (tipus.length == 0) return true;
-          for (var z = 0; z < tipus.length; z++) {
-            if (tipus[z].Id == esdev.TipusEsdeveniment) {
+          if (tipus?.length == 0) return true;
+          if (!tipus) return true;
+          for (var z = 0; z < (wtipus.length || 0); z++) {
+            if (wtipus[z].Id == esdev.TipusEsdeveniment) {
               return true;
             }
           }
+          return false;
         });
     } else
-      return this.esdevenimentService
+      return await lastValueFrom(this.esdevenimentService
         .obtenirEsdevenimentsHistoric(
-          text,
-          tipus.map((i) => {
+          text || "",
+          wtipus.map((i) => {
             return i.Id;
           }),
           regIni ?? 0,
           usuari
-        )
-        .toPromise();
+        ));
   }
 
   /**

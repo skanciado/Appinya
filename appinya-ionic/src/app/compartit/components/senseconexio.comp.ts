@@ -26,9 +26,9 @@ import { Component, Input } from "@angular/core";
 })
 export class SenseConexioComponent {
   @Input("descripcio")
-  descripcio: String;
+  descripcio: String | undefined;
   @Input("iconName")
-  iconName: String;
+  iconName: String | undefined;
 
-  constructor() {}
+  constructor() { }
 }

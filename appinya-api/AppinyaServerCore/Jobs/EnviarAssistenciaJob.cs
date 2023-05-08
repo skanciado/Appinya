@@ -24,77 +24,56 @@ using System.Threading.Tasks;
 
 using AppinyaServerCore.Database;
 using AppinyaServerCore.Services;
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using Quartz;
+
 namespace AppinyaServerCore.Jobs
 {
-    public class EnviarAssistenciaJob : IHostedService, IDisposable
+    public class EnviarAssistenciaJob : IJob
     {
-         
+
         private readonly ILogger<EnviarAssistenciaJob> _logger;
         private readonly IAuditoriaService _auditoriaService;
-        private readonly IAssistenciaService _assistenciaService; 
-        private Timer _timer;
-
+        private readonly IAssistenciaService _assistenciaService;  
         public EnviarAssistenciaJob(
-            ILogger<EnviarAssistenciaJob> logger
-            ,
+           ILogger<EnviarAssistenciaJob> logger,
             IAuditoriaService auditoriaService,
-            IAssistenciaService assistenciaService)
+            IAssistenciaService assistenciaService
+            )
         {
             _logger = logger;
             _auditoriaService = auditoriaService;
             _assistenciaService = assistenciaService;
+
         }
-
-        public Task StartAsync(CancellationToken stoppingToken)
+        public Task Execute(IJobExecutionContext context)
         {
-            _logger.LogInformation("EnviarAssistenciaJob Encens");
-            int calculo = 0;
-            int iDia = (int) DateTime.Now.DayOfWeek;
-            int hora = DateTime.Now.Hour;
-
-            
-            calculo = ((8 - iDia) % 7) * 24 + 9 - hora;
-
-            _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(calculo));
-
-            return Task.CompletedTask;
-        }
-
-        private async void DoWork(object state)
-        {
-           
             LogJobs log = _auditoriaService.RegistraExecIniProces<EnviarAssistenciaJob>();
-            try {  
-                _logger.LogInformation(
-                    "EnviarAssistenciaJob ID : {Count}", log.Id);
-               // await _assistenciaService.EnviarEmailRecordatori();
-                _auditoriaService.RegistraExecFinProces(log);
-            }catch(Exception ex)
+            try
             {
-                _logger.LogError(ex,ex.Message);
-                log.Error = ex.Message;
-                _auditoriaService.RegistraExecFinProces(log); 
+                _logger.LogInformation("EnviarAssistenciaJob Encens");
+                _assistenciaService.EnviarEmailRecordatori(); 
+                return Task.FromResult(true);
             }
-            
-            
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                log.Error = ex.Message;
+                _auditoriaService.RegistraExecFinProces(log);
+                return Task.FromResult(false);
+            }
+            finally
+            {
+                _logger.LogInformation("EnviarAssistenciaJob Apagat");
+                _auditoriaService.RegistraExecFinProces(log);
+            }
         }
 
-        public Task StopAsync(CancellationToken stoppingToken)
-        {
-            _logger.LogInformation("EnviarAssistenciaJob Parat");
 
-            _timer?.Change(Timeout.Infinite, 0);
 
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            _timer?.Dispose();
-        }
     }
+
 }

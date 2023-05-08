@@ -1,6 +1,6 @@
 /**
  *  Appinya Open Source Project
- *  Copyright (C) 2021  Daniel Horta Vidal
+ *  Copyright (C) 2023  Daniel Horta Vidal
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as
@@ -17,6 +17,42 @@
  *
  **/
 export class Constants {
+  /* URLs  Public*/
+  static URL_INICI = "/socis";
+  static URL_LOGIN = "/socis/login";
+  static URL_PERDRE_PASS = "/socis/perdrepassword"
+  static URL_ACCES = "/socis/acces";
+  static URL_HOME = "/socis/home";
+  static URL_FITXA_USUARI = "/socis/fitxa";
+
+  static URL_ORGANITZACIO = "/socis/organitzacio";
+  static URL_SOCIS = "/socis/socis";
+  static URL_INCIDENCIA = "/socis/incidencia";
+  static URL_CALENDAR = "/socis/agenda";
+  static URL_INICIALITZAR = "/socis/inicialitzar";
+  static URL_NOTICIA_FITXA = "/socis/formularis/noticia";
+  static URL_SOCIS_DET = "/socis/soci";
+  static URL_FITXA_SOCI = "/socis/formularis/soci";
+  static URL_OPTIMITIZAR = "/socis/optimitzar";
+  static URL_BUSTIA = "/socis/bustia";
+  static URL_NOTICIES = "/socis/noticies";
+  static URL_ALBUMS = "/socis/albums";
+  static URL_OPTIONS = "/socis/opcions";
+  static URL_DADES_TECNIQUES = "/socis/formularis/socitecnic";
+  static URL_ASSISTENCIA_SOCI = "/socis/soci/assistencia";
+  static URL_ASSISTENCIA = "/socis/assistencia";
+  static URL_EDITAR_ALBUM = "/socis/formularis/album";
+  static URL_EDITAR_ASSISTENCIA = "/administracio/assistencia";
+  static URL_PASAR_LLISTA = "/administracio/pasarllista";
+  static URL_AGENDA = "/socis/agendalist";
+  static URL_AGENDA_CALENDAR = "/socis/agenda";
+  static URL_ESDEVENIMENT_DET = "/socis/esdeveniment";
+  static URL_ESDEVENIMENT_EDIT = "/socis/formularis/esdeveniment";
+  /* Missatges */
+  static MSM_TITOL_ERROR_SYS = "Error del sistema";
+  static MSM_TITOL_ERROR_CRE = "Error del credencials";
+  static MSM_BACK_BUTTON_DISABLED = "Aquest boto està deshabilitat";
+
   /* Variables del Llistat Paginat */
   static ESTAT_LLISTAT_CARREGANT: number = 1;
   static ESTAT_LLISTAT_CARREGAT: number = 3;
@@ -24,9 +60,9 @@ export class Constants {
   static ESTAT_LLISTAT_SENSE_RESULTATS: number = 5;
 
   /* Variables de tipus noticies */
-  static NOTICIES_BAR: number = 6;
-  static NOTICIES_ENTRENAMENT: number = 4;
-  static NOTICIES_SOCIAL: number = 5;
+  static NOTICIES_BAR: string = "6";
+  static NOTICIES_ENTRENAMENT: string = "4";
+  static NOTICIES_SOCIAL: string = "5";
 
   /* Variables de tipus de entrenamnets */
   static ESDEVENIMENT_DIADA: string = "1";
@@ -45,6 +81,9 @@ export class Constants {
   static ESDEVENIMENT_SOCIAL_ICON: string = "icon-ico_cohet";
   static ESDEVENIMENT_MUSICS_ICON: string = "icon-ico_musics";
   static ESDEVENIMENT_ENTRENAMENT_OPC_ICON: string = "icon-ico_pesa";
+
+  /* Paginacio llistes */
+  static PAGINACIO: number = 30;
 
   /* Dies de la setmana */
   static DIES_SETMANA: string[] = [

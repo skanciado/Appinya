@@ -40,7 +40,7 @@ namespace AppinyaServerCore.Models
         public IList<String> Rols { get; set; }
         public string Token { get; set; }
         public string RefreshToken { get; set; }
-
+        public Boolean LocalUser { get; set; } = false;
         public Boolean ConfirmatEmail { get; set; }
 
         public static implicit operator UsuariSessio(Usuari usuari)

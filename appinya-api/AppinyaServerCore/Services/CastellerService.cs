@@ -85,7 +85,7 @@ namespace AppinyaServerCore.Services
         private readonly ITemporadaService _temporadaService;
         private readonly IAssistenciaService _assistenciaService;
         private readonly IAuditoriaService _auditoriaService;
-        private readonly AppSettings _appSettings;
+        private readonly AppSettings _appSettings; 
         public CastellerService(
            AppinyaDbContext appinyaDbContext,
            IdentityDbContext identityDbContext,
@@ -94,14 +94,14 @@ namespace AppinyaServerCore.Services
            IUsuariService usuariService,
            IAssistenciaService assistenciaService,
            IAuditoriaService auditoriaService,
-            IOptions<AppSettings> appSettings,
+            IOptions<AppSettings> appSettings,  
            ILogger<CastellerService> logger,
            IStringLocalizer<CastellerService> localizer
            ) : base(usuariService, localizer, logger)
         {
 
             if (appSettings == null) throw new ArgumentNullException(nameof(appSettings));
-            _appSettings = appSettings.Value;
+            _appSettings = appSettings.Value; 
             _appinyaDbContext = appinyaDbContext;
             _identityDbContext = identityDbContext;
             _emailService = emailService;
@@ -982,7 +982,7 @@ namespace AppinyaServerCore.Services
                     LogWarning("Id:  " + casteller.Id + " " + error);
                     return CrearRespotaAmbRetornError<CastellerModel>(error, casteller, casteller.Email, casterlleEmail.Nom, casterlleEmail.Cognoms);
                 }
-                bool enviarCorreu = casteller.Email != null && (casteller.Id == 0 || casteller.Email.ToUpper() != cas.Email.ToUpper());
+                bool crearUsuari = casteller.Email != null && (casteller.Id == 0 || casteller.Email.ToUpper() != cas.Email.ToUpper());
                 cas.Alias = casteller.Alias;
                 cas.Nom = casteller.Nom;
                 cas.Cognoms = casteller.Cognom;
@@ -1033,7 +1033,7 @@ namespace AppinyaServerCore.Services
                 DesarFoto(cas.IdCasteller, casteller.Foto, principal);
                 _auditoriaService.RegistraAccio<Casteller>((cas.IdCasteller == 0) ? Accio.Agregar : Accio.Modificar, cas.IdCasteller, principal);
                 dbContextTransaction.Commit();
-                if (enviarCorreu)
+                if (crearUsuari)
                     await _usuariService.CrearUsuari(casteller, principal);
 
                 return CrearRespotaAmbRetornOK<CastellerModel>(ObtenirCasteller(cas.IdCasteller, true, true, false, cas.UserId));

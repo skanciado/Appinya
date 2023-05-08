@@ -1,0 +1,84 @@
+<!--
+/**
+ *  Appinya Open Source Project
+ *  Copyright (C) 2021  Daniel Horta Vidal
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/-->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-searchbar slot="start" #textCerca [hidden]="!bmostraCerca" [(ngModel)]="queryText" (ionChange)="cercar($event)"
+      placeholder="Cerca">
+    </ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button class="hvr-grow" icon-only (click)="mostrarCerca()">
+        <ion-icon name="search" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button icon-only (click)="presentFilter()">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="ferActualitzar($event)">
+    <ion-refresher-content pullingText="Puja per actualitzar"></ion-refresher-content>
+  </ion-refresher>
+  <carregant-logo #carregant [temps]="1000" *ngIf="estatCarrega==1" style="width: 100%; height: 100%"></carregant-logo>
+  <senseconexio descripcio="No hi ha esdeveniments" iconName="accessibility-outline" *ngIf="estatCarrega==4">
+  </senseconexio>
+  <notrobat descripcio="No hi ha castellers" iconName="accessibility-outline" *ngIf="estatCarrega==5"></notrobat>
+
+  <ion-list #carregat *ngIf="estatCarrega==3">
+    <ion-item *ngFor="let cas of llistaItems" (click)="anarACastellerDet(cas)">
+      <ion-avatar slot="start">
+        <img [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'" />
+      </ion-avatar>
+      {{cas.Alias}}
+      <div slot="end"
+        *ngIf="( isJunta() || isAdmin() || isTecnica() || isTecnicaNivell2() || isSecretari() || this.isOrganitzador() || this.isCapMusic()) && cas.Posicions != null ">
+        <ion-icon *ngFor="let pos of cas.Posicions" src="assets/icons/icon_tipus_posicio_{{pos.IdPosicio}}.svg"
+          color="primary"></ion-icon>
+      </div>
+    </ion-item>
+    <ion-infinite-scroll (ionInfinite)="ferScrollInfinit($event)" threshold="100px">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregant">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed"
+    *ngIf="isSecretari() || isJunta() || isTecnica() || isTecnicaNivell2() || isAdmin()" #fab>
+    <ion-fab-button>
+      <ion-icon name="share"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="addCasteller()" *ngIf="isSecretari() || isAdmin()" data-desc="Nou Soci">
+        <ion-icon name="add" color="secondary"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="exportar()" *ngIf="isSecretari() || isAdmin()" data-desc="Exportar Socis">
+        <ion-icon name="download" color="secondary"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="exportarAssistenciaGlobalDetall()" data-desc="Exportar Assistència Detall"
+        *ngIf="isSecretari() || isJunta() || isTecnica() || isTecnicaNivell2() || isAdmin()">
+        <ion-icon name="download" color="secondary"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="exportarAssistenciaGlobalResum()" data-desc="Exportar Assistència Resum"
+        *ngIf="isSecretari() || isJunta() || isTecnica() || isTecnicaNivell2() || isAdmin()">
+        <ion-icon name="download" color="secondary"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

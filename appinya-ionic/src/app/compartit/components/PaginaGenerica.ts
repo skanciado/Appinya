@@ -34,7 +34,7 @@ export abstract class PaginaGenerica {
   logo: string;
   logoComplet: string;
   colla: string;
-  usuari: IUsuariModel;
+  usuari: IUsuariModel | null = null;
   treballEnProces: boolean = false;
   constructor(
     protected usuariBs: UsuariBs,
@@ -198,7 +198,7 @@ export abstract class PaginaGenerica {
   public presentarConfirmacioAccio(
     accio: string,
     que: string,
-    avis: string
+    avis: string | null = null
   ): Promise<Boolean> {
     let message = "Segur que vols " + accio + " " + que + " ? ";
     if (avis) message += "<p class='avis'>Avís:" + avis + "</p>";
@@ -256,6 +256,7 @@ export abstract class PaginaGenerica {
    * Metode per Preguntar si l'usuari te rol Junta
    * */
   public isJunta(): boolean {
+    if (!this.usuari) return false;
     return (
       this.usuariBs.esRolJunta(this.usuari) ||
       this.usuariBs.esRolAdmin(this.usuari)
@@ -265,42 +266,49 @@ export abstract class PaginaGenerica {
    * Metode per Preguntar si l'usuari te rol Tecnica
    * */
   public isTecnica(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolTecnica(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Tecnic Nivell2
    * */
   public isTecnicaNivell2(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolTecnicaNivell2(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Noticier
    * */
   public isNoticier(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolNoticier(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Bar
    * */
   public isBar(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolBar(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Organitzador
    * */
   public isOrganitzador(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolOrganitzador(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Secretari
    * */
   public isSecretari(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolSecretari(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Casteller
    * */
   public isCasteller(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolCasteller(this.usuari);
   }
 
@@ -308,18 +316,21 @@ export abstract class PaginaGenerica {
    * Metode per Preguntar si l'usuari te rol Admin
    * */
   public isAdmin(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolAdmin(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Camises
    * */
   public isCamises(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolCamises(this.usuari);
   }
   /**
    * Metode per Preguntar si l'usuari te rol Music
    * */
   public isMusic(): boolean {
+    if (!this.usuari) return false;
     return (
       this.usuariBs.esRolCapMusic(this.usuari) ||
       this.usuariBs.esRolMusic(this.usuari)
@@ -329,6 +340,7 @@ export abstract class PaginaGenerica {
    * Metode per Preguntar si l'usuari te rol Cap de musics
    * */
   public isCapMusic(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolCapMusic(this.usuari);
   }
 
@@ -336,6 +348,7 @@ export abstract class PaginaGenerica {
    * Metode per Preguntar si l'usuari te rol Responsable Salud
    * */
   public isResponsableSalud(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolResponsableSalud(this.usuari);
   }
 
@@ -343,6 +356,7 @@ export abstract class PaginaGenerica {
    * Metode per Preguntar si l'usuari te rol Tresore
    * */
   public isTresorer(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolTresorer(this.usuari);
   }
 
@@ -350,6 +364,7 @@ export abstract class PaginaGenerica {
    * Metode per Preguntar si l'usuari te rol Confirmacio assistencia
    * */
   public isConfirmadorAssistencia(): boolean {
+    if (!this.usuari) return false;
     return this.usuariBs.esRolConfirmadorAssistencia(this.usuari);
   }
 

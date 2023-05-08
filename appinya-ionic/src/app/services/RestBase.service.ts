@@ -44,7 +44,7 @@ export class RestService {
     * Obtenir caçalera per HTTP 
     * @param body 
     */
-    protected obtenirHeaders(user:IUsuariSessio, body?: any, contextType?: string ) {
+    protected obtenirHeaders(user?:IUsuariSessio, body?: any, contextType?: string ) {
         let headers = new HttpHeaders();
         headers=headers.append('Accept-Language', "ca");
         headers=headers.append("Content-Type", (contextType) ? contextType : 'application/json');

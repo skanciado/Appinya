@@ -39,7 +39,10 @@ import { StoreData } from "./storage.data";
   providedIn: "root",
 })
 export class EsdevenimentService extends RestService {
-  constructor(protected http: HttpClient, protected store: StoreData) {
+  constructor(
+    http: HttpClient,
+    store: StoreData
+  ) {
     super(http, store);
   }
 
@@ -96,8 +99,8 @@ export class EsdevenimentService extends RestService {
    * @returns
    */
   obtenirEsdevenimentsActuals(
-    text: String,
-    tipus: String[],
+    text: string = "",
+    tipus: string[],
     regIni: number,
     user: IUsuariSessio
   ): Observable<IEsdevenimentResumModel[]> {
@@ -184,8 +187,7 @@ export class EsdevenimentService extends RestService {
     user: IUsuariSessio
   ): Observable<IRespostaServidor> {
     let public$ = this.http.get<IRespostaServidor>(
-      `${this.obtenirURLServidor()}/api/v1.0/esdeveniments/desbloquejar/${
-        esd.Id
+      `${this.obtenirURLServidor()}/api/v1.0/esdeveniments/desbloquejar/${esd.Id
       }`,
       this.obtenirHeaders(user)
     );

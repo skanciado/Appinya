@@ -36,10 +36,10 @@ export class PopUpGeneric extends PaginaGenerica {
     protected usuariBS: UsuariBs,
     protected route: Router,
     protected modalController: ModalController,
-    protected toastCtrl: ToastController,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected storeData: StoreData
+    toastCtrl: ToastController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
+    storeData: StoreData
   ) {
     super(usuariBS, toastCtrl, alertCtrl, loadingCtrl, storeData);
   }

@@ -29,6 +29,7 @@ import {
 } from "../entities/Errors";
 import { StoreData } from "../services/storage.data";
 import { EventService } from "../services/event.service";
+import { Constants } from "../Constants";
 @Injectable({
   providedIn: "root",
 })
@@ -41,8 +42,11 @@ export class ErrorIntercept implements ErrorHandler {
     protected navCtrl: NavController,
     protected authenticateService: AuthenticateService,
     protected store: StoreData
-  ) {}
-
+  ) { }
+  /**
+   * Event Handler para recoger todos los errores de la app
+   * @param error 
+   */
   async handleError(error: any) {
     error = error.rejection ?? error;
     if (error instanceof ErrorRefrescarCredencials) {
@@ -55,12 +59,12 @@ export class ErrorIntercept implements ErrorHandler {
           } else {
             this.store.cleanMemoria();
             console.info("Enviar al login");
-            this.navCtrl.navigateRoot("/public/login");
+            this.navCtrl.navigateRoot(Constants.URL_ACCES);
           }
         },
         (e) => {
           console.info("Error de credencials");
-          this.navCtrl.navigateRoot("/public/acces");
+          this.navCtrl.navigateRoot(Constants.URL_ACCES);
         }
       );
       console.error("AppinyaError Error: " + error.missatge);
@@ -68,7 +72,7 @@ export class ErrorIntercept implements ErrorHandler {
       console.error("AppinyaError Error: " + error.missatge);
       this.eventService.enviarEventError(error.missatge);
       this.store.cleanMemoria();
-      this.navCtrl.navigateRoot("/public/login");
+      this.navCtrl.navigateRoot(Constants.URL_ACCES);
     } else if (error instanceof ErrorLocalStore) {
       console.error("AppinyaError Error: " + error.missatge);
       this.eventService.enviarEventError(error.missatge);

@@ -50,8 +50,7 @@ namespace AppinyaServerCore.Controllers
     public class TemporadaController : BaseController<TemporadaController>
     {
 
-        #region Variables privades
-        private readonly AppSettings _appSettings;
+        #region Variables privades 
         private readonly ITemporadaService _temporadaService; 
         #endregion
 

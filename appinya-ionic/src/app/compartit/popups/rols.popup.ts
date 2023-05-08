@@ -43,16 +43,16 @@ export class RolsPopUp extends PopUpGeneric implements OnInit {
     Checked: boolean;
     Icon: String;
   }> = [];
-  @Input() rolsSeleccionats: Array<any>;
+  @Input() rolsSeleccionats: Array<any> | undefined;
   constructor(
-    protected usuariBS: UsuariBs,
-    protected toastCtrl: ToastController,
-    protected alertCtrl: AlertController,
-    protected loadingCtrl: LoadingController,
-    protected route: Router,
+    usuariBS: UsuariBs,
+    toastCtrl: ToastController,
+    alertCtrl: AlertController,
+    loadingCtrl: LoadingController,
+    route: Router,
     protected navParams: NavParams,
-    protected storeData: StoreData,
-    protected modalController: ModalController
+    storeData: StoreData,
+    modalController: ModalController
   ) {
     super(
       usuariBS,
@@ -79,7 +79,7 @@ export class RolsPopUp extends PopUpGeneric implements OnInit {
       });
     });
     this.rols.forEach((rol) => {
-      rol.Checked = this.rolsSeleccionats.find((x) => {
+      rol.Checked = this.rolsSeleccionats?.find((x) => {
         if (x === rol.Id) return true;
         else return false;
       });
@@ -99,7 +99,7 @@ export class RolsPopUp extends PopUpGeneric implements OnInit {
     this.modalController.dismiss(rolsStr);
   }
 
-  cancelar() {
+  override cancelar() {
     this.modalController.dismiss(null);
   }
 }

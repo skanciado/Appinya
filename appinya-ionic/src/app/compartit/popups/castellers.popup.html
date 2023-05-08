@@ -1,7 +1,7 @@
 <!--
 /**
  *  Appinya Open Source Project
- *  Copyright (C) 2021  Daniel Horta Vidal
+ *  Copyright (C) 2023   Daniel Horta Vidal
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as
@@ -23,25 +23,16 @@
     <ion-buttons slot="start">
       <ion-button color="blanc" (click)="cancelar()">X</ion-button>
     </ion-buttons>
-    <ion-searchbar
-      slot="start"
-      #textCerca
-      [hidden]="!bmostraCerca"
-      [(ngModel)]="queryText"
-      (ionChange)="cercarText($event)"
-      placeholder="Cerca"
-    >
+    <ion-searchbar slot="start" #textCerca [hidden]="!bmostraCerca" [(ngModel)]="queryText"
+      (ionChange)="cercarText($event)" placeholder="Cerca">
     </ion-searchbar>
     <ion-buttons slot="end">
       <ion-button color="blanc" item-start (click)="mostrarCerca()">
         <ion-icon name="search" class="icon-gran25"></ion-icon>
       </ion-button>
 
-      <ion-button
-        icon-only
-        (click)="presentFilter()"
-        *ngIf="isAdmin() || isTecnica() || isTecnicaNivell2() || this.isCapMusic()"
-      >
+      <ion-button icon-only (click)="presentFilter()"
+        *ngIf="isAdmin() || isTecnica() || isTecnicaNivell2() || this.isCapMusic()">
         <ion-icon name="options-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -49,53 +40,27 @@
 </ion-header>
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="ferActualitzar($event)">
-    <ion-refresher-content
-      pullingText="Puja per actualitzar"
-    ></ion-refresher-content>
+    <ion-refresher-content pullingText="Puja per actualitzar"></ion-refresher-content>
   </ion-refresher>
-  <carregant-logo
-    #carregant
-    *ngIf="estatCarrega==1"
-    style="width: 100%; height: 100%"
-  ></carregant-logo>
+  <carregant-logo #carregant *ngIf="estatCarrega==1" style="width: 100%; height: 100%"></carregant-logo>
   <ion-list #carregat *ngIf="estatCarrega==3">
     <ion-item *ngFor="let cas of llistaItems" (click)="anarACastellerDet(cas)">
       <ion-avatar slot="start">
-        <img
-          [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'"
-        />
+        <img [src]="cas.Foto ? cas.Foto : 'assets/img/user/user-anonymous.jpg'" />
       </ion-avatar>
       {{cas.Alias}}
-      <div
-        slot="end"
-        *ngIf="( isJunta() || isAdmin() || isTecnica() || isTecnicaNivell2() || isSecretari() || this.isOrganitzador() || this.isCapMusic()) && cas.Posicions != null "
-      >
-        <ion-icon
-          *ngFor="let pos of cas.Posicions"
-          color="blanc"
-          src="assets/icons/icon_tipus_posicio_{{pos.IdPosicio}}.svg"
-        ></ion-icon>
+      <div slot="end"
+        *ngIf="( isJunta() || isAdmin() || isTecnica() || isTecnicaNivell2() || isSecretari() || this.isOrganitzador() || this.isCapMusic()) && cas.Posicions != null ">
+        <ion-icon *ngFor="let pos of cas.Posicions" color="blanc"
+          src="assets/icons/icon_tipus_posicio_{{pos.IdPosicio}}.svg"></ion-icon>
       </div>
     </ion-item>
-    <ion-infinite-scroll
-      (ionInfinite)="ferScrollInfinit($event)"
-      threshold="100px"
-    >
-      <ion-infinite-scroll-content
-        loadingSpinner="bubbles"
-        loadingText="Carregant"
-      >
+    <ion-infinite-scroll (ionInfinite)="ferScrollInfinit($event)" threshold="100px">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregant">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </ion-list>
-  <notrobat
-    descripcio="No hi ha assistència"
-    iconName="calendar-outline"
-    *ngIf="estatCarrega==5"
-  ></notrobat>
-  <senseconexio
-    descripcio="No hi ha assistència"
-    iconName="calendar-outline"
-    *ngIf="estatCarrega==4"
-  ></senseconexio>
+  <notrobat descripcio="No hi han socis registrats" iconName="calendar-outline" *ngIf="estatCarrega==5"></notrobat>
+  <senseconexio descripcio="No hi han socis registrats" iconName="calendar-outline" *ngIf="estatCarrega==4">
+  </senseconexio>
 </ion-content>

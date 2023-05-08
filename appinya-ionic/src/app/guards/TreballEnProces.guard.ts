@@ -27,8 +27,8 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/ro
     providedIn: 'root'
 })
 export class TreballEnProcesGuard implements CanDeactivate<PaginaGenerica> {
-    component: PaginaGenerica;
-    route: ActivatedRouteSnapshot;
+    component: PaginaGenerica | undefined;
+    route: ActivatedRouteSnapshot | undefined;
     constructor(private _router: Router) {
 
     }

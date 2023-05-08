@@ -27,6 +27,7 @@ import {
   animate,
 } from "@angular/animations";
 import { NavController } from "@ionic/angular";
+import { Constants } from "src/app/Constants";
 
 /** Compoment de carregar una barra 0-100% */
 @Component({
@@ -52,8 +53,8 @@ import { NavController } from "@ionic/angular";
   ],
 })
 export class NoticiaComponent {
-  _noticia: INoticiaModel;
-  constructor(protected navCtrl: NavController) {}
+  _noticia: INoticiaModel | undefined;
+  constructor(protected navCtrl: NavController) { }
   @Input("visioReduida")
   public visioReduida: boolean = false;
   public canExpand: boolean = false;
@@ -61,30 +62,30 @@ export class NoticiaComponent {
 
   @Input("editar")
   public editar: boolean = false;
-  get noticia(): INoticiaModel {
+  get noticia(): INoticiaModel | undefined {
     // transform value for display
     return this._noticia;
   }
 
   @Input()
-  set noticia(noticia: INoticiaModel) {
+  set noticia(noticia: INoticiaModel | undefined) {
     this._noticia = noticia;
     this.expand = "inactive";
-    this.canExpand = noticia.Descripcio.length > 350;
+    this.canExpand = noticia?.Descripcio ? (noticia.Descripcio.length > 350) : false;
   }
 
   editarNoticia() {
     this.navCtrl.navigateForward(
-      `/public/formularis/noticia/${this.noticia.Id}`
+      `${Constants.URL_NOTICIA_FITXA}/${this.noticia?.Id}`
     );
   }
   expandirNoticia() {
     this.expand = this.expand == "active" ? "inactive" : "active";
   }
   anarAUrl() {
-    window.open(this.noticia.Url, "_noticia");
+    window.open(this.noticia?.Url, "_noticia");
   }
   anarAContacto() {
-    window.open(`mailto:${this.noticia.UsuariReferencia.Email}`, "_noticia");
+    window.open(`mailto:${this.noticia?.UsuariReferencia?.Email}`, "_noticia");
   }
 }

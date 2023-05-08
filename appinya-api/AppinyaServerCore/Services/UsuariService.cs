@@ -216,49 +216,51 @@ namespace AppinyaServerCore.Services
             if (!usuari.ConfirmatEmail) return CrearRespotaAmbRetornError<UsuariModel>(_localizer["ConfirmatEmailFalse"]);
             //Cercar de l'usuari seleccionat
             Casteller cas = null;
-            if (_autenticacioService.esUsuariLocal(principal))
+
+            cas = (from caste in _appinyaDbContext.Casteller
+                   where caste.Email == usuari.Email
+                   select caste).FirstOrDefault();
+
+            // Si no existeix casteller 
+            if (cas == null)
             {
-                cas = (from caste in _appinyaDbContext.Casteller
-                       select caste).FirstOrDefault();
-                return CrearRespotaAmbRetornOK<UsuariModel>(await ObtenirUsuariPerId(usuari.Id));
+                if (_autenticacioService.esUsuariLocal(principal))
+                {
+                    return CrearRespotaAmbRetornOK<UsuariModel>(await ObtenirUsuariPerId(usuari.Id));
+                }
+                else
+                 
+                    return CrearRespotaAmbRetornError<UsuariModel>(_localizer["castellerNoRelacionat"]);  // No relacionat
             }
-            else
+
+            //Llista els castellers que tenia l'usuari per reassignar lo al nou
+            List<Casteller> lstCastellers = (from caste in _appinyaDbContext.Casteller
+                                             where caste.UserId == usuari.Id
+                                             select caste).ToList();
+            foreach (Casteller casteller in lstCastellers)
             {
-                cas = (from caste in _appinyaDbContext.Casteller
-                       where caste.Email == usuari.Email
-                       select caste).FirstOrDefault();
-
-                // Si no existeix casteller 
-                if (cas == null) return CrearRespotaAmbRetornError<UsuariModel>(_localizer["castellerNoRelacionat"]);  // No relacionat
-
-                //Llista els castellers que tenia l'usuari per reassignar lo al nou
-                List<Casteller> lstCastellers = (from caste in _appinyaDbContext.Casteller
-                                                 where caste.UserId == usuari.Id
-                                                 select caste).ToList();
-                foreach (Casteller casteller in lstCastellers)
-                {
-                    casteller.UserId = null;
-                }
-                bool posMusic = cas.CastellerPosicio.Where(t => t.IdPosicio == PosicionsHelper.ID_POSICIO_MUSIC_GRALLA || t.IdPosicio == PosicionsHelper.ID_POSICIO_MUSIC_GRALLA).Any();
-                cas.UserId = usuari.Id;
-                Resposta resposta = new Resposta() { Correcte = true };
-                if (!usuari.Rols.Where(rol => rol == SeguretatHelper.ROL_MUSIC).Any() && posMusic)
-                {
-                    var iuser = _userManager.Users.Where(x => x.UserName == usuari.Usuari).FirstOrDefault();
-                    await _userManager.AddToRoleAsync(iuser, SeguretatHelper.ROL_MUSIC).ConfigureAwait(false);
-                    resposta.Missatge = _localizer["CanviRolMusic"];
-                }
-
-                if (!usuari.Rols.Where(rol => rol == SeguretatHelper.ROL_CASTELLER).Any())
-                {
-                    var iuser = _userManager.Users.Where(x => x.UserName == usuari.Usuari).FirstOrDefault();
-                    await _userManager.AddToRoleAsync(iuser, SeguretatHelper.ROL_CASTELLER).ConfigureAwait(false);
-                    resposta.Missatge = _localizer["CanviRolCasteller"];
-                }
-                _appinyaDbContext.SaveChanges();
-
-                return CrearRespotaAmbRetornOK<UsuariModel>(await ObtenirUsuariPerId(usuari.Id));
+                casteller.UserId = null;
             }
+            bool posMusic = cas.CastellerPosicio.Where(t => t.IdPosicio == PosicionsHelper.ID_POSICIO_MUSIC_GRALLA || t.IdPosicio == PosicionsHelper.ID_POSICIO_MUSIC_GRALLA).Any();
+            cas.UserId = usuari.Id;
+            Resposta resposta = new Resposta() { Correcte = true };
+            if (!usuari.Rols.Where(rol => rol == SeguretatHelper.ROL_MUSIC).Any() && posMusic)
+            {
+                var iuser = _userManager.Users.Where(x => x.UserName == usuari.Usuari).FirstOrDefault();
+                await _userManager.AddToRoleAsync(iuser, SeguretatHelper.ROL_MUSIC).ConfigureAwait(false);
+                resposta.Missatge = _localizer["CanviRolMusic"];
+            }
+
+            if (!usuari.Rols.Where(rol => rol == SeguretatHelper.ROL_CASTELLER).Any())
+            {
+                var iuser = _userManager.Users.Where(x => x.UserName == usuari.Usuari).FirstOrDefault();
+                await _userManager.AddToRoleAsync(iuser, SeguretatHelper.ROL_CASTELLER).ConfigureAwait(false);
+                resposta.Missatge = _localizer["CanviRolCasteller"];
+            }
+            _appinyaDbContext.SaveChanges();
+
+            return CrearRespotaAmbRetornOK<UsuariModel>(await ObtenirUsuariPerId(usuari.Id));
+
         }
 
 
@@ -394,10 +396,11 @@ namespace AppinyaServerCore.Services
             String password = $"Appinya.{DateTime.Now.Minute}{DateTime.Now.Second}{DateTime.Now.Millisecond}";
 
             UsuariSessio user = await _autenticacioService.ObtenirUsuariPerEmail(casteller.Email).ConfigureAwait(false);
-            if (user == null) // si no existeix es crea
+            if (user == null || user.LocalUser) // si no existeix es crea
             {
                 Resposta resp = await _autenticacioService.CrearUsuari(new UsuariSessio()
                 {
+
                     Nom = casteller.Nom,
                     Cognoms = casteller.Cognom,
                     Contrasenya = password,
@@ -414,11 +417,14 @@ namespace AppinyaServerCore.Services
                     Dictionary<String, String> parames = new Dictionary<String, String>();
                     try
                     {
-
                         parames.Add("usuari", casteller.Nom);
                         parames.Add("email", casteller.Email);
                         parames.Add("password", password);
-                        _emailService.EnviarEmailBenvinguda(casteller.Email, parames);
+                        if (_emailService.ServeiActiu())
+                            _emailService.EnviarEmailBenvinguda(casteller.Email, parames);
+                        else
+                            _logger.LogInformation($" WARNING: Creació d'usuari {casteller.Email} amb password {password}");
+
                         _auditoriaService.RegistraAccio<Usuari>(Accio.Agregar, casteller.Id, principal);
                         return CrearRespotaOK();
                     }
@@ -447,8 +453,6 @@ namespace AppinyaServerCore.Services
                 {
                     _auditoriaService.RegistraAccio<Usuari>(Accio.Modificar, casteller.Id, principal);
                     return await _autenticacioService.AssignarRolsaUsuari(user.Usuari, new List<string>() { SeguretatHelper.ROL_CASTELLER });
-
-                    return CrearRespotaOK();
                 }
             }
 

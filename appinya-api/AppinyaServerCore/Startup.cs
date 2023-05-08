@@ -41,6 +41,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using AppinyaServerCore.Utils;
 using AppinyaServerCore.Jobs;
+using Quartz;
 
 namespace AppinyaServerCore
 {
@@ -98,7 +99,10 @@ namespace AppinyaServerCore
 
             // Db Context  Appinya
             services.AddDbContext<AppinyaDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.EnableSensitiveDataLogging(true);
+            });
 
             // Opcions de seguretat
             services.Configure<IdentityOptions>(options =>
@@ -180,6 +184,27 @@ namespace AppinyaServerCore
             //Jobs 
             //services.AddHostedService<HabitualJob>();
             // services.AddHostedService<EnviarAssistenciaJob>();
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionScopedJobFactory();
+                var jobKey = new JobKey("HabitualJob");
+                q.AddJob<HabitualJob>(opts => opts.WithIdentity(jobKey));
+
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
+                    .WithIdentity("HabitualJob-trigger")
+                    .WithCronSchedule("0 0 12 ? * MON-FRI *"));
+                var sendEmail = new JobKey("EnviarAssistenciaJob");
+                q.AddJob<EnviarAssistenciaJob>(opts => opts.WithIdentity(sendEmail));
+
+                q.AddTrigger(opts => opts
+                    .ForJob(sendEmail)
+                    .WithIdentity("EnviarAssistenciaJob-trigger")
+                    //.WithCronSchedule("0/5 * * * * ?"));
+                    .WithCronSchedule("0 0 12 ? * MON-FRI *")); 
+            });
+
+            services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
         }
 
 

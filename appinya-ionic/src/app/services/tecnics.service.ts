@@ -33,7 +33,9 @@ import {
   providedIn: "root",
 })
 export class TecnicsService extends RestService {
-  constructor(protected http: HttpClient, protected store: StoreData) {
+  constructor(
+    http: HttpClient,
+    store: StoreData) {
     super(http, store);
   }
 

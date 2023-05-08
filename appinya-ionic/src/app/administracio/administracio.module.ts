@@ -26,7 +26,6 @@ import { IonicModule } from "@ionic/angular";
 import { HttpClientJsonpModule, HttpClientModule } from "@angular/common/http";
 import { CompartitModule } from "../compartit/compartit.module";
 import { EditorModule } from "primeng/editor";
-import { FullCalendarModule } from "primeng/fullcalendar";
 import { CalendarModule } from "primeng/calendar";
 import { ConfirmacioListPage } from "./assistencia/confirmaciolist.page";
 import { OrganizationChartModule } from "primeng/organizationchart";
@@ -49,11 +48,11 @@ const routes: Routes = [
     canActivate: [AutenticacioGuard],
     data: {
       roles: [
-        UsuariBs.Rol_junta,
-        UsuariBs.Rol_admin,
-        UsuariBs.Rol_capmusics,
-        UsuariBs.Rol_organitzador,
-        UsuariBs.Rol_confirmador_assistencia,
+        UsuariBs.Rol_junta.Id,
+        UsuariBs.Rol_admin.Id,
+        UsuariBs.Rol_capmusics.Id,
+        UsuariBs.Rol_organitzador.Id,
+        UsuariBs.Rol_confirmador_assistencia.Id,
       ],
     },
   },
@@ -63,11 +62,11 @@ const routes: Routes = [
     canActivate: [AutenticacioGuard],
     data: {
       roles: [
-        UsuariBs.Rol_junta,
-        UsuariBs.Rol_admin,
-        UsuariBs.Rol_capmusics,
-        UsuariBs.Rol_organitzador,
-        UsuariBs.Rol_confirmador_assistencia,
+        UsuariBs.Rol_junta.Id,
+        UsuariBs.Rol_admin.Id,
+        UsuariBs.Rol_capmusics.Id,
+        UsuariBs.Rol_organitzador.Id,
+        UsuariBs.Rol_confirmador_assistencia.Id,
       ],
     },
   },
@@ -83,7 +82,6 @@ const routes: Routes = [
     HttpClientModule,
     CalendarModule,
     ChartModule,
-    FullCalendarModule,
     ChartModule,
     RouterModule.forChild(routes),
     CompartitModule,
@@ -94,4 +92,4 @@ const routes: Routes = [
   exports: [RouterModule],
   declarations: [ConfirmacioListPage, PasarLlistaPage],
 })
-export class AdministracioModule {}
+export class AdministracioModule { }
